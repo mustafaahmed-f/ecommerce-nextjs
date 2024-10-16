@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 // import { Inter } from "next/font/google";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
+import { Providers } from "./providers";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${Josefin_sans.variable} antialiased`}>{children}</body>
+      <body className={`${Josefin_sans.variable} antialiased`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
