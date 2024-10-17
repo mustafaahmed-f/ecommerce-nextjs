@@ -1,13 +1,16 @@
-// store/index.ts
 import { configureStore } from "@reduxjs/toolkit";
-import { createWrapper } from "next-redux-wrapper";
-import rootReducer from "./reducers"; // Import your root reducer
+import rootReducer from "./reducers";
+import { useDispatch, useSelector } from "react-redux";
 
-// Create a makeStore function
-const makeStore = () =>
-  configureStore({
-    reducer: rootReducer, // Your root reducer
-    devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development
-  });
+export const store = configureStore({
+  reducer: rootReducer,
+  devTools: true,
+});
 
-export const wrapper = createWrapper(makeStore);
+// Infer the `RootState` and `AppDispatch` types from the store itself
+type RootState = ReturnType<typeof store.getState>;
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();
