@@ -1,5 +1,6 @@
 // lib/middleware.ts
 import { NextRequest, NextResponse } from "next/server";
+import { chooseMiddleware } from "./chooseMiddleware";
 
 // Define an array of middleware functions
 type Middleware = (request: NextRequest) => Promise<NextResponse | null>;
@@ -9,6 +10,12 @@ export async function applyMiddlewares(
   request: NextRequest,
   middlewares: Middleware[]
 ) {
+  const authMiddleware = await chooseMiddleware(request);
+  if (authMiddleware) {
+    return authMiddleware;
+  }
+
+  // these are other middlewares ( ex: validation middleware )
   for (const middleware of middlewares) {
     const result = await middleware(request);
     if (result) {
