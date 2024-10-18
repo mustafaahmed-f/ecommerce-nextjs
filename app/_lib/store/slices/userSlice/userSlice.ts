@@ -3,7 +3,6 @@ import { User } from "./userSlice.types";
 
 // Initial State for userSlice
 const initialState: User = {
-  provider:"",
   userName: "", // Default value for required field
   email: "", // Default value for required field
   firstName: "", // Optional field with default value

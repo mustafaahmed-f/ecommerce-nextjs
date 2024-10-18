@@ -12,7 +12,6 @@ interface Address {
 }
 
 export interface User {
-  provider: "" | "system" | "google";
   userName: string; // Required
   email: string; // Required
   firstName: string;
