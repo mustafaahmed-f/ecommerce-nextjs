@@ -6,13 +6,20 @@ import { chooseMiddleware } from "./chooseMiddleware";
 type Middleware = (request: NextRequest) => Promise<NextResponse | null>;
 
 // Function to apply multiple middleware functions
-export async function applyMiddlewares(
-  request: NextRequest,
-  middlewares: Middleware[]
-) {
-  const authMiddleware = await chooseMiddleware(request);
-  if (authMiddleware) {
-    return authMiddleware;
+export async function applyMiddlewares({
+  request,
+  middlewares,
+  applyAuth = false,
+}: {
+  request: NextRequest;
+  middlewares: Middleware[];
+  applyAuth?: boolean;
+}) {
+  if (applyAuth) {
+    const authMiddleware = await chooseMiddleware(request);
+    if (authMiddleware) {
+      return authMiddleware;
+    }
   }
 
   // these are other middlewares ( ex: validation middleware )

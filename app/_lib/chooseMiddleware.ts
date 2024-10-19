@@ -16,12 +16,15 @@ export async function chooseMiddleware(request: NextRequest) {
   // Extract the token value from the cookie string
   const token = cookie.split("token=")[1].split(";")[0];
 
-  // Verify the token using the verifyToken function
-  const decoded = verifyToken({ token });
-  if (!decoded || !(decoded as any).id) {
+  let decoded;
+  try {
+    decoded = decoded = JSON.parse(
+      Buffer.from(token.split(".")[1], "base64").toString()
+    );
+  } catch (error) {
     return NextResponse.json(
-      { error: "Invalid token payload" },
-      { status: 401 }
+      { error: "Invalid token structure" },
+      { status: 400 }
     );
   }
 
@@ -29,9 +32,29 @@ export async function chooseMiddleware(request: NextRequest) {
 
   switch (provider) {
     case authProviders.system:
-      return authMiddleware(request);
+      let decoded = verifyToken({ token });
+      if (!decoded || !(decoded as any).id) {
+        return NextResponse.json(
+          { error: "Invalid token payload" },
+          { status: 401 }
+        );
+      }
+
+      return authMiddleware(decoded);
+
     case authProviders.google:
+      let verifyNextAuthToken = verifyToken({
+        token,
+        signature: process.env.NEXTAUTH_SECRET as string,
+      });
+      if (!verifyNextAuthToken) {
+        return NextResponse.json(
+          { error: "Invalid nextAuth token" },
+          { status: 400 }
+        );
+      }
       return nextAuthMiddleware(request);
+
     default:
       return NextResponse.json({ error: "Invalid provider" }, { status: 401 });
   }

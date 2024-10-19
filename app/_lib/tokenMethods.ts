@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 export const signToken = ({
   payload = {},
-  signature = `${process.env.DEFAULT_SIGNATURE}`,
+  signature = `${process.env.SIGNATURE}`,
   expiresIn = "1h",
 }) => {
   if (!Object.keys(payload).length) {
@@ -14,7 +14,7 @@ export const signToken = ({
 
 export const verifyToken = ({
   token = "",
-  signature = `${process.env.DEFAULT_SIGNATURE}`,
+  signature = `${process.env.SIGNATURE}`,
 } = {}) => {
   if (!token) {
     throw new Error("Token is required to verify !", { cause: 400 });
