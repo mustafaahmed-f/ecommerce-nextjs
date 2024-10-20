@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 // import { Inter } from "next/font/google";
+import Footer from "./_components/Footer/Footer";
+import Header from "./_components/Header/Header";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
-import { Providers } from "./providers";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -24,8 +25,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${Josefin_sans.variable} antialiased`}>
-        <Providers>{children}</Providers>
+      <body
+        className={`${Josefin_sans.variable} antialiased min-h-screen grid grid-rows-[auto_1fr] max-w-screen`}
+      >
+        <Header />
+        <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
