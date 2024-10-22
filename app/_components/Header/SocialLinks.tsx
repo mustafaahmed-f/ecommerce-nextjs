@@ -1,40 +1,22 @@
 import React from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { NearMeOutlined } from "@mui/icons-material";
-import FacebookIcon from "@/app/_icons/facebookIcon";
+import FacebookIcon from "@/app/_icons/FacebookIcon";
 
 interface SocialLinksProps {}
 
 function SocialLinks({}: SocialLinksProps) {
   return (
     <div className="flex items-center justify-center gap-3">
-      <a
-        className="no-underline cursor-pointer hover:text-sky-600 text-neutral-400"
-        href=""
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <span className="no-underline cursor-pointer hover:text-sky-600 text-neutral-400">
         <InstagramIcon />
-      </a>
-      <a
-        className="no-underline cursor-pointer hover:text-sky-600 text-neutral-400"
-        href=""
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-      >
+      </span>
+      <span className="no-underline cursor-pointer hover:text-sky-600 text-neutral-400">
         <FacebookIcon />
-      </a>
-      <a
-        className="no-underline cursor-pointer hover:text-sky-600 text-neutral-400"
-        href=""
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-      >
+      </span>
+      <span className="no-underline cursor-pointer hover:text-sky-600 text-neutral-400">
         <NearMeOutlined />
-      </a>
+      </span>
     </div>
   );
 }

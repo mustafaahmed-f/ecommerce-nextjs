@@ -1,14 +1,13 @@
-import React from "react";
-import DesktopHeader from "./DesktopHeader";
-import MobileHeader from "./MobileHeader";
+import { getCategories } from "@/app/_lib/APIs/categoriesAPIs";
+import HeadersWrapper from "./HeadersWrapper";
 
 interface HeaderProps {}
 
-function Header({}: HeaderProps) {
+async function Header({}: HeaderProps) {
+  const categories = await getCategories();
   return (
     <header>
-      <DesktopHeader />
-      <MobileHeader />
+      <HeadersWrapper categories={categories} />
     </header>
   );
 }

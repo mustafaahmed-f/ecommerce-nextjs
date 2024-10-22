@@ -1,5 +1,3 @@
-"use client";
-
 import {
   FavoriteBorder,
   KeyboardArrowDownOutlined,
@@ -89,10 +87,6 @@ function DesktopHeader() {
           </div>
         </div>
       </div>
-
-      {/* ////Third section for categories//// */}
-
-      <CategoriesOptions />
     </div>
   );
 }

@@ -11,9 +11,17 @@ class TrieNode {
 }
 
 export class Trie {
-  root: TrieNode;
+  private root: TrieNode;
 
   constructor() {
     this.root = new TrieNode("");
+  }
+
+  addWords(): void {}
+
+  search(): string[] {
+    const result: string[] = [];
+
+    return result;
   }
 }

@@ -44,10 +44,10 @@ const userSchema = new Schema(
     address: {
       unit_number: Number,
       street_number: Number,
-      address_line1: { type: String, required: true },
+      address_line1: { type: String },
       address_line2: String, //For more address details like (dep. num. , building num , PO box num , etc...)
-      city: { type: String, required: true },
-      country: { type: String, required: true },
+      city: { type: String },
+      country: { type: String },
       geolocation: {
         lat: Number,
         long: Number,

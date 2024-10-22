@@ -1,32 +1,16 @@
-import React from "react";
+import { useCategories } from "@/app/_context/CategoriesProvider";
+import { getCategories } from "@/app/_lib/APIs/categoriesAPIs";
 
-interface CategoriesOptionsProps {}
-
-function CategoriesOptions({}: CategoriesOptionsProps) {
+async function CategoriesOptions() {
+  const categories = await getCategories();
   return (
     <div className="">
-      <ul className="flex items-center justify-center pb-5 list-none md:pt-12 sm:pt-10 sm:gap-3 md:gap-16 sm:px-2 md:px-24 categoryList">
-        <li className="text-center cursor-pointer hover:text-sky-600">
-          electronics
-        </li>
-        <li className="text-center cursor-pointer hover:text-sky-600">
-          clothing
-        </li>
-        <li className="text-center cursor-pointer hover:text-sky-600">
-          home and kitchen
-        </li>
-        <li className="text-center cursor-pointer hover:text-sky-600">
-          beauty and personal care
-        </li>
-        <li className="text-center cursor-pointer hover:text-sky-600">
-          sports and outdoors
-        </li>
-        <li className="text-center cursor-pointer hover:text-sky-600">
-          books and stationery
-        </li>
-        <li className="text-center cursor-pointer hover:text-sky-600">
-          health & wellness
-        </li>
+      <ul className="flex items-center justify-center  list-none py-5  sm:gap-3 md:gap-16 sm:px-2 md:px-24 categoryList">
+        {categories.categories.map((el: string, i: number) => (
+          <li key={i} className="text-center cursor-pointer hover:text-sky-600">
+            {el}
+          </li>
+        ))}
       </ul>
     </div>
   );
