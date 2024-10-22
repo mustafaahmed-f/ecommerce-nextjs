@@ -3,15 +3,21 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 
 function valuetext(value: number) {
-  return `${value}°C`;
+  return `$ ${value}`;
 }
 
 const minDistance = 10;
 
-export default function MinimumDistanceSlider() {
-  const [value1, setValue1] = React.useState<number[]>([20, 37]);
+export default function MinimumDistanceSlider({
+  value,
+  setValue,
+}: {
+  value: number | number[];
+  setValue: React.Dispatch<React.SetStateAction<number[]>>;
+}) {
+  //   const [value, setValue] = React.useState<number[]>([10, 50]);
 
-  const handleChange1 = (
+  const handleChange = (
     event: Event,
     newValue: number | number[],
     activeThumb: number
@@ -20,34 +26,12 @@ export default function MinimumDistanceSlider() {
       return;
     }
 
-    if (activeThumb === 0) {
-      setValue1([Math.min(newValue[0], value1[1] - minDistance), value1[1]]);
-    } else {
-      setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)]);
-    }
-  };
-
-  const [value2, setValue2] = React.useState<number[]>([20, 37]);
-
-  const handleChange2 = (
-    event: Event,
-    newValue: number | number[],
-    activeThumb: number
-  ) => {
-    if (!Array.isArray(newValue)) {
-      return;
-    }
-
-    if (newValue[1] - newValue[0] < minDistance) {
+    if (Array.isArray(value)) {
       if (activeThumb === 0) {
-        const clamped = Math.min(newValue[0], 100 - minDistance);
-        setValue2([clamped, clamped + minDistance]);
+        setValue([Math.min(newValue[0], value[1] - minDistance), value[1]]);
       } else {
-        const clamped = Math.max(newValue[1], minDistance);
-        setValue2([clamped - minDistance, clamped]);
+        setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
       }
-    } else {
-      setValue2(newValue as number[]);
     }
   };
 
@@ -55,22 +39,16 @@ export default function MinimumDistanceSlider() {
     <Box sx={{ width: 300 }}>
       <Slider
         getAriaLabel={() => "Minimum distance"}
-        value={value1}
-        onChange={handleChange1}
+        value={value}
+        onChange={handleChange}
         valueLabelDisplay="auto"
         getAriaValueText={valuetext}
         min={0}
-        color="info"
+        className="text-[#4172DC]"
         disableSwap
+        max={8000}
+        step={10}
       />
-      {/* <Slider
-        getAriaLabel={() => "Minimum distance shift"}
-        value={value2}
-        onChange={handleChange2}
-        valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
-        disableSwap
-      /> */}
     </Box>
   );
 }

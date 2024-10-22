@@ -17,6 +17,10 @@
 .desktop-header-first-section {
   @apply grid px-7 py-3 md:grid-cols-[auto_auto] md:gap-9 gap-y-2 gap-x-3 md:grid-rows-[auto] grid-cols-[auto] grid-rows-[auto_auto];
 }
+.filter-sections {
+  @apply p-4 flex flex-col gap-4;
+}
+
 .store-name {
   background: rgb(108, 177, 197);
   background: linear-gradient(
