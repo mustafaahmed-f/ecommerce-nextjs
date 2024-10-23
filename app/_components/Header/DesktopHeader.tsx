@@ -9,7 +9,6 @@ import {
 
 import Image from "next/image";
 import Link from "next/link";
-import CategoriesOptions from "./CategoriesOptions";
 import LogoAndSearch from "./LogoAndSearch";
 import PagesLinks from "./PagesLinks";
 import SocialLinks from "./SocialLinks";

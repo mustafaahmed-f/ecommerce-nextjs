@@ -13,8 +13,8 @@ function HalfStar({}: HalfStarProps) {
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M10.9992 0.199951V17.1152L4.32445 20.6L5.59922 13.2192L0.199219 7.99206L7.66184 6.91521L10.9992 0.199951V0.199951Z"
           fill="#FFC000"
         />
@@ -30,8 +30,8 @@ function HalfStar({}: HalfStarProps) {
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M10.9992 0.199951V17.1152L4.32445 20.6L5.59922 13.2192L0.199219 7.99206L7.66184 6.91521L10.9992 0.199951V0.199951Z"
           stroke="#C4C4C4"
         />

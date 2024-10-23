@@ -36,6 +36,7 @@ export class Trie {
   }
 
   search(prefix: string): { prodName: string; prodId: number }[] {
+    if (!prefix) return [];
     const result: { prodName: string; prodId: number }[] = [];
     let currentNode: TrieNode | null = this.root;
     let lowerCasedPrefix = prefix.toLowerCase();

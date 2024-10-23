@@ -6,12 +6,16 @@ import DesktopHeader from "./DesktopHeader";
 import MobileHeader from "./MobileHeader";
 
 interface HeadersWrapperProps {
-  categories: any;
+  categories: any[];
+  products: any;
 }
 
-function HeadersWrapper({ categories }: HeadersWrapperProps) {
+function HeadersWrapper({ categories, products }: HeadersWrapperProps) {
   return (
-    <CategoriesProvider categories={categories}>
+    <CategoriesProvider
+      intitialCategories={categories}
+      initialProducts={products?.products}
+    >
       <DesktopHeader />
       <MobileHeader />
     </CategoriesProvider>

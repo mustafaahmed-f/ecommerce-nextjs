@@ -161,3 +161,24 @@ body::-webkit-scrollbar-thumb {
     rgba(44, 88, 211, 1) 70%
   );
 }
+
+/* .autoCompleteDialog::-webkit-scrollbar {
+  width: 20px;
+}
+.autoCompleteDialog::-webkit-scrollbar-thumb {
+  background: rgb(85, 97, 101);
+  background: linear-gradient(90deg, rgb(85, 97, 101) 19%, rgb(55, 57, 62));
+} */
+
+.autoCompleteDialog::-webkit-scrollbar-track {
+  opacity: 0.3;
+  background-color: #f5f5f5;
+}
+.autoCompleteDialog::-webkit-scrollbar-thumb {
+  background-color: #a5a4a4;
+}
+.autoCompleteDialog::-webkit-scrollbar {
+  /* height: 0px; */
+  width: 8px;
+  transition: height 5s;
+}

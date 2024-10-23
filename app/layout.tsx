@@ -27,6 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${Josefin_sans.variable} antialiased min-h-screen grid grid-rows-[auto_1fr] max-w-screen`}
+        suppressHydrationWarning
       >
         <Header />
         <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2">

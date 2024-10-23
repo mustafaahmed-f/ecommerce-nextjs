@@ -1,16 +1,63 @@
-import React, { createContext, ReactNode, useContext } from "react";
+// "use client";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 import { getCategories } from "../_lib/APIs/categoriesAPIs";
+import { Trie } from "../_lib/Trie";
 
 interface CategoriesProviderProps {
   children: ReactNode;
-  categories: any;
+  intitialCategories: any[];
+  initialProducts: any[];
 }
 
-const categoriesContext = createContext({ categories: [] });
+const categoriesContext = createContext<{
+  categories: any[];
+  products: any[];
+  setProducts: React.Dispatch<React.SetStateAction<any[]>>;
+  trie: Trie;
+  searchVal: string;
+  setSearchVal: React.Dispatch<React.SetStateAction<string>>;
+  showAutoComplete: boolean;
+  setShowAutoComplete: React.Dispatch<React.SetStateAction<boolean>>;
+}>({
+  categories: [],
+  products: [],
+  setProducts: () => {},
+  trie: new Trie(),
+  searchVal: "",
+  setSearchVal: () => {},
+  showAutoComplete: false,
+  setShowAutoComplete: () => {},
+});
 
-function CategoriesProvider({ children, categories }: CategoriesProviderProps) {
+function CategoriesProvider({
+  children,
+  intitialCategories,
+  initialProducts,
+}: CategoriesProviderProps) {
+  const { 0: categories } = useState<any[]>(intitialCategories);
+  const { 0: products, 1: setProducts } = useState<any[]>(initialProducts);
+  const { 0: searchVal, 1: setSearchVal } = useState<string>("");
+  const { 0: showAutoComplete, 1: setShowAutoComplete } =
+    useState<boolean>(false);
+  // console.log(products);
+  let trie = new Trie();
+  for (let product of products) {
+    trie.addProduct(product.title, product.id);
+  }
+
   return (
-    <categoriesContext.Provider value={categories}>
+    <categoriesContext.Provider
+      value={{
+        categories,
+        products,
+        setProducts,
+        trie,
+        searchVal,
+        setSearchVal,
+        showAutoComplete,
+        setShowAutoComplete,
+      }}
+    >
       {children}
     </categoriesContext.Provider>
   );
