@@ -1,15 +1,15 @@
 "use client";
 
-import React from "react";
-import { getRandomRating } from "../_lib/getRating";
+import EmptyStar from "../_icons/EmptyStar";
 import FullStar from "../_icons/FullStar";
 import HalfStar from "../_icons/HalfStar";
-import EmptyStar from "../_icons/EmptyStar";
 
-interface RatingProps {}
+interface RatingProps {
+  ratingValue: number;
+}
 
-function Rating({}: RatingProps) {
-  let rating: number = getRandomRating();
+function Rating({ ratingValue }: RatingProps) {
+  let rating: number = ratingValue;
   let ratings: number[] = [];
   while (ratings.length < 5) {
     if (rating >= 1) {
@@ -25,7 +25,7 @@ function Rating({}: RatingProps) {
     }
   }
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center justify-start gap-2 text-sm">
       {ratings.map((el, i) => {
         return el === 1 ? (
           <FullStar key={i} />

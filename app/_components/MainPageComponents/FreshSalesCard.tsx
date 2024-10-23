@@ -1,6 +1,9 @@
+import { getRandomRating } from "@/app/_lib/getRating";
 import Image from "next/image";
+import Rating from "../Rating";
 
 function FreshSalesCard({ product }: { product: any }) {
+  const rating: number = getRandomRating();
   return (
     <div className="flex flex-col min-w-48 sm:px-5 px-2 py-2 shadow-[0px_0px_2px_3px_#F3F3F3]  rounded-md cursor-pointer FreshSalesCard">
       <div className="flex flex-col items-center justify-center gap-2 py-2 text-center">
@@ -25,21 +28,21 @@ function FreshSalesCard({ product }: { product: any }) {
         <p className="font-bold text-black">{product.title}</p>
         <p className="text-textGrey">{product.brand}</p>
         <div className="flex flex-row flex-wrap items-center justify-start gap-2">
-          <div className="flex items-start justify-start text-sm">
-            <p>⭐</p>
-            <p>⭐</p>
-            <p>⭐</p>
-            <p>⭐</p>
-          </div>
-          <p className="text-textGrey">{"( 54 )"}</p>
+          <Rating ratingValue={rating} />
+          <p className="text-textGrey">{rating}</p>
         </div>
         <div className="flex flex-row items-center justify-start gap-[2px] sm:gap-3 ">
-          <p className="text-base text-red-600 sm:text-lg">$69.99</p>
+          <p className="text-base text-red-600 sm:text-lg">
+            ${" "}
+            {(product.price - product.price * (product.discount / 100)).toFixed(
+              2
+            )}
+          </p>
           <p className="text-sm line-through text-textGrey sm:text-base">
-            {product.price}
+            $ {product.price}
           </p>
           <div className="sm:p-1 py-[2px] px-[1px] text-[10px] sm:text-base text-white bg-red-600 rounded-md">
-            <p>- 40%</p>
+            <p>- {product.discount} %</p>
           </div>
         </div>
       </div>

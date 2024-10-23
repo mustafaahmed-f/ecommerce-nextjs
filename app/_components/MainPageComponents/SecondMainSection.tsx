@@ -13,6 +13,8 @@ function SecondMainSection({ products }: SecondMainSectionProps) {
   const freshSalesProducts: any[] = products.products.slice(
     products.products.length - 4
   );
+  const trending: any[] = products.products.slice(50, 53);
+  const top100: any[] = products.products.slice(20, 24);
 
   return (
     <div className="flex flex-col gap-16 px-5 sm:px-16 sm:pt-16 ">
@@ -31,9 +33,9 @@ function SecondMainSection({ products }: SecondMainSectionProps) {
 
       <div>
         <HomeHeadlines headline="trending must have" />
-        <div className="grid flashSalesSection md:grid-cols-[1fr_1fr_1fr] overflow-x-scroll sm:gap-4 gap-3 sm:grid-cols-[1fr] sm:grid-rows-[1fr_1fr_1fr] md:grid-rows-[1fr] grid-rows-[1fr] grid-cols-[auto_auto_auto] p-1">
-          {cardNums.slice(0, 3).map((el) => {
-            return <TrendingMustHaveCard cardNum={el} key={el} />;
+        <div className="grid flashSalesSection md:grid-cols-[1fr_1fr_1fr] overflow-y-hidden overflow-x-scroll sm:gap-4 gap-3 sm:grid-cols-[1fr] sm:grid-rows-[1fr_1fr_1fr] md:grid-rows-[1fr] grid-rows-[1fr] grid-cols-[auto_auto_auto] p-1">
+          {trending.slice(0, 3).map((el) => {
+            return <TrendingMustHaveCard product={el} key={el} />;
           })}
         </div>
       </div>
@@ -44,8 +46,8 @@ function SecondMainSection({ products }: SecondMainSectionProps) {
         <HomeHeadlines headline="top 100" />
         <div>
           <div className="grid flashSalesSection md:grid-cols-[1fr_1fr_1fr_1fr] overflow-x-scroll sm:gap-4 gap-2 sm:grid-cols-[1fr_1fr] sm:grid-rows-[1fr_1fr] md:grid-rows-[1fr] grid-rows-[1fr] grid-cols-[1fr_1fr_1fr_1fr] p-1">
-            {cardNums.map((el) => {
-              return <MainProductsCard key={el} />;
+            {top100.map((el: any) => {
+              return <MainProductsCard product={el} key={el.id} />;
             })}
           </div>
         </div>

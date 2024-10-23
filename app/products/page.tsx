@@ -4,7 +4,7 @@ interface PageProps {}
 
 function Page({}: PageProps) {
   let filter = "";
-  return <div></div>;
+  return <div>All products</div>;
 }
 
 export default Page;

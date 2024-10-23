@@ -1,9 +1,11 @@
-import React from "react";
+import React, { ParamHTMLAttributes } from "react";
 
-interface PageProps {}
+interface PageProps {
+  params: any;
+}
 
-function Page({}: PageProps) {
-  return <div></div>;
+function Page({ params }: PageProps) {
+  return <div>{params.id}</div>;
 }
 
 export default Page;

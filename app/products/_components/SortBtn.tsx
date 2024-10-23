@@ -5,7 +5,7 @@ interface SortBtnProps {}
 
 function SortBtn({}: SortBtnProps) {
   return (
-    <button className="border border-[#7B7B7B] text-[#555555] flex items-center justify-center gap-2 px-2 px-3">
+    <button className="border border-[#7B7B7B] text-[#555555] flex items-center justify-center gap-2 px-2 py-3">
       Sort by order
       <ArrowDown />
     </button>
