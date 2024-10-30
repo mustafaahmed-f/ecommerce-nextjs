@@ -1,6 +1,5 @@
 // "use client";
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import { getCategories } from "../_lib/APIs/categoriesAPIs";
 import { Trie } from "../_lib/Trie";
 
 interface CategoriesProviderProps {

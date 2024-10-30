@@ -162,14 +162,6 @@ body::-webkit-scrollbar-thumb {
   );
 }
 
-/* .autoCompleteDialog::-webkit-scrollbar {
-  width: 20px;
-}
-.autoCompleteDialog::-webkit-scrollbar-thumb {
-  background: rgb(85, 97, 101);
-  background: linear-gradient(90deg, rgb(85, 97, 101) 19%, rgb(55, 57, 62));
-} */
-
 .autoCompleteDialog::-webkit-scrollbar-track {
   opacity: 0.3;
   background-color: #f5f5f5;

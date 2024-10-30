@@ -18,9 +18,7 @@ export async function chooseMiddleware(request: NextRequest) {
 
   let decoded;
   try {
-    decoded = decoded = JSON.parse(
-      Buffer.from(token.split(".")[1], "base64").toString()
-    );
+    decoded = JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
   } catch (error) {
     return NextResponse.json(
       { error: "Invalid token structure" },

@@ -1,4 +1,3 @@
-import { NextRequest } from "next/server.js";
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import userModel from "../_mongodb/models/userModel";

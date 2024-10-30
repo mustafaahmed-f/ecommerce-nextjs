@@ -2,9 +2,9 @@ import { useCategories } from "@/app/_context/CategoriesProvider";
 import { KeyboardArrowDownOutlined, SearchOutlined } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
-import { redirect, usePathname, useRouter } from "next/navigation";
-import AutoCompleteDialog from "./AutoCompleteDialog";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
+import AutoCompleteDialog from "./AutoCompleteDialog";
 
 function ProductSearchDiv() {
   const {
