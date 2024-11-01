@@ -34,13 +34,13 @@ const userSchema = new Schema(
       default: false,
       enum: ["true", "false"],
     },
-    customID: String,
-    // provider: {
-    //   type: String,
-    //   default: "system",
-    //   enum: ["GOOGLE", "system"],
-    //   required: true,
-    // },
+    // customID: String,
+    provider: {
+      type: String,
+      default: "system",
+      enum: ["GOOGLE", "system"],
+      required: true,
+    },
     address: {
       unit_number: Number,
       street_number: Number,
