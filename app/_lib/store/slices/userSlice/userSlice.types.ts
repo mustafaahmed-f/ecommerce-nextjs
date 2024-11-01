@@ -17,5 +17,6 @@ export interface User {
   firstName: string;
   lastName: string;
   token: string;
+  role: string;
   address: Address; // Required
 }

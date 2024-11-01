@@ -39,9 +39,9 @@ const generalValidations = {
   //   isConfirmed: yup.boolean().default(false),
   provider: yup
     .string()
-    .oneOf(["GOOGLE", "system"], "Provider must be either 'GOOGLE' or 'system'")
-    .default("system")
-    .required("Provider is required"),
+    .oneOf(["google", "system"], "Provider must be either 'google' or 'system'")
+    .default("system"),
+  profileImage: yup.string().required(),
   //   customID: yup.string(),
   address: yup.object().shape({
     unit_number: yup.number().integer("Unit number must be an integer"),
@@ -50,6 +50,7 @@ const generalValidations = {
     address_line2: yup.string().max(100, "Max. length 100 for address line 2"),
     city: yup.string().max(50, "Max. length 50 for city"),
     country: yup.string().max(50, "Max. length 50 for country"),
+    profileImage: yup.string().required(),
     geolocation: yup.object().shape({
       lat: yup
         .number()

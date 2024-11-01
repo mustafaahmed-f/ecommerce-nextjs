@@ -1,6 +1,6 @@
 import generalValidations from "./generalValidations";
-
-export const loginValidations = {
+import * as yup from "yup";
+export const loginValidations = yup.object({
   email: generalValidations.email,
   password: generalValidations.password,
-};
+});

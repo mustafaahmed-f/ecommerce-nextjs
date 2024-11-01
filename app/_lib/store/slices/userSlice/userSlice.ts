@@ -8,6 +8,7 @@ const initialState: User = {
   firstName: "", // Optional field with default value
   lastName: "", // Optional field with default value
   token: "",
+  role: "",
   address: {
     address_line1: "", // Required field, default to empty string
     city: "", // Required field, default to empty string
@@ -33,14 +34,10 @@ const userSlice = createSlice({
     },
 
     // 2. Update Data - Update any field when modified
-    updateUser: (state, action: PayloadAction<Partial<User>>) => {
+    updateUser: (state, action: PayloadAction<User>) => {
       return {
         ...state,
         ...action.payload,
-        address: {
-          ...state.address,
-          ...action.payload.address,
-        },
       };
     },
 

@@ -38,8 +38,17 @@ const userSchema = new Schema(
     provider: {
       type: String,
       default: "system",
-      enum: ["GOOGLE", "system"],
+      enum: ["google", "system"],
+    },
+    profileImage: {
+      type: String,
+      default: null,
       required: true,
+    },
+    role: {
+      type: String,
+      default: "user",
+      enum: ["user", "admin"],
     },
     address: {
       unit_number: Number,

@@ -1,3 +1,4 @@
+import { profile } from "console";
 import generalValidations from "./generalValidations";
 
 export const signupValidations = {
@@ -8,6 +9,7 @@ export const signupValidations = {
   password: generalValidations.password,
   rePassword: generalValidations.rePassword,
   provider: generalValidations.provider,
+  profileImage: generalValidations.profileImage,
   //   customID: yup.string(),
   address: generalValidations.address,
 };

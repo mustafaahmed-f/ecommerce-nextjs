@@ -32,11 +32,12 @@ function MainProductsCard({ product }: { product: any }) {
           </div>
           <div className="flex flex-row items-center justify-start gap-[2px] sm:gap-3 w-full">
             <p className="text-base text-red-600 sm:text-lg">
-              $ {product.price - product.price * (product.discount ?? 0 / 100)}
+              ${" "}
+              {product.price - product.price * ((product.discount ?? 0) / 100)}
             </p>
 
             {product.discount && (
-              <p className="text-sm line-through text-textGrey sm:text-base">
+              <p className="text-sm line-through  text-textGrey sm:text-base">
                 $ {product.price}
               </p>
             )}

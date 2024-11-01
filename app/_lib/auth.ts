@@ -4,6 +4,12 @@ import userModel from "../_mongodb/models/userModel";
 
 // Extend the Session and User types
 declare module "next-auth" {
+  interface Profile {
+    given_name?: string;
+    family_name?: string;
+    picture?: string;
+    // other Google profile-specific fields can go here
+  }
   interface Session {
     user: {
       userId?: string;
@@ -41,8 +47,31 @@ export const {
       }
       return token;
     },
-    async signIn({}) {
+    async signIn({ profile }) {
       try {
+        const user = await userModel.findOne({ email: profile?.email });
+        if (!user) {
+          await userModel.create({
+            userName: profile?.name,
+            email: profile?.email,
+            firstName: profile?.given_name,
+            lastName: profile?.family_name,
+            profileImage: profile?.picture,
+            address: {
+              city: "",
+              country: "",
+              unit_number: 0,
+              street_number: 0,
+              address_line1: "",
+              address_line2: "",
+              geolocation: {
+                lat: 0,
+                long: 0,
+              },
+            },
+            provider: "google",
+          });
+        }
         return true;
       } catch (error) {
         return false;
