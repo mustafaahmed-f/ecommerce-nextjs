@@ -34,35 +34,7 @@ export async function chooseMiddleware(request: NextRequest) {
 
   const provider = (decoded as any).provider;
 
-  // switch (provider) {
-  //   case authProviders.system: {
-  //     let decoded = verifyToken({ token });
-  //     if (!decoded || !(decoded as any).id) {
-  //       return NextResponse.json(
-  //         { error: "Invalid token payload" },
-  //         { status: 401 }
-  //       );
-  //     }
-
-  //     return authMiddleware(decoded);
-  //   }
-
-  //   case authProviders.google:
-  //     let verifyNextAuthToken = verifyToken({
-  //       token,
-  //       signature: process.env.NEXTAUTH_SECRET as string,
-  //     });
-  //     if (!verifyNextAuthToken) {
-  //       return NextResponse.json(
-  //         { error: "Invalid nextAuth token" },
-  //         { status: 400 }
-  //       );
-  //     }
-  //     return nextAuthMiddleware(request);
-
-  //   default:
-  //     return NextResponse.json({ error: "Invalid provider" }, { status: 401 });
-  // }
+  if (provider === authProviders.google) return nextAuthMiddleware(request);
 
   // Refresh token if expired, using the correct provider signature
   try {
@@ -77,7 +49,6 @@ export async function chooseMiddleware(request: NextRequest) {
 
     // Call the appropriate middleware based on the provider
     if (provider === authProviders.system) return authMiddleware(verifiedToken);
-    if (provider === authProviders.google) return nextAuthMiddleware(request);
   } catch (error) {
     if ((error as Error).message === "JWT expired") {
       // Refresh the token

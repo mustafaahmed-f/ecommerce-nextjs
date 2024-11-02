@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import userModel from "../_mongodb/models/userModel";
+import { refreshAccessToken } from "./refreshAccessToken";
 
 // Extend the Session and User types
 declare module "next-auth" {
@@ -47,16 +48,25 @@ export const {
     Google({
       clientId: process.env.AUTH_GOOGLE_ID as string,
       clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
   ],
   callbacks: {
     async jwt({ token, account, profile }) {
       // Add the provider type to the token if available (e.g., "google", "github")
+
       if (account && profile) {
         token.provider = account.provider; // e.g., "google", "github", etc.
         const user = await userModel.findOne({ email: profile.email });
         if (user) token.userId = user._id.toString();
       }
+
       // Initial sign in
       if (account) {
         token.accessToken = account.access_token;
@@ -71,12 +81,16 @@ export const {
 
       // Refresh token logic
       try {
-        const refreshedTokens = await refreshAccessToken(token.refreshToken);
+        const refreshedTokens = await refreshAccessToken(
+          token.refreshToken as string
+        );
         return {
           ...token,
           accessToken: refreshedTokens.access_token,
           accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
           refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
+          userId: token.userId,
+          tokenRefreshed: true, // Indicate token was refreshed
         };
       } catch (error) {
         console.error("Error refreshing access token", error);
