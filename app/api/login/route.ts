@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   // Parse the request body
   const { email, password } = await request.json();
-  const user = await userModel.findOne({ email });
+  const user = await userModel.findOne({ email }).select("-password");
 
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -19,7 +19,12 @@ export async function POST(request: NextRequest) {
 
   // Generate token and set it as an HTTP-only cookie
   const token = signToken({
-    payload: { id: user._id, email: user.email, provider: "system" },
+    payload: {
+      id: user._id,
+      email: user.email,
+      provider: "system",
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+    },
     expiresIn: "1d",
   });
 
@@ -27,7 +32,7 @@ export async function POST(request: NextRequest) {
   const cookie = `token=${token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict; Secure`;
 
   // Set the cookie in the response header
-  const response = NextResponse.json({ message: "success" });
+  const response = NextResponse.json({ message: "success", user });
   response.headers.set("Set-Cookie", cookie);
 
   return response;

@@ -16,7 +16,7 @@ export interface User {
   email: string; // Required
   firstName: string;
   lastName: string;
-  token: string;
+
   role: string;
   address: Address; // Required
 }

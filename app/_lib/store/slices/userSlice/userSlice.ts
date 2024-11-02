@@ -7,7 +7,7 @@ const initialState: User = {
   email: "", // Default value for required field
   firstName: "", // Optional field with default value
   lastName: "", // Optional field with default value
-  token: "",
+
   role: "",
   address: {
     address_line1: "", // Required field, default to empty string

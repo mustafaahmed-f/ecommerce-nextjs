@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 export const signToken = ({
   payload = {},
   signature = `${process.env.SIGNATURE}`,
-  expiresIn = "1h",
+  expiresIn = "1d",
 }) => {
   if (!Object.keys(payload).length) {
     throw new Error("payload is required to sign token !", { cause: 400 });

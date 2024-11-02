@@ -1,6 +1,5 @@
 "use server";
 
-import { NextResponse } from "next/server";
 import { signIn, signOut } from "../_lib/auth";
 
 export async function logInGoogleAction() {
@@ -18,7 +17,19 @@ export async function logInSystemAction(data: {
   const { email, password } = data;
 
   try {
-    return { success: true, message: "Success", data };
+    const routeResponse = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    const response = await routeResponse.json();
+    if (response.message === "success") {
+      return { success: true, message: "Success", user: response.user };
+    } else {
+      return { success: false, message: "Server error" };
+    }
   } catch (error) {
     console.log(error);
     return { success: false, message: "Server error" };

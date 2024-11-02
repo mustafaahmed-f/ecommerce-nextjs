@@ -18,10 +18,10 @@ import { signIn } from "@/app/_lib/store/slices/userSlice/userSlice";
 import { redirect } from "next/navigation";
 
 // Type guard to check if `response` has `data` property
-function hasData(
+function hasUserInResponse(
   response: any
-): response is { success: boolean; message: string; data: any } {
-  return "data" in response;
+): response is { success: boolean; message: string; user: any } {
+  return "user" in response;
 }
 
 interface AuthFormProps {
@@ -68,8 +68,8 @@ function AuthForm({
       if (response.success) {
         setAlertMessage(response.message); // Set success message
         setIsError(false);
-        if (purpose === "Sign in" && hasData(response)) {
-          dispatch(signIn(response.data));
+        if (purpose === "Sign in" && hasUserInResponse(response)) {
+          dispatch(signIn(response.user));
           setIsLoading(false);
           redirect("/");
         }
