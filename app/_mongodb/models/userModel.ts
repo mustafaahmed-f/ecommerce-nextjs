@@ -29,11 +29,6 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    isConfirmed: {
-      type: Boolean,
-      default: false,
-      enum: ["true", "false"],
-    },
     // customID: String,
     provider: {
       type: String,
@@ -43,23 +38,34 @@ const userSchema = new Schema(
     profileImage: {
       type: String,
       default: null,
-      required: true,
+      // required: true,
     },
     role: {
       type: String,
       default: "user",
       enum: ["user", "admin"],
     },
+    phoneNumber: {
+      type: String,
+      default: null,
+      required: true,
+    },
     address: {
-      unit_number: Number,
-      street_number: Number,
-      address_line1: { type: String },
-      address_line2: String, //For more address details like (dep. num. , building num , PO box num , etc...)
-      city: { type: String },
-      country: { type: String },
+      unit_number: { type: Number, default: 0 },
+      street_number: { type: Number, default: 0 },
+      address_line1: { type: String, default: "", required: true },
+      address_line2: { type: String, default: "" }, //For more address details like (dep. num. , building num , PO box num , etc...)
+      city: { type: String, default: "", required: true },
+      country: { type: String, default: "", required: true },
       geolocation: {
-        lat: Number,
-        long: Number,
+        lat: {
+          type: Number,
+          default: 0,
+        },
+        long: {
+          type: Number,
+          default: 0,
+        },
       },
     },
   },
@@ -90,6 +96,4 @@ userSchema.post(
   }
 );
 
-const userModel = mongoose.model("User", userSchema);
-
-export default userModel;
+export default mongoose.models.User || mongoose.model("User", userSchema);

@@ -42,15 +42,25 @@ const generalValidations = {
     .oneOf(["google", "system"], "Provider must be either 'google' or 'system'")
     .default("system"),
   profileImage: yup.string().required(),
+  phoneNumber: yup.string().required(),
   //   customID: yup.string(),
   address: yup.object().shape({
     unit_number: yup.number().integer("Unit number must be an integer"),
     street_number: yup.number().integer("Street number must be an integer"),
-    address_line1: yup.string().max(100, "Max. length 100 for address line 1"),
+    address_line1: yup
+      .string()
+      .max(100, "Max. length 100 for address line 1")
+      .required("Address line 1 is required"),
     address_line2: yup.string().max(100, "Max. length 100 for address line 2"),
-    city: yup.string().max(50, "Max. length 50 for city"),
-    country: yup.string().max(50, "Max. length 50 for country"),
-    profileImage: yup.string().required(),
+    city: yup
+      .string()
+      .max(50, "Max. length 50 for city")
+      .required("City is required"),
+    country: yup
+      .string()
+      .max(50, "Max. length 50 for country")
+      .required("Country is required"),
+    profileImage: yup.string().required("Profile image's URL is required"),
     geolocation: yup.object().shape({
       lat: yup
         .number()

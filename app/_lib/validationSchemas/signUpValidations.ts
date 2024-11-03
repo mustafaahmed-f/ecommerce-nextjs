@@ -1,15 +1,14 @@
 import { profile } from "console";
 import generalValidations from "./generalValidations";
-
-export const signupValidations = {
+import * as yup from "yup";
+export const signupValidations = yup.object({
   userName: generalValidations.userName,
   firstName: generalValidations.firstName,
   lastName: generalValidations.lastName,
   email: generalValidations.email,
   password: generalValidations.password,
   rePassword: generalValidations.rePassword,
-  provider: generalValidations.provider,
   profileImage: generalValidations.profileImage,
-  //   customID: yup.string(),
+  phoneNumber: generalValidations.phoneNumber,
   address: generalValidations.address,
-};
+});

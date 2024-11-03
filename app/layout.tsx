@@ -30,7 +30,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Header />
-        <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2">
+        <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2 my-10">
           {children}
         </main>
         <Footer />

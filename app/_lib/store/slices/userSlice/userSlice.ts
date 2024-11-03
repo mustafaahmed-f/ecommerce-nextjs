@@ -7,7 +7,7 @@ const initialState: User = {
   email: "", // Default value for required field
   firstName: "", // Optional field with default value
   lastName: "", // Optional field with default value
-
+  phoneNumber: "",
   role: "",
   address: {
     address_line1: "", // Required field, default to empty string
@@ -30,7 +30,11 @@ const userSlice = createSlice({
   reducers: {
     // 1. Sign In - Add user's data to the Redux store
     signIn: (state, action: PayloadAction<User>) => {
-      return { ...state, ...action.payload };
+      state.userName = action.payload.userName;
+      return {
+        ...state,
+        ...action.payload,
+      };
     },
 
     // 2. Update Data - Update any field when modified

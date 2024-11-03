@@ -6,9 +6,9 @@ import { refreshAccessToken } from "./refreshAccessToken";
 // Extend the Session and User types
 declare module "next-auth" {
   interface Profile {
-    given_name?: string;
-    family_name?: string;
-    picture?: string;
+    given_name?: string | null;
+    family_name?: string | null;
+    picture?: any | string | null;
     // other Google profile-specific fields can go here
   }
   interface Session {
@@ -38,12 +38,7 @@ declare module "next-auth" {
   }
 }
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
+export const authOptions = {
   providers: [
     Google({
       clientId: process.env.AUTH_GOOGLE_ID as string,
@@ -58,14 +53,22 @@ export const {
     }),
   ],
   callbacks: {
-    async jwt({ token, account, profile }) {
+    jwt: async ({
+      token,
+      account,
+      profile,
+    }: {
+      token: any;
+      account?: any;
+      profile?: any;
+    }) => {
       // Add the provider type to the token if available (e.g., "google", "github")
 
-      if (account && profile) {
-        token.provider = account.provider; // e.g., "google", "github", etc.
-        const user = await userModel.findOne({ email: profile.email });
-        if (user) token.userId = user._id.toString();
-      }
+      // if (account && profile) {
+      //   token.provider = account.provider; // e.g., "google", "github", etc.
+      //   const user = await userModel.findOne({ email: profile.email });
+      //   if (user) token.userId = user._id.toString();
+      // }
 
       // Initial sign in
       if (account) {
@@ -97,37 +100,49 @@ export const {
         return { ...token, error: "RefreshAccessTokenError" };
       }
     },
-    async signIn({ profile }) {
+    signIn: async ({
+      // user,
+      // account,
+      profile,
+    }: // email,
+    // credentials,
+    {
+      user: any;
+      account: any;
+      profile?: any;
+      email?: any;
+      credentials?: any;
+    }) => {
       try {
-        const user = await userModel.findOne({ email: profile?.email });
-        if (!user) {
-          await userModel.create({
-            userName: profile?.name,
-            email: profile?.email,
-            firstName: profile?.given_name,
-            lastName: profile?.family_name,
-            profileImage: profile?.picture,
-            address: {
-              city: "",
-              country: "",
-              unit_number: 0,
-              street_number: 0,
-              address_line1: "",
-              address_line2: "",
-              geolocation: {
-                lat: 0,
-                long: 0,
-              },
-            },
-            provider: "google",
-          });
-        }
+        // const user = await userModel.findOne({ email: profile?.email });
+        // if (!user) {
+        //   await userModel.create({
+        //     userName: profile?.name,
+        //     email: profile?.email,
+        //     firstName: profile?.given_name,
+        //     lastName: profile?.family_name,
+        //     profileImage: profile?.picture,
+        //     address: {
+        //       city: "",
+        //       country: "",
+        //       unit_number: 0,
+        //       street_number: 0,
+        //       address_line1: "",
+        //       address_line2: "",
+        //       geolocation: {
+        //         lat: 0,
+        //         long: 0,
+        //       },
+        //     },
+        //     provider: "google",
+        //   });
+        // }
         return true;
       } catch (error) {
         return false;
       }
     },
-    async session({ session, token }) {
+    session: async ({ session, token }: { session: any; token: any }) => {
       session.user = {
         ...session.user,
         accessToken: token.accessToken as string,
@@ -141,4 +156,12 @@ export const {
   pages: {
     signIn: "/login",
   },
-});
+  debug: true,
+};
+
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth(authOptions);
