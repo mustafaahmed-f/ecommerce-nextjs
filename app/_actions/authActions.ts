@@ -24,14 +24,14 @@ export async function logInSystemAction(data: {
       body: JSON.stringify(data),
     });
 
-    console.log("Inside action");
-
     if (!routeResponse.ok) {
-      const errorResponse = await routeResponse.text(); // Get the text of the response
+      const errorResponse = await routeResponse.json();
       console.error("Server responded with an error:", errorResponse);
+
+      // Trigger custom alert here with errorResponse.error
       return {
         success: false,
-        message: "Server error",
+        message: errorResponse.error || "Server error",
         details: errorResponse,
       };
     }

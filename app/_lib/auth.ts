@@ -64,11 +64,11 @@ export const authOptions = {
     }) => {
       // Add the provider type to the token if available (e.g., "google", "github")
 
-      // if (account && profile) {
-      //   token.provider = account.provider; // e.g., "google", "github", etc.
-      //   const user = await userModel.findOne({ email: profile.email });
-      //   if (user) token.userId = user._id.toString();
-      // }
+      if (account && profile) {
+        token.provider = account.provider; // e.g., "google", "github", etc.
+        const user = await userModel.findOne({ email: profile.email });
+        if (user) token.userId = user._id.toString();
+      }
 
       // Initial sign in
       if (account) {
@@ -101,8 +101,8 @@ export const authOptions = {
       }
     },
     signIn: async ({
-      // user,
-      // account,
+      user,
+      account,
       profile,
     }: // email,
     // credentials,
@@ -114,29 +114,29 @@ export const authOptions = {
       credentials?: any;
     }) => {
       try {
-        // const user = await userModel.findOne({ email: profile?.email });
-        // if (!user) {
-        //   await userModel.create({
-        //     userName: profile?.name,
-        //     email: profile?.email,
-        //     firstName: profile?.given_name,
-        //     lastName: profile?.family_name,
-        //     profileImage: profile?.picture,
-        //     address: {
-        //       city: "",
-        //       country: "",
-        //       unit_number: 0,
-        //       street_number: 0,
-        //       address_line1: "",
-        //       address_line2: "",
-        //       geolocation: {
-        //         lat: 0,
-        //         long: 0,
-        //       },
-        //     },
-        //     provider: "google",
-        //   });
-        // }
+        const user = await userModel.findOne({ email: profile?.email });
+        if (!user) {
+          await userModel.create({
+            userName: profile?.name,
+            email: profile?.email,
+            firstName: profile?.given_name,
+            lastName: profile?.family_name,
+            profileImage: profile?.picture,
+            address: {
+              city: "",
+              country: "",
+              unit_number: 0,
+              street_number: 0,
+              address_line1: "",
+              address_line2: "",
+              geolocation: {
+                lat: 0,
+                long: 0,
+              },
+            },
+            provider: "google",
+          });
+        }
         return true;
       } catch (error) {
         return false;

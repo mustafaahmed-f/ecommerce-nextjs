@@ -1,18 +1,17 @@
-import bcrypt from "bcrypt";
 import { signToken } from "@/app/_lib/tokenMethods";
+import connectDB from "@/app/_mongodb/dbConnect";
 import userModel from "@/app/_mongodb/models/userModel";
+import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
-import clientPromise from "@/app/_mongodb";
 
 export async function POST(request: NextRequest) {
   // Parse the request body
   try {
     console.log("Before accessing request");
     const { email, password } = await request.json();
-    const client = await clientPromise;
-    const db = client.db("ecommerce_nextjs");
+    await connectDB();
     // const user = await userModel.findOne({ email }).select("-password");
-    const user = await db.collection("users").findOne({ email });
+    const user = await userModel.findOne({ email });
     console.log("user", user);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });

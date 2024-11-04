@@ -1,20 +1,20 @@
-// lib/db.ts
-import clientPromise from "./index";
-import { Db, Collection } from "mongodb";
+import mongoose from "mongoose";
+const uri = process.env.MONGODB_URI_ATLAS as string;
 
-let db: Db;
-
-export async function getDb(): Promise<Db> {
-  if (!db) {
-    const client = await clientPromise;
-    db = client.db("your-database-name");
+const connectDB = async () => {
+  if (mongoose.connections[0].readyState) {
+    console.log("Already connected");
+    return true;
   }
-  return db;
-}
 
-export async function getCollection<T extends Document>(
-  collectionName: string
-): Promise<Collection<T>> {
-  const database = await getDb();
-  return database.collection<T>(collectionName);
-}
+  try {
+    await mongoose.connect(uri);
+    console.log("MongoDB connected");
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export default connectDB;
