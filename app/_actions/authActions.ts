@@ -15,7 +15,6 @@ export async function logInSystemAction(data: {
   password: string;
 }) {
   try {
-    console.log("Here");
     const routeResponse = await fetch(`${process.env.NEXTAUTH_URL}api/login`, {
       method: "POST",
       headers: {
@@ -37,9 +36,13 @@ export async function logInSystemAction(data: {
     }
 
     const response = await routeResponse.json();
-    console.log(response);
-    if (response.message === "success") {
-      return { success: true, message: "Success", user: response.user };
+
+    if (response.success) {
+      return {
+        success: true,
+        message: "Logged in successfully !",
+        user: response.user,
+      };
     } else {
       return { success: false, message: "Server error" };
     }
@@ -51,20 +54,41 @@ export async function logInSystemAction(data: {
 
 export async function logOutSystemAction() {}
 
-export async function signUpSystemAction(data: any) {
+export async function signUpSystemAction(data: {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  phoneNumber: string;
+  profileImage: string;
+  address: {
+    address_line1: string;
+    address_line2: string;
+    city: string;
+    country: string;
+    geolocation: {
+      lat: string;
+      long: string;
+    };
+    street_number: string;
+    unit_number: string;
+  };
+}) {
   try {
-    const routeResponse = await fetch("/api/signup", {
+    const routeResponse = await fetch(`${process.env.NEXTAUTH_URL}api/signup`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
       body: JSON.stringify(data),
     });
     const response = await routeResponse.json();
-    if (response.message === "success") {
+    if (response.success) {
       return { success: true, message: "Account created successfully" };
     } else {
-      return { success: false, message: "Server error" };
+      console.log(response);
+      return { success: false, message: response.error };
     }
   } catch (error) {
     console.log(error);

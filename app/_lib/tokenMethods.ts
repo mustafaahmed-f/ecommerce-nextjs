@@ -4,6 +4,10 @@ export const signToken = ({
   payload = {},
   signature = `${process.env.SIGNATURE}`,
   expiresIn = "1d",
+}: {
+  payload?: any;
+  signature?: string;
+  expiresIn?: string | number;
 }) => {
   if (!Object.keys(payload).length) {
     throw new Error("payload is required to sign token !", { cause: 400 });

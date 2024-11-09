@@ -40,6 +40,10 @@ const userSchema = new Schema(
       default: null,
       // required: true,
     },
+    cid: {
+      type: String,
+      default: null,
+    },
     role: {
       type: String,
       default: "user",
@@ -47,24 +51,23 @@ const userSchema = new Schema(
     },
     phoneNumber: {
       type: String,
-      default: null,
       required: true,
     },
     address: {
-      unit_number: { type: Number, default: 0 },
-      street_number: { type: Number, default: 0 },
-      address_line1: { type: String, default: "", required: true },
+      unit_number: { type: String, default: "0" },
+      street_number: { type: String, default: "0" },
+      address_line1: { type: String, default: "" },
       address_line2: { type: String, default: "" }, //For more address details like (dep. num. , building num , PO box num , etc...)
-      city: { type: String, default: "", required: true },
-      country: { type: String, default: "", required: true },
+      city: { type: String, default: "" },
+      country: { type: String, default: "" },
       geolocation: {
         lat: {
-          type: Number,
-          default: 0,
+          type: String,
+          default: "0",
         },
         long: {
-          type: Number,
-          default: 0,
+          type: String,
+          default: "0",
         },
       },
     },
@@ -83,17 +86,17 @@ userSchema.pre("save", function () {
   );
 });
 
-userSchema.post(
-  "findOneAndUpdate",
+// userSchema.post(
+//   "findOneAndUpdate",
 
-  async function () {
-    const user = await this.model.findOne(this.getQuery());
-    try {
-      await user.save();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);
+//   async function () {
+//     const user = await this.model.findOne(this.getQuery());
+//     try {
+//       await user.save();
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+// );
 
 export default mongoose.models.User || mongoose.model("User", userSchema);

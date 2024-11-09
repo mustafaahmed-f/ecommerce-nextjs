@@ -17,6 +17,7 @@ export async function GET() {
       },
       maxUses: 1,
     });
+
     return NextResponse.json(keyData, { status: 200 });
   } catch (error) {
     console.log(error);

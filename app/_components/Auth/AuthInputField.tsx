@@ -1,39 +1,58 @@
 import React from "react";
-
-interface AuthInputfieldProps {
+import { get } from "lodash";
+import { match } from "ts-pattern";
+interface AuthInputfieldProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   errors: any;
+  register: (s: string) => {};
   field: string;
   label: string;
-  defaultValue?: string | null;
-  register: (s: string) => {};
+  defaultValues?: string | number | readonly string[] | undefined;
 }
 
 function AuthInputfield({
   errors,
+  register,
   field,
   label,
-  register,
-  defaultValue,
+  defaultValues,
+  ...props
 }: AuthInputfieldProps) {
   const [showPass, setShowPass] = React.useState(false);
+
+  const isNumber =
+    field === "address.unit_number" ||
+    field === "address.street_number" ||
+    field === "address.geolocation.lat" ||
+    field === "address.geolocation.long";
+
   return (
     <div className="flex flex-col justify-between w-full gap-2 mt-8 align-middle ">
       <label htmlFor={`${field}`}>{label} : </label>
       <div className="flex flex-col flex-grow w-full">
         <input
+          min={props.type === "number" ? 0 : undefined}
           autoComplete="off"
-          defaultValue={defaultValue ?? ""}
+          defaultValue={match(defaultValues)
+            .with(undefined, () =>
+              match(isNumber)
+                .with(true, () => 0)
+                .otherwise(() => "")
+            )
+            .otherwise(() => defaultValues)}
           id={`${field}`}
           {...register(`${field}`)}
-          type={
+          type={match(
             (field === "password" || field === "rePassword") && !showPass
-              ? "password"
-              : "text"
-          }
+          )
+            .with(true, () => "password")
+            .with(false, () => props.type)
+            .otherwise(() => props.type)}
           placeholder={`enter your ${label} ...`}
           className={`rounded-full w-full focus:ring-secondary-100 bg-gray-200 px-4 py-1 ring placeholder:text-xs placeholder:sm:text-base ${
-            errors[`${field}`] ? `ring-red-400` : `ring-transparent`
+            get(errors, field) ? `ring-red-400` : `ring-transparent`
           } focus:outline-0   `}
+          {...props}
         />
         {field === "password" && (
           <div className="flex items-center gap-1 px-2 py-1">
@@ -45,7 +64,7 @@ function AuthInputfield({
           </div>
         )}
         <p className="mt-1 mb-0 text-red-600 ">
-          {errors[`${field}`] && errors[`${field}`]?.message}
+          {get(errors, field) && get(errors, field)?.message}
         </p>
       </div>
     </div>

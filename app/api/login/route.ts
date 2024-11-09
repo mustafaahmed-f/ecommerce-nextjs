@@ -1,3 +1,4 @@
+import { applyMiddlewares } from "@/app/_lib/middlewares";
 import { signToken } from "@/app/_lib/tokenMethods";
 import connectDB from "@/app/_mongodb/dbConnect";
 import userModel from "@/app/_mongodb/models/userModel";
@@ -5,6 +6,15 @@ import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+  //// Make sure user is not logged in:
+  const applyMiddleware = await applyMiddlewares({
+    request,
+    middlewares: [],
+    applyAuth: true,
+  });
+  if (!applyMiddleware) {
+    throw new Error("Can't use this route while logged in !!", { cause: 400 });
+  }
   // Parse the request body
   try {
     console.log("Before accessing request");
@@ -37,7 +47,11 @@ export async function POST(request: NextRequest) {
     const cookie = `token=${token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict; Secure`;
     console.log("Before sending back a response !!");
     // Set the cookie in the response header
-    const response = NextResponse.json({ message: "success", user });
+    const response = NextResponse.json({
+      success: true,
+      message: "Logged in successfully !",
+      user,
+    });
     response.headers.set("Set-Cookie", cookie);
 
     return response;

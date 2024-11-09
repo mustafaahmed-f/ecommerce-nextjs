@@ -54,7 +54,8 @@ export async function chooseMiddleware(request: NextRequest) {
       // Refresh the token
       const newAccessToken = signToken({
         payload: { id: decoded.id, provider: decoded.provider },
-        expiresIn: "1d",
+        // expiresIn: "1d",  //TODO: uncomment this after testing
+        expiresIn: 60,
         signature:
           provider === authProviders.system
             ? process.env.SIGNATURE

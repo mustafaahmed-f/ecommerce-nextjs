@@ -6,19 +6,20 @@ import {
 } from "@/app/_actions/authActions";
 import { signIn } from "@/app/_lib/store/slices/userSlice/userSlice";
 import { useAppDispatch } from "@/app/_lib/store/store";
+import { loginValidations } from "@/app/_lib/validationSchemas/logInValidations";
+import { signupValidations } from "@/app/_lib/validationSchemas/signUpValidations";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
+import GoogleLogInBtn from "../GoogleLogInBtn";
 import SnackBar from "../SnackBar";
-import Spinner from "../Spinner";
 import AuthButton from "./AuthButton";
 import AuthInputfield from "./AuthInputField";
-import GoogleLogInBtn from "../GoogleLogInBtn";
-import { loginValidations } from "@/app/_lib/validationSchemas/logInValidations";
-import { signupValidations } from "@/app/_lib/validationSchemas/signUpValidations";
+import { useAlert } from "@/app/_context/AlertProvider";
+import { Button } from "@mui/material";
 
 // Type guard to check if `response` has `data` property
 function hasUserInResponse(
@@ -58,9 +59,10 @@ function AuthForm({
   });
 
   const dispatch = useAppDispatch();
+  const { setAlertMessage, setIsError } = useAlert();
   const { 0: file, 1: setFile } = useState<null | any>("");
-  const { 0: alertMessage, 1: setAlertMessage } = useState<string | null>(null);
-  const { 0: isError, 1: setIsError } = useState<boolean>(false);
+  // const { 0: alertMessage, 1: setAlertMessage } = useState<string | null>(null);
+  // const { 0: isError, 1: setIsError } = useState<boolean>(false);
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
 
   const action = purpose === "Sign in" ? logInSystemAction : signUpSystemAction;
@@ -106,12 +108,12 @@ function AuthForm({
 
   return (
     <>
-      {!isLoading && alertMessage && (
+      {/* {!isLoading && alertMessage && (
         <SnackBar
           message={alertMessage}
           severity={isError ? "error" : "success"}
         />
-      )}
+      )} */}
       <form onSubmit={handleSubmit(handleSubmitFn)}>
         {fields.map((element, index) => (
           <AuthInputfield
@@ -120,10 +122,10 @@ function AuthForm({
             register={register}
             label={element["label"]}
             key={index}
-            defaultValue={
+            defaultValues={
               purpose === "Sign in" && defaultValues
                 ? defaultValues[element["field"] as keyof typeof defaultValues]
-                : null
+                : undefined
             }
           />
         ))}
@@ -136,9 +138,9 @@ function AuthForm({
 
         {extraField && (
           <div className="flex justify-end w-full my-4">
-            <p className="cursor-pointer hover:text-blue-500 ">
+            <Button variant="text" color="inherit">
               <Link href={extraLink}>{extraField}</Link>
-            </p>
+            </Button>
           </div>
         )}
         <div className="w-full mt-4">

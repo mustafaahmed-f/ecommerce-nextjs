@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
       cid: data.cid,
       expires: 30,
     });
+
     return NextResponse.json(url, { status: 200 });
   } catch (error) {
     console.log(error);

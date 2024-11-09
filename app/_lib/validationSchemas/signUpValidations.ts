@@ -1,6 +1,5 @@
-import { profile } from "console";
-import generalValidations from "./generalValidations";
 import * as yup from "yup";
+import generalValidations from "./generalValidations";
 export const signupValidations = yup.object({
   userName: generalValidations.userName,
   firstName: generalValidations.firstName,
@@ -11,4 +10,5 @@ export const signupValidations = yup.object({
   profileImage: generalValidations.profileImage,
   phoneNumber: generalValidations.phoneNumber,
   address: generalValidations.address,
+  cid: generalValidations.cid,
 });

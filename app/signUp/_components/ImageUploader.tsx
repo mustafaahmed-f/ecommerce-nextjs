@@ -1,20 +1,22 @@
 import { pinata } from "@/utils/config";
+import { Button } from "@mui/material";
 import { useState } from "react";
-import { UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { UseFormSetValue } from "react-hook-form";
+import { match } from "ts-pattern";
 interface props {
-  register: UseFormRegister<any>;
   setValue: UseFormSetValue<any>;
   onUploadComplete: (uploaded: boolean) => void;
   file: any;
   setFile: (file: any) => void;
+  trigger: (s: string) => Promise<boolean>;
 }
 
 const ImageUploader = ({
-  register,
   setValue,
   onUploadComplete,
   file,
   setFile,
+  trigger,
 }: props) => {
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
@@ -32,10 +34,10 @@ const ImageUploader = ({
 
     try {
       setUploading(true);
-      const keyRequest = await fetch("/api/key");
+      const keyRequest = await fetch(`/api/key`);
       const keyData = await keyRequest.json();
       const upload = await pinata.upload.file(file).key(keyData.JWT);
-      const urlRequest = await fetch("/api/sign", {
+      const urlRequest = await fetch(`/api/sign`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,11 +46,12 @@ const ImageUploader = ({
       });
       const finalURL = await urlRequest.json();
       setUrl(finalURL);
-      console.log(upload);
       setMessage("File uploaded successfully");
       setUploading(false);
       onUploadComplete(true);
-      setValue("profileImage", url);
+      setValue("profileImage", finalURL);
+      setValue("cid", upload.cid);
+      await trigger("profileImage");
     } catch (e) {
       console.log(e);
       setUploading(false);
@@ -58,20 +61,18 @@ const ImageUploader = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <input
-        type="file"
-        {...register("image", {
-          onChange: (e) => handleFileChange(e),
-        })}
-      />
-      <button
+      <input type="file" onChange={(e) => handleFileChange(e)} />
+      <Button
         onClick={handleUpload}
-        className="hover:text-teal-400"
         disabled={uploading || !file}
         type="button"
+        variant="contained"
+        color="inherit"
       >
-        Upload Image
-      </button>
+        {match(uploading)
+          .with(true, () => "Uploading...")
+          .otherwise(() => "Upload Image")}
+      </Button>
       {message && <p className="text-green-400">{message}</p>}
     </div>
   );

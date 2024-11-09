@@ -1,6 +1,10 @@
-// "use client";
+"use client";
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import { Trie } from "../_lib/DataStructures/Trie";
+
+//===============================================================================
+//========================= used for search =====================================
+//===============================================================================
 
 interface CategoriesProviderProps {
   children: ReactNode;

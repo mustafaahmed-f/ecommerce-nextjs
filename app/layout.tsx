@@ -4,6 +4,7 @@ import Footer from "./_components/Footer/Footer";
 import Header from "./_components/Header/Header";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
+import GlobalAlertWrapper from "./_components/GlobalAlertWrapper";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -29,8 +30,9 @@ export default function RootLayout({
         className={`${Josefin_sans.variable} antialiased min-h-screen grid grid-rows-[auto_1fr] max-w-screen`}
         suppressHydrationWarning
       >
+        <GlobalAlertWrapper />
         <Header />
-        <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2 my-10">
+        <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2 max-md:px-4 max-sm:px-2 my-10">
           {children}
         </main>
         <Footer />

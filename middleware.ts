@@ -26,6 +26,8 @@ export default async function middleware() {
   // return NextResponse.next();
 }
 
-// export const config = {
-//   matcher: ["/loginsignup", "/user/**"],
-// };
+export const config = {
+  api: {
+    bodyParser: false, // Disable the default body parser
+  },
+};
