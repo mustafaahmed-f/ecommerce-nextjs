@@ -5,7 +5,8 @@ import Header from "./_components/Header/Header";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
 import GlobalAlertWrapper from "./_components/GlobalAlertWrapper";
-
+import { cookies } from "next/headers";
+import { verifyToken } from "./_lib/tokenMethods";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,6 +25,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const token = cookies().get("next_ecommerce_token")?.value;
+
+  let user = null;
+  if (token) {
+    try {
+      // Verify token and decode user info
+      const decoded: any = verifyToken({ token });
+
+      // Assuming the token contains user info; if not, fetch it from the DB/API
+      user = {
+        id: decoded.id,
+        email: decoded.email,
+        ...decoded, // Any additional user info encoded in the token
+      };
+    } catch (error) {
+      console.error("Invalid token", error);
+    }
+  }
+
+  console.log(user);
+
   return (
     <html lang="en">
       <body

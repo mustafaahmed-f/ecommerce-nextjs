@@ -4,25 +4,28 @@ import connectDB from "@/app/_mongodb/dbConnect";
 import userModel from "@/app/_mongodb/models/userModel";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
+import cookie from "cookie";
 
 export async function POST(request: NextRequest) {
-  //// Make sure user is not logged in:
-  const applyMiddleware = await applyMiddlewares({
-    request,
-    middlewares: [],
-    applyAuth: true,
-  });
-  if (!applyMiddleware) {
-    throw new Error("Can't use this route while logged in !!", { cause: 400 });
-  }
   // Parse the request body
   try {
-    console.log("Before accessing request");
+    //// Make sure user is not logged in:
+    const applyMiddleware = await applyMiddlewares({
+      request,
+      middlewares: [],
+      applyAuth: true,
+    });
+
+    if (!applyMiddleware) {
+      throw new Error("Can't use this route while logged in !!", {
+        cause: 400,
+      });
+    }
+
     const { email, password } = await request.json();
     await connectDB();
-    // const user = await userModel.findOne({ email }).select("-password");
     const user = await userModel.findOne({ email });
-    console.log("user", user);
+
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -32,30 +35,48 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid password" }, { status: 400 });
     }
 
-    // Generate token and set it as an HTTP-only cookie
     const token = signToken({
       payload: {
         id: user._id,
         email: user.email,
         provider: "system",
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
       },
       expiresIn: "1d",
     });
 
-    // Create the cookie options
-    const cookie = `token=${token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict; Secure`;
-    console.log("Before sending back a response !!");
-    // Set the cookie in the response header
-    const response = NextResponse.json({
-      success: true,
-      message: "Logged in successfully !",
-      user,
+    const response = NextResponse.json(
+      {
+        success: true,
+        message: "Logged in successfully !",
+        user,
+      },
+      { status: 200 }
+    );
+
+    // Set cookie
+    response.cookies.set("next_ecommerce_token", token, {
+      httpOnly: true,
+      path: "/",
+      sameSite: "strict", // Necessary for cross-origin cookies
+      maxAge: 86400,
+      secure: process.env.NODE_ENV === "production", // True in production for HTTPS
     });
-    response.headers.set("Set-Cookie", cookie);
+
+    // Set CORS headers
+    response.headers.set(
+      "Access-Control-Allow-Origin",
+      // "http://localhost:3000/" i=21 .. l=22
+      process.env.NEXTAUTH_URL?.substring(
+        0,
+        process.env.NEXTAUTH_URL.length - 1
+      ) as string
+    );
+    response.headers.set("Access-Control-Allow-Credentials", "true");
+    response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+    response.headers.set("Access-Control-Allow-Headers", "Content-Type");
 
     return response;
   } catch (error: any) {
-    throw new Error(error.message, { cause: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

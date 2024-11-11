@@ -138,6 +138,7 @@ export default function SignUpStepper() {
       setIsLoading(false);
       setAlertMessage("An unexpected error occurred. Please try again.");
       setIsError(true);
+      setFile(null);
       console.log(error);
     } finally {
       setIsLoading(false);

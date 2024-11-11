@@ -4,6 +4,8 @@ import CategoriesProvider from "@/app/_context/CategoriesProvider";
 import React from "react";
 import DesktopHeader from "./DesktopHeader";
 import MobileHeader from "./MobileHeader";
+import { useAppSelector } from "@/app/_lib/store/store";
+import { Providers } from "@/app/Providers";
 
 interface HeadersWrapperProps {
   categories: any[];
@@ -12,13 +14,15 @@ interface HeadersWrapperProps {
 
 function HeadersWrapper({ categories, products }: HeadersWrapperProps) {
   return (
-    <CategoriesProvider
-      intitialCategories={categories}
-      initialProducts={products?.products}
-    >
-      <DesktopHeader />
-      <MobileHeader />
-    </CategoriesProvider>
+    <Providers>
+      <CategoriesProvider
+        intitialCategories={categories}
+        initialProducts={products?.products}
+      >
+        <DesktopHeader />
+        <MobileHeader />
+      </CategoriesProvider>
+    </Providers>
   );
 }
 

@@ -6,15 +6,15 @@ import { nextAuthMiddleware } from "../_mongodb/middlewares/nextAuthMiddleware";
 
 // To know if we will apply the custom auth middleware or the auth middleware of nextAuth:
 export async function chooseMiddleware(request: NextRequest) {
-  const cookie = request.headers.get("cookie");
+  const cookie = request.cookies.get("next_ecommerce_token");
 
   // Check if the cookie exists and contains the 'token=' string
-  if (!cookie || !cookie.includes("token=")) {
+  if (!cookie) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   // Extract the token value from the cookie string
-  const token = cookie.split("token=")[1].split(";")[0];
+  const token = cookie.value;
 
   let decoded;
   try {
@@ -33,6 +33,8 @@ export async function chooseMiddleware(request: NextRequest) {
   }
 
   const provider = (decoded as any).provider;
+
+  // console.log("Provider :", provider);
 
   if (provider === authProviders.google) return nextAuthMiddleware(request);
 

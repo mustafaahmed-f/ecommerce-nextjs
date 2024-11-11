@@ -1,16 +1,14 @@
 "use client";
 
-import {
-  logInSystemAction,
-  signUpSystemAction,
-} from "@/app/_actions/authActions";
+import { logInSystemAction } from "@/app/_actions/authActions";
 import { signIn } from "@/app/_lib/store/slices/userSlice/userSlice";
 import { useAppDispatch } from "@/app/_lib/store/store";
 import { loginValidations } from "@/app/_lib/validationSchemas/logInValidations";
 import { signupValidations } from "@/app/_lib/validationSchemas/signUpValidations";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Button } from "@mui/material";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -18,8 +16,7 @@ import GoogleLogInBtn from "../GoogleLogInBtn";
 import SnackBar from "../SnackBar";
 import AuthButton from "./AuthButton";
 import AuthInputfield from "./AuthInputField";
-import { useAlert } from "@/app/_context/AlertProvider";
-import { Button } from "@mui/material";
+import { instance } from "@/app/_lib/axiosInstance";
 
 // Type guard to check if `response` has `data` property
 function hasUserInResponse(
@@ -43,6 +40,7 @@ function AuthForm({
   fields,
   defaultValues,
 }: AuthFormProps) {
+  const router = useRouter();
   const mySchema: Yup.ObjectSchema<any> =
     purpose === "Sign in" ? loginValidations : signupValidations;
 
@@ -59,13 +57,13 @@ function AuthForm({
   });
 
   const dispatch = useAppDispatch();
-  const { setAlertMessage, setIsError } = useAlert();
+  // const { setAlertMessage, setIsError } = useAlert();
   const { 0: file, 1: setFile } = useState<null | any>("");
-  // const { 0: alertMessage, 1: setAlertMessage } = useState<string | null>(null);
-  // const { 0: isError, 1: setIsError } = useState<boolean>(false);
+  const { 0: alertMessage, 1: setAlertMessage } = useState<string | null>(null);
+  const { 0: isError, 1: setIsError } = useState<boolean>(false);
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
 
-  const action = purpose === "Sign in" ? logInSystemAction : signUpSystemAction;
+  const action = logInSystemAction;
 
   const handleFileChange = (event: any) => {
     setFile(event.target.files[0]);
@@ -77,30 +75,30 @@ function AuthForm({
       setIsLoading(true);
       setAlertMessage("");
       setIsError(false);
-      const response = await action(data);
-      if (response.success) {
-        setAlertMessage(response.message); // Set success message
-        setIsError(false);
-        if (purpose === "Sign in" && hasUserInResponse(response)) {
-          dispatch(signIn(response.user));
-          setIsLoading(false);
-          redirect("/");
-        } else {
-          setIsLoading(false);
-          redirect("/login");
-        }
-      } else {
-        setAlertMessage(response.message); // Set error message
-        setValue("profileImage", "");
-        setFile(null);
+
+      const routeResponse = await instance.post("api/login", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      if (routeResponse.status !== 200) {
+        setAlertMessage(routeResponse.data.error || "Server error");
         setIsError(true);
         setIsLoading(false);
+      } else {
+        setAlertMessage("Logged in successfully!");
+        setIsError(false);
+        dispatch(signIn(routeResponse.data.user));
+        setIsLoading(false);
+        router.push("/");
       }
-    } catch (error) {
+    } catch (error: any) {
       setIsLoading(false);
-      setAlertMessage("An unexpected error occurred. Please try again.");
+      setAlertMessage("An unexpected error occurred : " + error.message);
       setIsError(true);
-      console.log(error);
+      console.log(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -108,12 +106,12 @@ function AuthForm({
 
   return (
     <>
-      {/* {!isLoading && alertMessage && (
+      {!isLoading && alertMessage && (
         <SnackBar
           message={alertMessage}
           severity={isError ? "error" : "success"}
         />
-      )} */}
+      )}
       <form onSubmit={handleSubmit(handleSubmitFn)}>
         {fields.map((element, index) => (
           <AuthInputfield

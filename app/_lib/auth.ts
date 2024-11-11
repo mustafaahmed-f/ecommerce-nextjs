@@ -115,6 +115,9 @@ export const authOptions = {
     }) => {
       try {
         const user = await userModel.findOne({ email: profile?.email });
+        if (user && user.provider === "system") {
+          return false;
+        }
         if (!user) {
           await userModel.create({
             userName: profile?.name,

@@ -1,6 +1,5 @@
-import { verifyToken } from "@/app/_lib/tokenMethods";
-import { NextRequest, NextResponse } from "next/server";
 import userModel from "@/app/_mongodb/models/userModel";
+import { NextResponse } from "next/server";
 
 // Authentication middleware function
 export async function authMiddleware(decoded: any) {

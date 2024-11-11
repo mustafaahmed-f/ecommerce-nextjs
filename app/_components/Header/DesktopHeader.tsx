@@ -12,8 +12,11 @@ import Link from "next/link";
 import LogoAndSearch from "./LogoAndSearch";
 import PagesLinks from "./PagesLinks";
 import SocialLinks from "./SocialLinks";
+import { useAppSelector } from "@/app/_lib/store/store";
 
 function DesktopHeader() {
+  const user = useAppSelector((state) => state.user);
+  console.log(user);
   return (
     <div className="hidden sm:block">
       {/* ////First section for logo, search and main pages//// */}
@@ -71,7 +74,7 @@ function DesktopHeader() {
         <div className="flex items-center justify-center sm:gap-4 md:gap-6 border-s-[1px] border-s-neutral-400">
           <div className="flex items-center gap-2 cursor-pointer hover:text-sky-600">
             <Person2Outlined />
-            <Link href="">Sign in</Link>
+            <Link href="/login">Sign in</Link>
           </div>
           <div className="flex items-center gap-2 cursor-pointer hover:text-sky-600">
             <FavoriteBorder />

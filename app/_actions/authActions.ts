@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn, signOut } from "@/app/_lib/auth";
+import { instance } from "../_lib/axiosInstance";
 
 export async function logInGoogleAction() {
   await signIn("google", { redirectTo: "/" });
@@ -15,40 +16,34 @@ export async function logInSystemAction(data: {
   password: string;
 }) {
   try {
-    const routeResponse = await fetch(`${process.env.NEXTAUTH_URL}api/login`, {
-      method: "POST",
+    const routeResponse = await instance.post("api/login", data, {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      withCredentials: true,
     });
 
-    if (!routeResponse.ok) {
-      const errorResponse = await routeResponse.json();
-      console.error("Server responded with an error:", errorResponse);
+    // Check if cookie is in the response headers
+    const cookie = routeResponse.headers["set-cookie"];
 
-      // Trigger custom alert here with errorResponse.error
+    if (routeResponse.status !== 200) {
       return {
         success: false,
-        message: errorResponse.error || "Server error",
-        details: errorResponse,
+        message: routeResponse.data.error || "Server error",
+        details: routeResponse.data,
       };
     }
 
-    const response = await routeResponse.json();
-
-    if (response.success) {
-      return {
-        success: true,
-        message: "Logged in successfully !",
-        user: response.user,
-      };
-    } else {
-      return { success: false, message: "Server error" };
-    }
+    // Return the response along with the extracted cookie
+    return {
+      success: true,
+      message: "Logged in successfully!",
+      user: routeResponse.data.user,
+      cookie, // Pass cookie for server action to set
+    };
   } catch (error) {
     console.log(error);
-    return { success: false, message: "Server error" };
+    throw new Error("An unexpected error occurred : " + error);
   }
 }
 

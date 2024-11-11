@@ -51,7 +51,7 @@ function Page({}: PageProps) {
               extraLink="/signup"
               defaultValues={{
                 email: "mostafafikry97@gmail.com",
-                password: "Aaaaaa@123",
+                password: "Aaaa@123",
               }}
             />
           </Providers>

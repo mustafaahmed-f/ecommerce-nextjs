@@ -19,4 +19,5 @@ export interface User {
   phoneNumber: string;
   role: string;
   address: Address; // Required
+  provider: "" | "system" | "google";
 }
