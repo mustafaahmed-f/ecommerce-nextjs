@@ -1,6 +1,6 @@
 "use client";
 
-import { logInSystemAction } from "@/app/_actions/authActions";
+import { instance } from "@/app/_lib/axiosInstance";
 import { signIn } from "@/app/_lib/store/slices/userSlice/userSlice";
 import { useAppDispatch } from "@/app/_lib/store/store";
 import { loginValidations } from "@/app/_lib/validationSchemas/logInValidations";
@@ -16,7 +16,6 @@ import GoogleLogInBtn from "../GoogleLogInBtn";
 import SnackBar from "../SnackBar";
 import AuthButton from "./AuthButton";
 import AuthInputfield from "./AuthInputField";
-import { instance } from "@/app/_lib/axiosInstance";
 
 // Type guard to check if `response` has `data` property
 function hasUserInResponse(
@@ -32,6 +31,13 @@ interface AuthFormProps {
   defaultValues?: { email: string; password: string };
   fields: { field: string; label: string }[];
 }
+
+//========================================================
+//// This component was firstly used for login and signup but when I wanted to add stepper
+//// for sign up I used another form that contains stepper and used it for sign up
+//// so I added the purpose prop here but I ignored it after I added the stepper
+//// so you may see checking purpose in the code ...
+//========================================================
 
 function AuthForm({
   purpose,
@@ -62,8 +68,6 @@ function AuthForm({
   const { 0: alertMessage, 1: setAlertMessage } = useState<string | null>(null);
   const { 0: isError, 1: setIsError } = useState<boolean>(false);
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
-
-  const action = logInSystemAction;
 
   const handleFileChange = (event: any) => {
     setFile(event.target.files[0]);
