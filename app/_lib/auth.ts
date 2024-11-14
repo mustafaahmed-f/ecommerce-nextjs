@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
+import { cookies } from "next/headers";
 import userModel from "../_mongodb/models/userModel";
 import { refreshAccessToken } from "./refreshAccessToken";
 
@@ -114,32 +115,9 @@ export const authOptions = {
       credentials?: any;
     }) => {
       try {
-        const user = await userModel.findOne({ email: profile?.email });
-        if (user && user.provider === "system") {
-          return false;
-        }
-        if (!user) {
-          await userModel.create({
-            userName: profile?.name,
-            email: profile?.email,
-            firstName: profile?.given_name,
-            lastName: profile?.family_name,
-            profileImage: profile?.picture,
-            address: {
-              city: "",
-              country: "",
-              unit_number: 0,
-              street_number: 0,
-              address_line1: "",
-              address_line2: "",
-              geolocation: {
-                lat: 0,
-                long: 0,
-              },
-            },
-            provider: "google",
-          });
-        }
+        //// check if user is already logged in using system:
+        if (cookies().get("next_ecommerce_token")?.value) return false;
+
         return true;
       } catch (error) {
         return false;
@@ -151,7 +129,7 @@ export const authOptions = {
         accessToken: token.accessToken as string,
       };
       // Add the provider information to the session
-      session.provider = token.provider as string;
+      session.user.provider = token.provider as string;
       session.user.userId = token.userId as string;
       return session;
     },

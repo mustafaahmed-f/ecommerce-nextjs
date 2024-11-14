@@ -27,7 +27,8 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false,
+      default: "",
     },
     // customID: String,
     provider: {
@@ -51,7 +52,7 @@ const userSchema = new Schema(
     },
     phoneNumber: {
       type: String,
-      required: true,
+      required: false,
     },
     address: {
       unit_number: { type: String, default: "0" },
@@ -80,23 +81,11 @@ const userSchema = new Schema(
 );
 
 userSchema.pre("save", function () {
-  this.password = bcrypt.hashSync(
-    this.password,
-    parseInt(process.env.SALT_ROUND as string)
-  );
+  if (this.password !== "")
+    this.password = bcrypt.hashSync(
+      this.password!,
+      parseInt(process.env.SALT_ROUND as string)
+    );
 });
-
-// userSchema.post(
-//   "findOneAndUpdate",
-
-//   async function () {
-//     const user = await this.model.findOne(this.getQuery());
-//     try {
-//       await user.save();
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-// );
 
 export default mongoose.models.User || mongoose.model("User", userSchema);

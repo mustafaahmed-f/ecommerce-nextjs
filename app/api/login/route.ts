@@ -30,6 +30,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
+    if (user.provider === "google") {
+      throw new Error("Login using google account !!", { cause: 400 });
+    }
+
     const matchPassword = await bcrypt.compare(password, user.password);
     if (!matchPassword) {
       return NextResponse.json({ error: "Invalid password" }, { status: 400 });

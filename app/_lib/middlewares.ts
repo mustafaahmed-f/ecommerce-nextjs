@@ -8,7 +8,7 @@ type Middleware = (request: NextRequest) => Promise<NextResponse | null>;
 // Function to apply multiple middleware functions
 export async function applyMiddlewares({
   request,
-  middlewares,
+  middlewares = [],
   applyAuth = false,
 }: {
   request: NextRequest;

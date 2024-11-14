@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { signToken, verifyToken } from "./tokenMethods";
-import { authProviders } from "./authProviders";
 import { authMiddleware } from "../_mongodb/middlewares/authMiddleware";
-import { nextAuthMiddleware } from "../_mongodb/middlewares/nextAuthMiddleware";
+import { auth } from "./auth";
+import { authProviders } from "./authProviders";
+import { signToken, verifyToken } from "./tokenMethods";
 
-// To know if we will apply the custom auth middleware or the auth middleware of nextAuth:
+//// to see if the user is logged in using auth.js or using our DB or not logged in.
 export async function chooseMiddleware(request: NextRequest) {
+  const session = await auth();
   const cookie = request.cookies.get("next_ecommerce_token");
+
+  if (session?.user) {
+    return null;
+  }
 
   // Check if the cookie exists and contains the 'token=' string
   if (!cookie) {
@@ -34,10 +39,6 @@ export async function chooseMiddleware(request: NextRequest) {
 
   const provider = (decoded as any).provider;
 
-  // console.log("Provider :", provider);
-
-  if (provider === authProviders.google) return nextAuthMiddleware(request);
-
   // Refresh token if expired, using the correct provider signature
   try {
     // Verify the token with the appropriate signature
@@ -56,8 +57,8 @@ export async function chooseMiddleware(request: NextRequest) {
       // Refresh the token
       const newAccessToken = signToken({
         payload: { id: decoded.id, provider: decoded.provider },
-        // expiresIn: "1d",  //TODO: uncomment this after testing
-        expiresIn: 60,
+        expiresIn: "1d", //TODO: uncomment this after testing
+        // expiresIn: 60,
         signature:
           provider === authProviders.system
             ? process.env.SIGNATURE

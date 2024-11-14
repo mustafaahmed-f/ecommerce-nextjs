@@ -8,12 +8,12 @@ import { Trie } from "../_lib/DataStructures/Trie";
 
 interface CategoriesProviderProps {
   children: ReactNode;
-  intitialCategories: any[];
+  intitialCategories: any;
   initialProducts: any[];
 }
 
 const categoriesContext = createContext<{
-  categories: any[];
+  categories: any;
   products: any[];
   setProducts: React.Dispatch<React.SetStateAction<any[]>>;
   trie: Trie;

@@ -96,12 +96,23 @@ function AuthForm({
         setIsError(false);
         dispatch(signIn(routeResponse.data.user));
         setIsLoading(false);
-        router.push("/");
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
       }
     } catch (error: any) {
       setIsLoading(false);
-      setAlertMessage("An unexpected error occurred : " + error.message);
-      setIsError(true);
+
+      // Check if it's an error from the response
+      if (error.response) {
+        // Server responded with a status other than 200
+        setAlertMessage(error.response.data.error || "Server error");
+        setIsError(true);
+      } else {
+        // Network or unexpected errors
+        setAlertMessage("An unexpected error occurred: " + error.message);
+        setIsError(true);
+      }
       console.log(error.message);
     } finally {
       setIsLoading(false);

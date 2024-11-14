@@ -4,7 +4,7 @@ import Link from "next/link";
 
 function Menu({ setShowMenu }: { setShowMenu: any }) {
   const categories = useCategories();
-  console.log(categories);
+
   return (
     <div className="absolute top-0 z-50 w-full h-full sm:hidden ">
       <div className=" grid grid-rows-[auto_1fr_auto] bg-bgGrey ">
@@ -20,15 +20,17 @@ function Menu({ setShowMenu }: { setShowMenu: any }) {
 
         <div className="px-2 py-3 border-y-2 border-b-white border-slate-400">
           <ul className="flex flex-col gap-4 list-none">
-            {categories?.categories?.map((el: string, i: number) => (
-              <Link href={`products/${el}`} key={i}>
-                <p
-                  className={`mb-1 font-semibold cursor-pointer hover:text-orange-300`}
-                >
-                  {el}
-                </p>
-              </Link>
-            ))}
+            {categories?.categories?.categories?.map(
+              (el: string, i: number) => (
+                <Link href={`products/${el}`} key={i}>
+                  <p
+                    className={`mb-1 font-semibold cursor-pointer hover:text-orange-300`}
+                  >
+                    {el}
+                  </p>
+                </Link>
+              )
+            )}
           </ul>
         </div>
 

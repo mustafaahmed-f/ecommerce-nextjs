@@ -22,7 +22,7 @@ function Page({}: PageProps) {
   ];
 
   return (
-    <div className="flex items-center justify-center gap-3 px-12">
+    <div className="flex items-center justify-center gap-3 mt-10 px-12">
       <div className="hidden w-1/2 p-4 md:flex sm:flex-col sm:items-center">
         <h2 className="mb-3 text-3xl font-bold text-center">
           Log in and get started with the best UI experience
