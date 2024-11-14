@@ -9,6 +9,7 @@ import { instance } from "./_lib/axiosInstance";
 import { verifyToken } from "./_lib/tokenMethods";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
+import { checkOnRedis } from "./_lib/checkOnRedis";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -32,24 +33,26 @@ export default async function RootLayout({
   const session = await auth();
   if (session?.user) {
     googleUser = session.user;
-    const response = await fetch(`${process.env.NEXTAUTH_URL}api/user/check`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: googleUser.email,
-        name: googleUser.name,
-        image: googleUser.image,
-      }),
-    });
-    console.log("Check api Response : ", response);
-    // if (!response.ok) {
-    //   const errorDetails = await response.text();
-    //   console.error("Failed to get user info", response.status, errorDetails);
-    //   throw new Error("Couldn't get user info !!");
-    // }
+    const checkUserChecked = await checkOnRedis(googleUser.userId!);
+
+    if (!checkUserChecked) {
+      const response = await fetch(
+        `${process.env.NEXTAUTH_URL}api/user/check`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: googleUser.email,
+            name: googleUser.name,
+            image: googleUser.image,
+          }),
+        }
+      );
+    }
   }
+
   if (!session?.user) {
     const token = cookies().get("next_ecommerce_token")?.value;
     if (token) {
