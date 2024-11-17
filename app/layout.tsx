@@ -34,25 +34,21 @@ export default async function RootLayout({
   if (session?.user) {
     googleUser = session.user;
     const checkUserChecked = await checkOnRedis(googleUser.userId!);
-
+    console.log(checkUserChecked);
     if (!checkUserChecked) {
-      const response = await fetch(
-        `${process.env.NEXTAUTH_URL}api/user/check`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: googleUser.email,
-            name: googleUser.name,
-            image: googleUser.image,
-          }),
-        }
-      );
+      await fetch(`${process.env.NEXTAUTH_URL}api/user/check`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: googleUser.email,
+          name: googleUser.name,
+          image: googleUser.image,
+        }),
+      });
     }
   }
-
   if (!session?.user) {
     const token = cookies().get("next_ecommerce_token")?.value;
     if (token) {

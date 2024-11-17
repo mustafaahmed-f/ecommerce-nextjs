@@ -16,7 +16,7 @@ import { useAppSelector } from "@/app/_lib/store/store";
 
 function DesktopHeader() {
   const user = useAppSelector((state) => state.user);
-  console.log(user);
+  // console.log(user);
   return (
     <div className="hidden sm:block">
       {/* ////First section for logo, search and main pages//// */}

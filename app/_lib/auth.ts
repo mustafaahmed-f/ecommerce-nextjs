@@ -77,29 +77,29 @@ export const authOptions = {
         token.refreshToken = account.refresh_token;
         token.accessTokenExpires = Date.now() + account.expires_in * 1000;
       }
-
+      return token;
       // Check if token is expired and refresh if necessary
-      if (Date.now() < (token as any).accessTokenExpires) {
-        return token;
-      }
+      // if (Date.now() < (token as any).accessTokenExpires) {
+      //   return token;
+      // }
 
-      // Refresh token logic
-      try {
-        const refreshedTokens = await refreshAccessToken(
-          token.refreshToken as string
-        );
-        return {
-          ...token,
-          accessToken: refreshedTokens.access_token,
-          accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-          refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
-          userId: token.userId,
-          tokenRefreshed: true, // Indicate token was refreshed
-        };
-      } catch (error) {
-        console.error("Error refreshing access token", error);
-        return { ...token, error: "RefreshAccessTokenError" };
-      }
+      // // Refresh token logic
+      // try {
+      //   const refreshedTokens = await refreshAccessToken(
+      //     token.refreshToken as string
+      //   );
+      //   return {
+      //     ...token,
+      //     accessToken: refreshedTokens.access_token,
+      //     accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
+      //     refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
+      //     userId: token.userId,
+      //     tokenRefreshed: true, // Indicate token was refreshed
+      //   };
+      // } catch (error) {
+      //   console.error("Error refreshing access token", error);
+      //   return { ...token, error: "RefreshAccessTokenError" };
+      // }
     },
     signIn: async ({
       user,

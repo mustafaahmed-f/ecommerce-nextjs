@@ -7,6 +7,7 @@ import { signToken, verifyToken } from "./tokenMethods";
 //// to see if the user is logged in using auth.js or using our DB or not logged in.
 export async function chooseMiddleware(request: NextRequest) {
   const session = await auth();
+  console.log("Session : ", session);
   const cookie = request.cookies.get("next_ecommerce_token");
 
   if (session?.user) {

@@ -1,9 +1,11 @@
 import userModel from "@/app/_mongodb/models/userModel";
 import { NextResponse } from "next/server";
+import connectDB from "../dbConnect";
 
 // Authentication middleware function
 export async function authMiddleware(decoded: any) {
   try {
+    await connectDB();
     // Find the user associated with the token's ID
     const user = await userModel.findOne({ _id: (decoded as any).id });
     if (!user) {
