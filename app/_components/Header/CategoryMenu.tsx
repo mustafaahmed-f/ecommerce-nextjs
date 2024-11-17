@@ -7,7 +7,7 @@ function CategoryMenu({}: CategoryMenuProps) {
   const { categories } = useCategories();
   return (
     <ul className="flex absolute z-[999999px] rounded-bl-md rounded-br-md flex-col translate-y-[104%] -bottom-0 left-0 bg-neutral-300">
-      {categories.map((el, i) => (
+      {categories.map((el: string, i: number) => (
         <div key={i} className="py-3 px-4 hover:bg-neutral-400">
           {el}
         </div>

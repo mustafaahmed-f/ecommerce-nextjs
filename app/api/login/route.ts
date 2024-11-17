@@ -4,7 +4,6 @@ import connectDB from "@/app/_mongodb/dbConnect";
 import userModel from "@/app/_mongodb/models/userModel";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
-import cookie from "cookie";
 
 export async function POST(request: NextRequest) {
   // Parse the request body

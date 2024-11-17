@@ -8,11 +8,15 @@ interface pageProps {
 export async function generateStaticParams() {
   const categories = await getCategories();
 
-  return categories;
+  return categories.categories.map((category: string) => ({
+    params: { category },
+  }));
 }
 
 function page({ params }: pageProps) {
-  return <div></div>;
+  const { category } = params;
+
+  return <div>{`Category: ${category}`}</div>;
 }
 
 export default page;

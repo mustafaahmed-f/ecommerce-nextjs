@@ -1,4 +1,3 @@
-import { applyMiddlewares } from "@/app/_lib/middlewares";
 import connectDB from "@/app/_mongodb/dbConnect";
 import userModel from "@/app/_mongodb/models/userModel";
 import { NextRequest, NextResponse } from "next/server";

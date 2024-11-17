@@ -18,6 +18,7 @@ export interface User {
   lastName: string;
   phoneNumber: string;
   role: string;
+  profileImage: string;
   address: Address; // Required
   provider: "" | "system" | "google";
 }

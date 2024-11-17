@@ -3,7 +3,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import AuthForm from "../_components/Auth/AuthForm";
-import { loginValidations } from "../_lib/validationSchemas/logInValidations";
 import { Providers } from "../Providers";
 
 interface PageProps {}

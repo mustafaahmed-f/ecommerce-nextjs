@@ -9,6 +9,7 @@ const initialState: User = {
   lastName: "", // Optional field with default value
   phoneNumber: "",
   role: "",
+  profileImage: "",
   provider: "",
   address: {
     address_line1: "", // Required field, default to empty string
@@ -31,13 +32,16 @@ const userSlice = createSlice({
   reducers: {
     // 1. Sign In - Add user's data to the Redux store
     signIn: (state, action: PayloadAction<User>) => {
-      state.userName = action.payload.userName;
-      state.address = action.payload.address;
-      state.email = action.payload.email;
-      state.firstName = action.payload.firstName;
-      state.lastName = action.payload.lastName;
-      state.phoneNumber = action.payload.phoneNumber;
-      state.provider = action.payload.provider;
+      if (action.payload.userName) state.userName = action.payload.userName;
+      if (action.payload.address) state.address = action.payload.address;
+      if (action.payload.email) state.email = action.payload.email;
+      if (action.payload.firstName) state.firstName = action.payload.firstName;
+      if (action.payload.lastName) state.lastName = action.payload.lastName;
+      if (action.payload.phoneNumber)
+        state.phoneNumber = action.payload.phoneNumber;
+      if (action.payload.provider) state.provider = action.payload.provider;
+      if (action.payload.profileImage)
+        state.profileImage = action.payload.profileImage;
     },
 
     // 2. Update Data - Update any field when modified

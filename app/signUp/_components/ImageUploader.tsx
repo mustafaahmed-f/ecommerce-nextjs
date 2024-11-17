@@ -64,7 +64,7 @@ const ImageUploader = ({
       setValue("profileImage", url);
       setValue("cid", response.IpfsHash);
       await trigger("profileImage");
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.log(error);
       setUploading(false);
@@ -78,40 +78,6 @@ const ImageUploader = ({
       return;
     }
     await pinFileToIPFS();
-    // try {
-    //   setUploading(true);
-    //   const keyRequest = await fetch(`/api/key`);
-    //   const keyData = await keyRequest.json();
-    //   const upload = await pinata.upload
-    //     .file(file)
-    //     .key(keyData.JWT)
-    //     .addMetadata({
-    //       name: file.name,
-    //       keyvalues: {
-    //         customKey: "customValue",
-    //       },
-    //     });
-
-    //   const urlRequest = await fetch(`/api/sign`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ cid: upload.cid }),
-    //   });
-    //   const finalURL = await urlRequest.json();
-    //   setUrl(finalURL);
-    //   setMessage("File uploaded successfully");
-    //   setUploading(false);
-    //   onUploadComplete(true);
-    //   setValue("profileImage", finalURL);
-    //   setValue("cid", upload.cid);
-    //   await trigger("profileImage");
-    // } catch (e) {
-    //   console.log(e);
-    //   setUploading(false);
-    //   setMessage("Trouble uploading file");
-    // }
   };
 
   return (

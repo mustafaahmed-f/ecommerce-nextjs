@@ -1,20 +1,87 @@
 import { getCategories } from "@/app/_lib/APIs/categoriesAPIs";
 import HeadersWrapper from "./HeadersWrapper";
 import { getAllProducts } from "@/app/_lib/APIs/productsAPIs";
+import { instance } from "@/app/_lib/axiosInstance";
+import { verifyToken } from "@/app/_lib/tokenMethods";
+import { cookies } from "next/headers";
+import { auth } from "@/app/_lib/auth";
+import { checkOnRedis } from "@/app/_lib/checkOnRedis";
 
-interface HeaderProps {
-  isLoggedIn: any | null;
-  provider: string;
-}
+interface HeaderProps {}
 
-async function Header({ isLoggedIn = null, provider }: HeaderProps) {
+async function Header({}: HeaderProps) {
   const { 0: categories, 1: products } = await Promise.all([
     getCategories(),
     getAllProducts(),
   ]);
+
+  let systemUser = null;
+  let googleUser = null;
+  const session = await auth();
+
+  if (session?.user) {
+    googleUser = session.user;
+    const checkUserChecked = await checkOnRedis(googleUser.userId!);
+
+    if (!checkUserChecked) {
+      await fetch(`${process.env.NEXTAUTH_URL}api/user/check`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: googleUser.email,
+          name: googleUser.name,
+          image: googleUser.image,
+        }),
+      });
+    }
+  }
+
+  if (!session?.user) {
+    const token = cookies().get("next_ecommerce_token")?.value;
+    if (token) {
+      try {
+        // Verify token and decode user info
+        const decoded: any = verifyToken({ token });
+        const response = await instance.get(`api/user/${decoded.id}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
+
+        if (response.status === 200) {
+          systemUser = response.data;
+        }
+
+        // Assuming the token contains user info; if not, fetch it from the DB/API
+      } catch (error) {
+        // console.error("Invalid token", error);
+      }
+    }
+  }
+
+  let finalUser = systemUser
+    ? systemUser
+    : googleUser
+    ? {
+        email: googleUser.email,
+        firstName: googleUser.name.split(" ")[0],
+        lastName: googleUser.name.split(" ")[1],
+        userName: googleUser.name.split("").join(""),
+        provider: "google",
+        profileImage: googleUser.image,
+      }
+    : null;
+
   return (
     <header>
-      <HeadersWrapper categories={categories} products={products} />
+      <HeadersWrapper
+        loggedUser={finalUser}
+        categories={categories}
+        products={products}
+      />
     </header>
   );
 }
