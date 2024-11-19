@@ -1,12 +1,12 @@
 "use client";
 
 import CategoriesProvider from "@/app/_context/CategoriesProvider";
-import React, { useEffect } from "react";
+import { signIn } from "@/app/_lib/store/slices/userSlice/userSlice";
+import { store } from "@/app/_lib/store/store";
+import { Providers } from "@/app/Providers";
+import { useEffect } from "react";
 import DesktopHeader from "./DesktopHeader";
 import MobileHeader from "./MobileHeader";
-import { useAppDispatch, useAppSelector } from "@/app/_lib/store/store";
-import { Providers } from "@/app/Providers";
-import { signIn } from "@/app/_lib/store/slices/userSlice/userSlice";
 
 interface HeadersWrapperProps {
   categories: any[];
@@ -19,12 +19,11 @@ function HeadersWrapper({
   products,
   loggedUser = null,
 }: HeadersWrapperProps) {
-  const dispatch = useAppDispatch();
   useEffect(() => {
-    if (loggedUser) {
-      dispatch(signIn(loggedUser));
+    if (loggedUser && store.getState().user.email === "") {
+      store.dispatch(signIn(loggedUser));
     }
-  }, [loggedUser, dispatch]);
+  }, [loggedUser]);
 
   return (
     <Providers>

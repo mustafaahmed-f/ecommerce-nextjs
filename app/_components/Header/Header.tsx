@@ -6,6 +6,8 @@ import { verifyToken } from "@/app/_lib/tokenMethods";
 import { cookies } from "next/headers";
 import { auth } from "@/app/_lib/auth";
 import { checkOnRedis } from "@/app/_lib/checkOnRedis";
+import { getCookie } from "@/app/_lib/getCookie";
+import { checkUserInDB } from "@/app/_lib/checkUserInDB";
 
 interface HeaderProps {}
 
@@ -23,18 +25,33 @@ async function Header({}: HeaderProps) {
     googleUser = session.user;
     const checkUserChecked = await checkOnRedis(googleUser.userId!);
 
+    //TODO : Try to use cookie instead of called redis to avoid re-check same user multiple times
+
+    // const checkToken = cookies().get("next_ecommerce_check_user");
+    // if (checkToken) {
+    //   let decoded;
+    //   try {
+    //     decoded = JSON.parse(
+    //       Buffer.from(token.split(".")[1], "base64").toString()
+    //     );
+    //     if (!decoded || !decoded.provider) {
+    //       return NextResponse.json(
+    //         { error: "Invalid token structure" },
+    //         { status: 400 }
+    //       );
+    //     }
+    //   } catch (error) {
+    //     return NextResponse.json(
+    //       { error: "Invalid token structure" },
+    //       { status: 400 }
+    //     );
+    //   }
+    // } else {
+    //   await checkUserInDB(googleUser);
+    // }
+
     if (!checkUserChecked) {
-      await fetch(`${process.env.NEXTAUTH_URL}api/user/check`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: googleUser.email,
-          name: googleUser.name,
-          image: googleUser.image,
-        }),
-      });
+      await checkUserInDB(googleUser);
     }
   }
 
@@ -69,7 +86,7 @@ async function Header({}: HeaderProps) {
         email: googleUser.email,
         firstName: googleUser.name.split(" ")[0],
         lastName: googleUser.name.split(" ")[1],
-        userName: googleUser.name.split("").join(""),
+        userName: googleUser.name.split(" ").join(""),
         provider: "google",
         profileImage: googleUser.image,
       }

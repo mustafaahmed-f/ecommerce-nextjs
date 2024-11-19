@@ -1,4 +1,3 @@
-import { pinata } from "@/utils/config";
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
