@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+  console.log("Request : ", request);
   // Get the cookie header
   const cookieHeader = request.headers.get("cookie");
 

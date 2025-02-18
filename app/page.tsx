@@ -1,4 +1,4 @@
-import CategoriesOptions from "./_components/Header/CategoriesOptions";
+import CategoriesOptions from "./_components/MainPageComponents/CategoriesOptions";
 import FirstMainSection from "./_components/MainPageComponents/FirstMainSection";
 import SecondMainSection from "./_components/MainPageComponents/SecondMainSection";
 import { getAllProducts } from "./_lib/APIs/productsAPIs";

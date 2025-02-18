@@ -56,7 +56,7 @@ function Page({}: PageProps) {
           </Providers>
         </div>
       </div>
-    </div>
+    </div> 
   );
 }
 

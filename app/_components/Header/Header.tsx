@@ -12,18 +12,13 @@ import { checkUserInDB } from "@/app/_lib/checkUserInDB";
 interface HeaderProps {}
 
 async function Header({}: HeaderProps) {
-  const { 0: categories, 1: products } = await Promise.all([
-    getCategories(),
-    getAllProducts(),
-  ]);
-
   let systemUser = null;
   let googleUser = null;
   const session = await auth();
 
   if (session?.user) {
     googleUser = session.user;
-    const checkUserChecked = await checkOnRedis(googleUser.userId!);
+    // const checkUserChecked = await checkOnRedis(googleUser.userId!);
 
     //TODO : Try to use cookie instead of called redis to avoid re-check same user multiple times
 
@@ -50,9 +45,9 @@ async function Header({}: HeaderProps) {
     //   await checkUserInDB(googleUser);
     // }
 
-    if (!checkUserChecked) {
-      await checkUserInDB(googleUser);
-    }
+    // if (!checkUserChecked) {
+    //   await checkUserInDB(googleUser);
+    // }
   }
 
   if (!session?.user) {
@@ -74,7 +69,7 @@ async function Header({}: HeaderProps) {
 
         // Assuming the token contains user info; if not, fetch it from the DB/API
       } catch (error) {
-        // console.error("Invalid token", error);
+        console.error("Invalid token", error);
       }
     }
   }
@@ -94,11 +89,7 @@ async function Header({}: HeaderProps) {
 
   return (
     <header>
-      <HeadersWrapper
-        loggedUser={finalUser}
-        categories={categories}
-        products={products}
-      />
+      <HeadersWrapper loggedUser={finalUser} />
     </header>
   );
 }

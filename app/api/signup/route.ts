@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     pinataJwt: process.env.PINATA_JWT!,
     pinataGateway: process.env.NEXT_PUBLIC_GATEWAY_URL!,
   });
-
+   
   try {
     await connectDB();
 

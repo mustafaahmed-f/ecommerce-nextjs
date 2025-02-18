@@ -5,6 +5,9 @@ import GlobalAlertWrapper from "./_components/GlobalAlertWrapper";
 import Header from "./_components/Header/Header";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
+import { Providers } from "./Providers";
+import { getCategories } from "./_lib/APIs/categoriesAPIs";
+import { getAllProducts } from "./_lib/APIs/productsAPIs";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,11 +21,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { 0: categories, 1: products } = await Promise.all([
+    getCategories(),
+    getAllProducts(),
+  ]);
+
   return (
     <html lang="en">
       <body
@@ -30,10 +38,19 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <GlobalAlertWrapper />
-        <Header />
-        <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2 max-md:px-4 max-sm:px-2 ">
-          {children}
-        </main>
+        <Providers
+          intitialCategories={
+            categories.status === "SUCCESS" ? categories : { categories: [] }
+          }
+          initialProducts={
+            products.status === "SUCCESS" ? products.products : []
+          }
+        >
+          <Header />
+          <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2 max-md:px-4 max-sm:px-2 ">
+            {children}
+          </main>
+        </Providers>
         <Footer />
       </body>
     </html>

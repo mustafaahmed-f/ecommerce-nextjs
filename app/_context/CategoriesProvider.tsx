@@ -42,7 +42,7 @@ function CategoriesProvider({
   const { 0: searchVal, 1: setSearchVal } = useState<string>("");
   const { 0: showAutoComplete, 1: setShowAutoComplete } =
     useState<boolean>(false);
-  // console.log(products);
+  // console.log("Products : ", products);
   let trie = new Trie();
   for (let product of products) {
     trie.addProduct(product.title, product.id);
