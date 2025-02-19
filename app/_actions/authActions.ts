@@ -7,11 +7,26 @@ export async function logInGoogleAction() {
   await signIn("google", { redirectTo: "/" });
 }
 
-export async function logOutGoogleAction() {
+export async function logOutAction(provider: string) {
   await signOut({ redirectTo: "/" });
+  try {
+    if (provider === "google") {
+      await signOut();
+    } else {
+      const response = await instance.post("/api/logout", {});
+      if (!response.data.success) {
+        return {
+          success: false,
+          message: "Error logging out",
+          error: response.data.error,
+        };
+      }
+    }
+    return { success: true, message: "Logged out successfully" };
+  } catch (error) {
+    return { success: false, message: "Error logging out", error };
+  }
 }
-
-export async function logOutSystemAction() {}
 
 export async function signUpSystemAction(data: {
   email: string;

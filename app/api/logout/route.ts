@@ -18,7 +18,10 @@ export async function POST(request: NextRequest) {
 
   // Invalidate the token by overwriting it with an expired cookie
   const expiredCookie = `token=; HttpOnly; Path=/; Max-Age=0; SameSite=Strict; Secure`;
-  const response = NextResponse.json({ message: "Successfully logged out" });
+  const response = NextResponse.json({
+    success: true,
+    message: "Successfully logged out",
+  });
   response.headers.set("Set-Cookie", expiredCookie);
 
   return response;

@@ -8,6 +8,7 @@ import "./_styles/globals.css";
 import { Providers } from "./Providers";
 import { getCategories } from "./_lib/APIs/categoriesAPIs";
 import { getAllProducts } from "./_lib/APIs/productsAPIs";
+import connectDB from "./_mongodb/dbConnect";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -30,7 +31,7 @@ export default async function RootLayout({
     getCategories(),
     getAllProducts(),
   ]);
-
+  await connectDB();
   return (
     <html lang="en">
       <body

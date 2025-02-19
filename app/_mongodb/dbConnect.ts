@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+//TODO : Change the uri to Atlas uri
+// const uri = process.env.MONGODB_URI_ATLAS as string;
 const uri = process.env.MONGODB_URI as string;
 
 const connectDB = async () => {

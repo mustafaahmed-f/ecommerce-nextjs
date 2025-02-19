@@ -1,8 +1,9 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
 import userModel from "../_mongodb/models/userModel";
-import { refreshAccessToken } from "./refreshAccessToken";
+import { checkUserInDB } from "./checkUserInDB";
 
 // Extend the Session and User types
 declare module "next-auth" {
@@ -42,18 +43,21 @@ declare module "next-auth" {
 export const authOptions = {
   providers: [
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID as string,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      // authorization: {
+      //   params: {
+      //     prompt: "consent",
+      //     access_type: "offline",
+      //     response_type: "code",
+      //   },
+      // },
     }),
   ],
   callbacks: {
+    authorized({ request, auth }: { request: NextRequest; auth: any }) {
+      return !!auth?.user;
+    },
     jwt: async ({
       token,
       account,
@@ -78,28 +82,6 @@ export const authOptions = {
         token.accessTokenExpires = Date.now() + account.expires_in * 1000;
       }
       return token;
-      // Check if token is expired and refresh if necessary
-      // if (Date.now() < (token as any).accessTokenExpires) {
-      //   return token;
-      // }
-
-      // // Refresh token logic
-      // try {
-      //   const refreshedTokens = await refreshAccessToken(
-      //     token.refreshToken as string
-      //   );
-      //   return {
-      //     ...token,
-      //     accessToken: refreshedTokens.access_token,
-      //     accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-      //     refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
-      //     userId: token.userId,
-      //     tokenRefreshed: true, // Indicate token was refreshed
-      //   };
-      // } catch (error) {
-      //   console.error("Error refreshing access token", error);
-      //   return { ...token, error: "RefreshAccessTokenError" };
-      // }
     },
     signIn: async ({
       user,
@@ -115,11 +97,16 @@ export const authOptions = {
       credentials?: any;
     }) => {
       try {
+        if (!account || !profile) return false;
         //// check if user is already logged in using system:
-        if (cookies().get("next_ecommerce_token")?.value) return false;
-
+        // if (cookies().get("next_ecommerce_token")?.value) return false;
+        //// check if user is on the database:
+        console.log("Here 1");
+        await checkUserInDB(profile);
+        console.log("Here 2");
         return true;
       } catch (error) {
+        console.log("Error signing in : ", error);
         return false;
       }
     },
@@ -137,7 +124,7 @@ export const authOptions = {
   pages: {
     signIn: "/login",
   },
-  debug: true,
+  // debug: true,
 };
 
 export const {

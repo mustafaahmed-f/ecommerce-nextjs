@@ -37,12 +37,13 @@ function CategoriesProvider({
   intitialCategories,
   initialProducts,
 }: CategoriesProviderProps) {
-  const { 0: categories } = useState<any[]>(intitialCategories);
-  const { 0: products, 1: setProducts } = useState<any[]>(initialProducts);
+  const { 0: categories } = useState<any[]>(intitialCategories ?? []);
+  const { 0: products, 1: setProducts } = useState<any[]>(
+    initialProducts ?? []
+  );
   const { 0: searchVal, 1: setSearchVal } = useState<string>("");
   const { 0: showAutoComplete, 1: setShowAutoComplete } =
     useState<boolean>(false);
-  // console.log("Products : ", products);
   let trie = new Trie();
   for (let product of products) {
     trie.addProduct(product.title, product.id);

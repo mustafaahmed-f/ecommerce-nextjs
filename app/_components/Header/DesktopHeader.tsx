@@ -27,14 +27,16 @@ import { instance } from "@/app/_lib/axiosInstance";
 import { useRouter } from "next/navigation";
 import { logOut } from "@/app/_lib/store/slices/userSlice/userSlice";
 import { signOut } from "@/app/_lib/auth";
+import { logOutAction } from "@/app/_actions/authActions";
 
 const settings = ["Update Profile", "Logout"];
 
 function DesktopHeader() {
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const { 0: loading, 1: setLoading } = useState<boolean>(false);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  console.log("user", user);
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  // console.log("user", user);
   const router = useRouter();
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -44,22 +46,22 @@ function DesktopHeader() {
   };
 
   const logOutFn = async () => {
-    try {
-      if (user.provider === "google") {
-        // dispatch(logOut());
-        // await signOut({ redirectTo: "/" });
-      } else {
-        const response = await instance.post("/api/logout", {});
-        if (response.data.message === "Successfully logged out") {
-          dispatch(logOut());
-          router.push("/");
-        }
-      }
-    } catch (error) {
-      console.log("Error logging out : ", error);
-    } finally {
+    if (!user.email || !user.provider) return;
+    setLoading(true);
+    const response = await logOutAction(user.provider);
+    if (user.provider === "google") {
+      dispatch(logOut());
       handleCloseUserMenu();
+      router.push("/");
     }
+    if (user.provider === "system" && response?.success) {
+      dispatch(logOut());
+      handleCloseUserMenu();
+      router.push("/");
+    } else {
+      console.log("Error logging out : ", response.error);
+    }
+    setLoading(false);
   };
 
   return (
@@ -135,7 +137,11 @@ function DesktopHeader() {
                 </IconButton>
               </Tooltip>
               <Menu
-                sx={{ mt: "45px" }}
+                sx={{
+                  mt: "45px",
+                  pointerEvents: loading ? "none" : "auto", // Prevent interactions
+                  opacity: loading ? 0.5 : 1, // Visually indicate disabled state
+                }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
