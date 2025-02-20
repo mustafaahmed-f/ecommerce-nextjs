@@ -1,5 +1,8 @@
 export async function getCategories() {
-  const response = await fetch("https://fakestoreapi.in/api/products/category");
+  const response = await fetch(
+    "https://fakestoreapi.in/api/products/category",
+    { next: { revalidate: 3600 * 24 } }
+  );
 
   if (!response.ok) throw new Error("Couldn't get categories !!");
 

@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 // import { Inter } from "next/font/google";
 import Footer from "./_components/Footer/Footer";
-import GlobalAlertWrapper from "./_components/GlobalAlertWrapper";
 import Header from "./_components/Header/Header";
-import { Josefin_sans } from "./_styles/fonts";
-import "./_styles/globals.css";
-import { Providers } from "./Providers";
 import { getCategories } from "./_lib/APIs/categoriesAPIs";
 import { getAllProducts } from "./_lib/APIs/productsAPIs";
 import connectDB from "./_mongodb/dbConnect";
+import { Josefin_sans } from "./_styles/fonts";
+import "./_styles/globals.css";
+import { Providers } from "./Providers";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -32,13 +31,15 @@ export default async function RootLayout({
     getAllProducts(),
   ]);
   await connectDB();
+
+  console.log("Navigation");
+
   return (
     <html lang="en">
       <body
         className={`${Josefin_sans.variable} antialiased min-h-screen grid grid-rows-[auto_1fr] max-w-screen`}
         suppressHydrationWarning
       >
-        <GlobalAlertWrapper />
         <Providers
           intitialCategories={
             categories.status === "SUCCESS" ? categories : { categories: [] }

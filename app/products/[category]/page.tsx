@@ -9,6 +9,8 @@ interface pageProps {
   params: any;
 }
 
+export const revalidate = 3600 * 24;
+
 export async function generateStaticParams() {
   const categories = await getCategories();
 

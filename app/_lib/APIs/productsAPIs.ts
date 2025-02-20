@@ -1,6 +1,7 @@
 export async function getAllProducts() {
   const response = await fetch(
-    "https://fakestoreapi.in/api/products?limit=150"
+    "https://fakestoreapi.in/api/products?limit=150",
+    { next: { revalidate: 3600 * 24 } }
   );
   if (!response.ok) throw new Error("Couldn't get products !!");
 
