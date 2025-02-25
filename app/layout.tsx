@@ -32,8 +32,6 @@ export default async function RootLayout({
   ]);
   await connectDB();
 
-  console.log("Navigation");
-
   return (
     <html lang="en">
       <body

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import {
+  addSizeToProducts,
   fetchCategoriesFromAPI,
   fetchProductsFromAPI,
 } from "../_lib/AddProductsToDB";
@@ -9,9 +10,10 @@ const uri = process.env.MONGODB_URI_ATLAS as string;
 
 const connectDB = async () => {
   if (mongoose.connections[0].readyState) {
-    console.log("Already connected");
+    console.log("MongoDB Already connected");
     // await fetchProductsFromAPI();
     // await fetchCategoriesFromAPI();
+    // await addSizeToProducts();
     return true;
   }
 

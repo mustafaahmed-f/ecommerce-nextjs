@@ -49,8 +49,6 @@ function CategoriesProvider({
     trie.addProduct(product.title, product.id);
   }
 
-  console.log("categories : ", categories);
-
   return (
     <categoriesContext.Provider
       value={{

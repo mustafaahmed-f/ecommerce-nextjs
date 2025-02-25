@@ -8,7 +8,7 @@ import { getAllProducts } from "./APIs/productsAPIs";
 export async function fetchProductsFromAPI() {
   try {
     const response = await getAllProducts();
-    const products = response.products.slice(100);
+    const products = response.products;
     for (let product of products) {
       const productsExistence = await productsModel.findOne({
         productId: product.id,
@@ -36,6 +36,22 @@ export async function fetchProductsFromAPI() {
     console.log("✅ Products successfully added to MongoDB");
   } catch (error) {
     console.log("Error fetching products from API: ", error);
+  }
+}
+
+const sizes = ["2XS", "XS", "S", "M", "L", "XL", "2XL", "3XL"];
+
+export async function addSizeToProducts() {
+  try {
+    const products = await productsModel.find();
+    for (let product of products) {
+      const size = sizes[Math.floor(Math.random() * sizes.length)];
+      product.size = size;
+      await product.save();
+    }
+    console.log("✅ Sizes successfully added to MongoDB");
+  } catch (error) {
+    console.log("Error adding sizes to products: ", error);
   }
 }
 

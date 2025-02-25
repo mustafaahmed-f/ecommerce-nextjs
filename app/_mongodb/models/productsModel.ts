@@ -10,6 +10,7 @@ const productSchema = new Schema(
     brand: { type: String, required: true },
     model: { type: String, required: true },
     color: { type: String, default: null },
+    size: { type: String, default: null },
     category: { type: String, required: true },
     discount: { type: Number, default: 0 },
     stock: { type: Number, default: 10 }, // Default stock value
