@@ -36,13 +36,13 @@ function MainProductsCard({ product }: { product: any }) {
               {product.price - product.price * ((product.discount ?? 0) / 100)}
             </p>
 
-            {product.discount && (
+            {product.discount !== 0 ? (
               <p className="text-sm line-through  text-textGrey sm:text-base">
                 $ {product.price}
               </p>
-            )}
+            ) : null}
             <div className="sm:p-1 py-[2px] px-[1px] text-[10px] sm:text-sm text-xs text-red-600 rounded-md">
-              {product.discount && <p>- {product.discount}%</p>}
+              {product.discount !== 0 ? <p>- {product.discount}%</p> : null}
             </div>
           </div>
         </div>

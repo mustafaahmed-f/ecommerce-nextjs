@@ -7,10 +7,6 @@ export async function getCategories() {
     throw new Error("Couldn't get categories !!");
 
   return response.data;
-  // const finalResponse = response.data.categories.map(
-  //   (category: any) => category.title
-  // );
-  // return finalResponse;
 }
 
 export async function getProductsByCategories(category: string) {

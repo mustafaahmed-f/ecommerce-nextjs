@@ -42,11 +42,9 @@ export default async function RootLayout({
       >
         <Providers
           intitialCategories={
-            categories.status === "SUCCESS" ? categories : { categories: [] }
+            categories.success ? categories : { categories: [] }
           }
-          initialProducts={
-            products.status === "SUCCESS" ? products.products : []
-          }
+          initialProducts={products.success ? products.products : []}
         >
           <Header />
           <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2 max-md:px-4 max-sm:px-2 ">

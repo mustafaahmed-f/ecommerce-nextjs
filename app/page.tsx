@@ -1,17 +1,14 @@
 import CategoriesOptions from "./_components/MainPageComponents/CategoriesOptions";
 import FirstMainSection from "./_components/MainPageComponents/FirstMainSection";
 import SecondMainSection from "./_components/MainPageComponents/SecondMainSection";
-import { getAllProducts } from "./_lib/APIs/productsAPIs";
 
-export default async function Home() {
-  const products = await getAllProducts();
-
+export default function Home() {
   return (
     <div className="flex flex-col w-full">
       <CategoriesOptions />
       <FirstMainSection />
 
-      <SecondMainSection products={products} />
+      <SecondMainSection />
     </div>
   );
 }

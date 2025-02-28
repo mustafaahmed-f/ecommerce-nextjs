@@ -2,6 +2,9 @@ import { apiFeatures } from "@/app/_lib/apiFeatures";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { NextRequest, NextResponse } from "next/server";
 
+// Cache key (for Next.js caching)
+const revalidateTime = 3600 * 24; // 24 hours
+
 export async function GET(
   request: NextRequest,
   {
@@ -46,5 +49,13 @@ export async function GET(
     );
   }
 
-  return NextResponse.json({ success: true, products }, { status: 200 });
+  return NextResponse.json(
+    { success: true, products },
+    {
+      status: 200,
+      headers: {
+        "Cache-Control": `s-maxage=${revalidateTime}, stale-while-revalidate`,
+      },
+    }
+  );
 }

@@ -1,10 +1,18 @@
-export async function getAllProducts() {
-  const response = await fetch(
-    "https://fakestoreapi.in/api/products?limit=150",
-    { next: { revalidate: 3600 * 24 } }
-  );
-  if (!response.ok) throw new Error("Couldn't get products !!");
+import { instance } from "../axiosInstance";
 
+export async function getAllProducts({
+  page = 1,
+  size = 149,
+}: { page?: number; size?: number } = {}) {
+  // const response: any = await fetch(
+  //   `${process.env.NEXTAUTH_URL}/api/products/${page}/${size}`,
+  //   { next: { revalidate: 3600 * 24 } }
+  // );
+  const response = await instance.get(`/api/products/${page}/${size}`);
+  if (!response.data || !response.data.success)
+    throw new Error("Couldn't get products !!");
+
+  return response.data;
   /*  
       ============= Response ==========
 
@@ -27,8 +35,6 @@ export async function getAllProducts() {
       }
 
   */
-
-  return response.json();
 }
 
 export async function getSingleProduct(id: number) {
