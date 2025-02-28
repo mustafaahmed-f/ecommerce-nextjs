@@ -1,21 +1,22 @@
 "use client";
 
-import React from "react";
-import HomeHeadlines from "./HomeHeadlines";
-import FreshSalesCard from "./FreshSalesCard";
-import TrendingMustHaveCard from "./TrendingMustHaveCard";
-import MainProductsCard from "./MainProductsCard";
 import { useCategories } from "@/app/_context/CategoriesProvider";
+import Spinner from "../Spinner";
+import FreshSalesCard from "./FreshSalesCard";
+import HomeHeadlines from "./HomeHeadlines";
+import MainProductsCard from "./MainProductsCard";
+import TrendingMustHaveCard from "./TrendingMustHaveCard";
 
 function SecondMainSection({}) {
   const { products } = useCategories();
-  console.log("Products : ", products);
-  const freshSalesProducts: any[] = products.slice(products.length - 4);
-  const trending: any[] = products.slice(50, 53);
-  const top100: any[] = products.slice(20, 24);
 
-  if (!products.length)
-    return <p className="text-center w-full">Loading products ...</p>;
+  const freshSalesProducts: any[] = products.length
+    ? products.slice(products.length - 4)
+    : [];
+  const trending: any[] = products.length ? products.slice(50, 53) : [];
+  const top100: any[] = products.length ? products.slice(20, 24) : [];
+
+  if (!products.length) return <Spinner />;
 
   return (
     <div className="flex flex-col gap-16 px-5 sm:px-16 sm:pt-16 ">

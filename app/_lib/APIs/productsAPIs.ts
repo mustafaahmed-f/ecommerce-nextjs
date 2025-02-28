@@ -4,15 +4,16 @@ export async function getAllProducts({
   page = 1,
   size = 149,
 }: { page?: number; size?: number } = {}) {
-  // const response: any = await fetch(
-  //   `${process.env.NEXTAUTH_URL}/api/products/${page}/${size}`,
-  //   { next: { revalidate: 3600 * 24 } }
-  // );
-  const response = await instance.get(`/api/products/${page}/${size}`);
-  if (!response.data || !response.data.success)
-    throw new Error("Couldn't get products !!");
+  const response: any = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/products/${page}/${size}`,
+    { cache: "force-cache" }
+  );
+  // console.log("Response : ", response);
+  console.log("Products fetched !!");
+  // const response = await instance.get(`/api/products/${page}/${size}`);
+  if (!response.ok) throw new Error("Couldn't get products !!");
 
-  return response.data;
+  return response.json();
   /*  
       ============= Response ==========
 

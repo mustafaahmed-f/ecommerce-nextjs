@@ -53,9 +53,9 @@ export async function GET(
     { success: true, products },
     {
       status: 200,
-      headers: {
-        "Cache-Control": `s-maxage=${revalidateTime}, stale-while-revalidate`,
-      },
+      // headers: {
+      //   "Cache-Control": `s-maxage=${revalidateTime}, stale-while-revalidate`,
+      // },
     }
   );
 }
