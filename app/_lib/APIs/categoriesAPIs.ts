@@ -1,12 +1,16 @@
+import { instance } from "../axiosInstance";
+
 export async function getCategories() {
-  const response = await fetch(
-    "https://fakestoreapi.in/api/products/category",
-    { next: { revalidate: 3600 * 24 } }
-  );
+  const response = await instance.get("/api/categories");
+  // console.log("response", response.data);
+  if (!response.data || !response.data.success)
+    throw new Error("Couldn't get categories !!");
 
-  if (!response.ok) throw new Error("Couldn't get categories !!");
-
-  return response.json();
+  return response.data;
+  // const finalResponse = response.data.categories.map(
+  //   (category: any) => category.title
+  // );
+  // return finalResponse;
 }
 
 export async function getProductsByCategories(category: string) {

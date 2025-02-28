@@ -13,11 +13,18 @@ export const revalidate = 3600 * 24;
 
 export async function generateStaticParams() {
   const categories = await getCategories();
-
+  // console.log("Categories : ", categories);
   return categories.categories.map((category: string) => ({
-    params: { category },
+    params: category,
   }));
 }
+
+// export async function generateStaticParams() {
+//   const categories = await getCategories();
+//   return categories.categories.map((category: any) => ({
+//     category: category.title, // ✅ No extra "params" key
+//   }));
+// }
 
 async function page({ params }: pageProps) {
   const { category } = params;

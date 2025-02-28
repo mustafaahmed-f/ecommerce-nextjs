@@ -1,6 +1,6 @@
 import { paginationFunction } from "./paginationFn";
 
-class apiFeatures {
+export class apiFeatures {
   query: any;
   queryObj: any;
   constructor(query: any, queryObj: any) {

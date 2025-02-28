@@ -26,11 +26,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await connectDB();
   const { 0: categories, 1: products } = await Promise.all([
     getCategories(),
     getAllProducts(),
   ]);
-  await connectDB();
+
+  // console.log("Categories : ", categories);
 
   return (
     <html lang="en">
