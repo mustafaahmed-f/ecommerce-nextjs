@@ -5,8 +5,8 @@ import Link from "next/link";
 async function CategoriesOptions() {
   const categories = await getCategories();
   return (
-    <div className="">
-      <ul className="flex items-center justify-center  list-none py-5  sm:gap-3 md:gap-16 sm:px-2 md:px-24 categoryList">
+    <div className="sm:mb-0 mb-5">
+      <ul className="flex items-center justify-center  list-none py-5 flex-wrap gap-3 sm:bg-white bg-slate-100  sm:gap-3 md:gap-16 sm:px-2 md:px-24 categoryList">
         {categories.categories.map((category: string, i: number) => (
           <Link
             href={`/products/${category}`}
