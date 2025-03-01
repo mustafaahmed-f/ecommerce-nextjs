@@ -3,11 +3,13 @@ import type { Metadata } from "next";
 import Footer from "./_components/Footer/Footer";
 import Header from "./_components/Header/Header";
 import { getCategories } from "./_lib/APIs/categoriesAPIs";
-import { getAllProducts } from "./_lib/APIs/productsAPIs";
+import { getAllProducts, getCachedProducts } from "./_lib/APIs/productsAPIs";
 import connectDB from "./_mongodb/dbConnect";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
 import { Providers } from "./Providers";
+import { Suspense } from "react";
+import Spinner from "./_components/Spinner";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -29,7 +31,7 @@ export default async function RootLayout({
   await connectDB();
   const { 0: categories, 1: products } = await Promise.all([
     getCategories(),
-    getAllProducts(),
+    getCachedProducts(),
   ]);
 
   // console.log("Categories : ", categories);

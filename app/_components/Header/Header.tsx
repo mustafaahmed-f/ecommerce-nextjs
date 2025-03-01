@@ -1,13 +1,8 @@
-import { getCategories } from "@/app/_lib/APIs/categoriesAPIs";
-import HeadersWrapper from "./HeadersWrapper";
-import { getAllProducts } from "@/app/_lib/APIs/productsAPIs";
+import { auth } from "@/app/_lib/auth";
 import { instance } from "@/app/_lib/axiosInstance";
 import { verifyToken } from "@/app/_lib/tokenMethods";
 import { cookies } from "next/headers";
-import { auth } from "@/app/_lib/auth";
-import { checkOnRedis } from "@/app/_lib/checkOnRedis";
-import { getCookie } from "@/app/_lib/getCookie";
-import { checkUserInDB } from "@/app/_lib/checkUserInDB";
+import HeadersWrapper from "./HeadersWrapper";
 
 interface HeaderProps {}
 

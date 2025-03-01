@@ -1,5 +1,4 @@
 import { useCategories } from "@/app/_context/CategoriesProvider";
-import { getCategories } from "@/app/_lib/APIs/categoriesAPIs";
 import Link from "next/link";
 
 function Menu({ setShowMenu }: { setShowMenu: any }) {

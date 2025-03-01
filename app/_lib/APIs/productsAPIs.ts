@@ -1,4 +1,17 @@
+import { cache } from "react";
 import { instance } from "../axiosInstance";
+
+export const getCachedProducts = cache(
+  async ({ page = 1, size = 149 } = {}) => {
+    const response: any = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/products/${page}/${size}`,
+      { cache: "force-cache" }
+    );
+    console.log("Cached Products fetched !!");
+
+    return response.json();
+  }
+);
 
 export async function getAllProducts({
   page = 1,
@@ -6,12 +19,13 @@ export async function getAllProducts({
 }: { page?: number; size?: number } = {}) {
   const response: any = await fetch(
     `${process.env.NEXTAUTH_URL}/api/products/${page}/${size}`,
-    { cache: "force-cache" }
+    // { next: { revalidate: 3600 * 24 } }
+    { next: { revalidate: 20000 } }
   );
   // console.log("Response : ", response);
-  console.log("Products fetched !!");
   // const response = await instance.get(`/api/products/${page}/${size}`);
   if (!response.ok) throw new Error("Couldn't get products !!");
+  console.log("Products fetched !!");
 
   return response.json();
   /*  

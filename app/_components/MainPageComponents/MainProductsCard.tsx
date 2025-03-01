@@ -20,7 +20,7 @@ function MainProductsCard({ product }: { product: any }) {
       <div className="flex flex-row items-center justify-between gap-2 p-2 sm:p-4 ">
         <div className="flex flex-col items-start justify-center gap-2 text-start ">
           <Link
-            href={`/product/${product.id}`}
+            href={`/product/${product.productId}`}
             className="text-sm font-bold text-black hover:underline cursor-pointer"
           >
             {product.title}

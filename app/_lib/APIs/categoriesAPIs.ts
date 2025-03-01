@@ -3,10 +3,12 @@ import { instance } from "../axiosInstance";
 export async function getCategories() {
   // const response = await instance.get("/api/categories");
   const response = await fetch(`${process.env.NEXTAUTH_URL}/api/categories`, {
-    cache: "force-cache",
+    next: { revalidate: 3600 * 24 },
   });
   // console.log("response", response.data);
   if (!response.ok) throw new Error("Couldn't get categories !!");
+
+  console.log("Categories Fetched !!");
 
   return response.json();
 }

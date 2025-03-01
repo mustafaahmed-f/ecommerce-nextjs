@@ -3,7 +3,7 @@ import productsModel from "@/app/_mongodb/models/productsModel";
 import { NextRequest, NextResponse } from "next/server";
 
 // Cache key (for Next.js caching)
-const revalidateTime = 3600 * 24; // 24 hours
+// const revalidateTime = 3600 * 24;
 
 export async function GET(
   request: NextRequest,
@@ -37,10 +37,6 @@ export async function GET(
   // .filter();
 
   const products = await apiFeatureInstance.query;
-
-  // let tempProducts = await productsModel.find();
-
-  // console.log("tempProducts", tempProducts.length);
 
   if (!products.length) {
     return NextResponse.json(
