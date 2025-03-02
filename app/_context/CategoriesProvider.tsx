@@ -50,7 +50,7 @@ function CategoriesProvider({
     useState<boolean>(false);
   let trie = new Trie();
   for (let product of products) {
-    trie.addProduct(product.title, product.id);
+    trie.addProduct(product.title, product.productId);
   }
 
   useEffect(() => {

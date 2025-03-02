@@ -1,4 +1,3 @@
-"use client";
 import MainLogo from "../MainLogo";
 import ProductSearchDiv from "./ProductSearchDiv";
 import { Reorder, ShoppingBag } from "@mui/icons-material";

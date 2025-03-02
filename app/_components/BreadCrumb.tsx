@@ -1,7 +1,7 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Link from "@mui/material/Link";
+import Link from "next/link";
 
 export interface breadCrumbOptionsType {
   label: string;
@@ -19,7 +19,12 @@ function BreadCrumb({ breadCrumbOptions }: BreadCrumbProps) {
       <Breadcrumbs aria-label="breadcrumb">
         {breadCrumbOptions.map((option, i) =>
           !option.current ? (
-            <Link underline="hover" color="inherit" href={option.href} key={i}>
+            <Link
+              color="inherit"
+              href={option.href}
+              key={i}
+              className="hover:underline"
+            >
               {option.label}
             </Link>
           ) : (

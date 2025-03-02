@@ -6,6 +6,8 @@ import { Provider } from "react-redux";
 import { store } from "./_lib/store/store";
 import AlertContextProvider from "./_context/AlertProvider";
 import CategoriesProvider from "./_context/CategoriesProvider";
+import UserProvider from "./_context/UserProvider";
+import { SessionProvider } from "next-auth/react";
 
 interface ProvidersProps {
   children: React.ReactNode;
