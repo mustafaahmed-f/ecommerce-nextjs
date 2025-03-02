@@ -7,7 +7,6 @@ interface AutoCompleteDialogProps {
 }
 
 function AutoCompleteDialog({ productsArr }: AutoCompleteDialogProps) {
-  console.log("Products arr in AutoCompleteDialog : ", productsArr);
   return (
     <div
       className="autoCompleteDialog bg-bgGrey overflow-x-hidden overflow-y-scroll rounded-bl-md rounded-br-md z-50 flex flex-col absolute translate-y-[104%] -bottom-0 left-0 w-full max-h-48 sm:max-h-60"

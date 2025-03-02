@@ -1,11 +1,9 @@
-import { Provider } from "react-redux";
+import { cookies } from "next/headers";
 import UserProvider from "../_context/UserProvider";
-import { auth } from "./auth";
-import { store } from "./store/store";
 import { Providers } from "../Providers";
+import { auth } from "./auth";
 import { instance } from "./axiosInstance";
 import { verifyToken } from "./tokenMethods";
-import { cookies } from "next/headers";
 
 interface AuthHandlerProps {
   children: React.ReactNode;
@@ -46,7 +44,7 @@ async function AuthHandler({
     }
   }
 
-  console.log("User in auth handler : ", user);
+  // console.log("User in auth handler : ", user);
 
   return (
     <Providers
