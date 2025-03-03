@@ -1,13 +1,12 @@
 // app/providers.tsx
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Provider } from "react-redux";
-import { store } from "./_lib/store/store";
 import AlertContextProvider from "./_context/AlertProvider";
 import CategoriesProvider from "./_context/CategoriesProvider";
-import UserProvider from "./_context/UserProvider";
-import { SessionProvider } from "next-auth/react";
+import { store } from "./_lib/store/store";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -20,14 +19,18 @@ export function Providers({
   intitialCategories,
   initialProducts,
 }: ProvidersProps) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
     <Provider store={store}>
-      <CategoriesProvider
-        intitialCategories={intitialCategories}
-        initialProducts={initialProducts}
-      >
-        <AlertContextProvider>{children}</AlertContextProvider>
-      </CategoriesProvider>
+      <QueryClientProvider client={queryClient}>
+        <CategoriesProvider
+          intitialCategories={intitialCategories}
+          initialProducts={initialProducts}
+        >
+          <AlertContextProvider>{children}</AlertContextProvider>
+        </CategoriesProvider>
+      </QueryClientProvider>
     </Provider>
   );
 }

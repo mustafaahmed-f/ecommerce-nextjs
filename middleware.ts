@@ -26,5 +26,5 @@ export const config = {
   api: {
     bodyParser: false, // Disable the default body parser
   },
-  matcher: ["/api/signup", "/api/login", "/login", "/signup"],
+  matcher: ["/api/signup", "/api/login", "/login", "/signup", "/auth"],
 };

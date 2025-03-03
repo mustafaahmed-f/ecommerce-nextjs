@@ -1,3 +1,12 @@
+/**
+ * We are using trie for autocomplete while searching products and that works because we
+ * have just 149 products in our database. If we had a lot of products, we would have
+ * to query the database for each character of the prefix and we will use debounce to
+ * reduce the number of queries.
+ */
+
+//=========================================================
+
 class TrieNode {
   value: string;
   wordEnd: boolean;

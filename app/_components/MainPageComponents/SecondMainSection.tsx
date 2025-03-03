@@ -10,10 +10,8 @@ import TrendingMustHaveCard from "./TrendingMustHaveCard";
 function SecondMainSection({}) {
   const { products } = useCategories();
 
-  const freshSalesProducts: any[] = products.length
-    ? products.slice(products.length - 4)
-    : [];
-  const trending: any[] = products.length ? products.slice(50, 53) : [];
+  const freshSalesProducts: any[] = products.length ? products.slice(0, 4) : [];
+  const trending: any[] = products.length ? products.slice(40, 43) : [];
   const top100: any[] = products.length ? products.slice(20, 24) : [];
 
   if (!products.length) return <Spinner />;

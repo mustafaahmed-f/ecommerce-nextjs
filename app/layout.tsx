@@ -9,6 +9,7 @@ import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
 import { Providers } from "./Providers";
 import AuthHandler from "./_lib/AuthHandler";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -47,6 +48,7 @@ export default async function RootLayout({
           }
           initialProducts={products.success ? products.products : []}
         >
+          <ReactQueryDevtools initialIsOpen={false} />
           <Header />
           <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2 max-md:px-4 max-sm:px-2 ">
             {children}
