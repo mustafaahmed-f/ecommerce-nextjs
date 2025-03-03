@@ -17,6 +17,8 @@
     "@mui/material": "^6.1.4",
     "@mui/styled-engine-sc": "^6.1.4",
     "@reduxjs/toolkit": "^2.3.0",
+    "@tanstack/react-query": "^5.67.1",
+    "@tanstack/react-query-devtools": "^5.67.1",
     "axios": "^1.7.7",
     "axios-cache-adapter": "^2.7.3",
     "bcrypt": "^5.1.1",
@@ -46,6 +48,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.66.1",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/formidable": "^3.4.5",
