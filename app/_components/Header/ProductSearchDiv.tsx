@@ -1,4 +1,4 @@
-import { useCategories } from "@/app/_context/CategoriesProvider";
+import { useProducts } from "@/app/_context/ProductsProvider";
 import { KeyboardArrowDownOutlined, SearchOutlined } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
@@ -13,7 +13,7 @@ function ProductSearchDiv() {
     trie,
     setShowAutoComplete,
     showAutoComplete,
-  } = useCategories();
+  } = useProducts();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const pathName = usePathname();

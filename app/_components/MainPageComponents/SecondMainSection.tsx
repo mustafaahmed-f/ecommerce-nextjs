@@ -1,6 +1,6 @@
 "use client";
 
-import { useCategories } from "@/app/_context/CategoriesProvider";
+import { useProducts } from "@/app/_context/ProductsProvider";
 import Spinner from "../Spinner";
 import FreshSalesCard from "./FreshSalesCard";
 import HomeHeadlines from "./HomeHeadlines";
@@ -8,7 +8,7 @@ import MainProductsCard from "./MainProductsCard";
 import TrendingMustHaveCard from "./TrendingMustHaveCard";
 
 function SecondMainSection({}) {
-  const { products } = useCategories();
+  const { products } = useProducts();
 
   const freshSalesProducts: any[] = products.length ? products.slice(0, 4) : [];
   const trending: any[] = products.length ? products.slice(40, 43) : [];
