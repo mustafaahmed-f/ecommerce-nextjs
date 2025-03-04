@@ -9,6 +9,7 @@ import React, {
   useState,
 } from "react";
 import { Trie } from "../_lib/DataStructures/Trie";
+import { getAllProducts } from "../_lib/APIs/productsAPIs";
 
 //===============================================================================
 //========================= used for search =====================================
@@ -68,7 +69,10 @@ function ProductsProvider({
     enabled: category !== "All",
     queryFn: async () => {
       //todo : add api call to get products by category
-      return [];
+      const response = await getAllProducts({
+        category,
+      });
+      if (response.success) return response.products;
     },
   });
 
