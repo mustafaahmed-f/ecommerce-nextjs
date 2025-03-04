@@ -2,24 +2,23 @@ import { apiFeatures } from "@/app/_lib/apiFeatures";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { NextRequest, NextResponse } from "next/server";
 
-// Cache key (for Next.js caching)
-// const revalidateTime = 3600 * 24;
-
-export async function GET(
-  request: NextRequest,
-  {
-    params,
-  }: {
-    params: Promise<{ page: string; size: string }>;
-  }
-) {
-  const { page, size } = await params;
+export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
+  const page = searchParams.get("page") ?? "1";
+  const size = searchParams.get("size") ?? "149";
+  const category = searchParams.get("category");
+
   const brand = searchParams.get("brand");
   const model = searchParams.get("model");
   const sort = searchParams.get("sort");
   const color = searchParams.get("color");
-  const price = searchParams.get("price");
+  const priceMin = searchParams.get("priceMin");
+  const priceMax = searchParams.get("priceMax");
+
+  let filter: any = {};
+  if (category) {
+    filter.category = category; // Directly filtering by category name
+  }
 
   const queryObj = {
     page: parseInt(page),
@@ -28,10 +27,20 @@ export async function GET(
     model,
     sort,
     color,
-    price,
+    priceMin,
+    priceMax,
   };
 
-  const apiFeatureInstance = new apiFeatures(productsModel.find(), queryObj)
+  //   if (priceMin || priceMax) {
+  //     filter.price = {};
+  //     if (priceMin) filter.price.$gte = parseFloat(priceMin);
+  //     if (priceMax) filter.price.$lte = parseFloat(priceMax);
+  //   }
+
+  const apiFeatureInstance = new apiFeatures(
+    productsModel.find(filter),
+    queryObj
+  )
     .pagination()
     .sort();
   // .filter();
@@ -44,14 +53,10 @@ export async function GET(
       { status: 404 }
     );
   }
-
   return NextResponse.json(
     { success: true, products },
     {
       status: 200,
-      // headers: {
-      //   "Cache-Control": `s-maxage=${revalidateTime}, stale-while-revalidate`,
-      // },
     }
   );
 }

@@ -1,9 +1,26 @@
 export async function getAllProducts({
   page = 1,
   size = 149,
-}: { page?: number; size?: number } = {}) {
+  category = "",
+  brand = [],
+  model = [],
+  sort = "",
+  color = [],
+  priceMin = 0,
+  priceMax = 50000,
+}: {
+  page?: number;
+  size?: number;
+  category?: string;
+  brand?: string[];
+  model?: string[];
+  sort?: string;
+  color?: string[];
+  priceMin?: number;
+  priceMax?: number;
+} = {}) {
   const response: any = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/products/${page}/${size}`,
+    `${process.env.NEXTAUTH_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
     // { next: { revalidate: 3600 * 24 } }
     { next: { revalidate: 3600 * 24 } }
   );
