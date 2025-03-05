@@ -24,6 +24,7 @@ function FirstMainSection({}: FirstMainSectionProps) {
             alt="left"
             className=" w-full"
             src="/left.png"
+            priority={true}
           />
         </div>
       </div>

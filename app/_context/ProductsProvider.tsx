@@ -79,22 +79,20 @@ function ProductsProvider({
     if (category === "All") {
       setProducts(initialProducts ?? []);
       if (!trieMap.current.has("All")) {
-        trieMap.current.set("All", new Trie());
+        let newTrie = new Trie();
+        trieMap.current.set("All", newTrie);
         for (let product of initialProducts) {
-          trieMap.current
-            .get("All")
-            ?.addProduct(product.title, product.productId);
+          newTrie.addProduct(product.title, product.productId);
         }
       }
       setTrie(trieMap.current.get("All")!);
     } else if (category !== "All" && data?.length && !isPending && !isError) {
       setProducts(data ?? []);
       if (!trieMap.current.has(category)) {
-        trieMap.current.set(category, new Trie());
+        let newTrie = new Trie();
+        trieMap.current.set(category, newTrie);
         for (let product of data as any[]) {
-          trieMap.current
-            .get(category)
-            ?.addProduct(product.title, product.productId);
+          newTrie.addProduct(product.title, product.productId);
         }
       }
       setTrie(trieMap.current.get(category)!);
