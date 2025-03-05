@@ -13,6 +13,7 @@ function ProductSearchDiv() {
     trie,
     setShowAutoComplete,
     showAutoComplete,
+    loadingProducts,
   } = useProducts();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,7 +49,11 @@ function ProductSearchDiv() {
   }, [setShowAutoComplete]);
 
   return (
-    <div className="productSearchDiv flex relative items-center gap-[2px] sm:gap-1 py-1 sm:text-base text-sm bg-white rounded-sm w-full sm:w-fit flex-nowrap ring-1 ring-neutral-400">
+    <div
+      className={`productSearchDiv flex relative items-center gap-[2px] sm:gap-1 py-1 sm:text-base text-sm bg-white rounded-sm w-full sm:w-fit flex-nowrap ring-1 ring-neutral-400 ${
+        loadingProducts ? "pointer-events-none opacity-40" : ""
+      }`}
+    >
       <input
         value={searchVal}
         ref={inputRef}
@@ -67,12 +72,14 @@ function ProductSearchDiv() {
         <AutoCompleteDialog productsArr={productsArr} />
       )}
 
-      <div className="flex h-full bg-white cursor-pointer whitespace-nowrap flex-nowrap">
+      <div
+        className="flex h-full bg-white cursor-pointer whitespace-nowrap flex-nowrap"
+        onClick={() => setShowAutoComplete(false)}
+      >
         {searchVal && (
           <div
             onClick={() => {
               setSearchVal("");
-              setShowAutoComplete(false);
             }}
             className="cursor-pointer hover:text-primary-500  text-lg flex items-center  pe-2"
           >

@@ -55,7 +55,7 @@ function ProductsProvider({
   initialProducts,
 }: ProductsProviderProps) {
   type Category = (typeof intitialCategories)[number];
-  const { 0: category, 1: setCategory } = useState<Category>("mobile");
+  const { 0: category, 1: setCategory } = useState<Category>("gaming");
   // const { 0: products, 1: setProducts } = useState<any[]>([]);
   const { 0: loadingProducts, 1: setLoadingProducts } = useState<boolean>(true);
   const { 0: errorProducts, 1: setErrorProducts } = useState<string>("");
@@ -65,22 +65,28 @@ function ProductsProvider({
   const { 0: trie, 1: setTrie } = useState<Trie>(new Trie());
   const trieMap = useRef(new Map<Category, Trie>());
 
+  const { 0: isHydrated, 1: setIsHydrated } = useState<boolean>(false);
+
   const { data, isPending, error, isError } = useQuery({
     queryKey: ["products by category", category],
     enabled: !!category && category !== "All",
     queryFn: async () => {
-      console.log("Query fn called !!");
+      // console.log("Query fn called !!");
       const response = await getAllProducts({ category });
       if (response.success) return response.products;
       return [];
     },
   });
 
-  console.log("Data : ", data);
+  // console.log("Data : ", data);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   //// set products with each change in category
   useEffect(() => {
-    console.log("UseEffect called !!");
+    // console.log("UseEffect called !!");
     if (category === "All") {
       // setProducts(initialProducts ?? []);
       if (!trieMap.current.has("All")) {
@@ -128,6 +134,8 @@ function ProductsProvider({
     errorProducts,
     loadingProducts,
   ]);
+
+  if (!isHydrated) return null;
 
   return (
     <categoriesContext.Provider
