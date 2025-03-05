@@ -21,26 +21,30 @@ interface initialStateType {
   category: string;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
   initialProducts: any[];
-  products: any[];
-  setProducts: React.Dispatch<React.SetStateAction<any[]>>;
+  // products: any[];
+  // setProducts: React.Dispatch<React.SetStateAction<any[]>>;
   trie: Trie;
   searchVal: string;
   setSearchVal: React.Dispatch<React.SetStateAction<string>>;
   showAutoComplete: boolean;
   setShowAutoComplete: React.Dispatch<React.SetStateAction<boolean>>;
+  loadingProducts: boolean;
+  errorProducts: string;
 }
 
 const initialState: initialStateType = {
   category: "All",
   setCategory: () => {},
-  products: [],
+  // products: [],
   initialProducts: [],
-  setProducts: () => {},
+  // setProducts: () => {},
   trie: new Trie(),
   searchVal: "",
   setSearchVal: () => {},
   showAutoComplete: false,
   setShowAutoComplete: () => {},
+  loadingProducts: true,
+  errorProducts: "",
 };
 
 const categoriesContext = createContext<initialStateType>(initialState);
@@ -52,9 +56,8 @@ function ProductsProvider({
 }: ProductsProviderProps) {
   type Category = (typeof intitialCategories)[number];
   const { 0: category, 1: setCategory } = useState<Category>("mobile");
-  const { 0: products, 1: setProducts } = useState<any[]>([]);
-  const { 0: loadingProducts, 1: setLoadingProducts } =
-    useState<boolean>(false);
+  // const { 0: products, 1: setProducts } = useState<any[]>([]);
+  const { 0: loadingProducts, 1: setLoadingProducts } = useState<boolean>(true);
   const { 0: errorProducts, 1: setErrorProducts } = useState<string>("");
   const { 0: searchVal, 1: setSearchVal } = useState<string>("");
   const { 0: showAutoComplete, 1: setShowAutoComplete } =
@@ -66,18 +69,20 @@ function ProductsProvider({
     queryKey: ["products by category", category],
     enabled: !!category && category !== "All",
     queryFn: async () => {
+      console.log("Query fn called !!");
       const response = await getAllProducts({ category });
       if (response.success) return response.products;
       return [];
     },
   });
 
-  // console.log("Data : ", data);
+  console.log("Data : ", data);
 
   //// set products with each change in category
   useEffect(() => {
+    console.log("UseEffect called !!");
     if (category === "All") {
-      setProducts(initialProducts ?? []);
+      // setProducts(initialProducts ?? []);
       if (!trieMap.current.has("All")) {
         let newTrie = new Trie();
         trieMap.current.set("All", newTrie);
@@ -86,8 +91,8 @@ function ProductsProvider({
         }
       }
       setTrie(trieMap.current.get("All")!);
-    } else if (category !== "All" && data?.length && !isPending && !isError) {
-      setProducts(data ?? []);
+    } else if (category !== "All" && data && !isPending && !isError) {
+      // setProducts(data ?? []);
       if (!trieMap.current.has(category)) {
         let newTrie = new Trie();
         trieMap.current.set(category, newTrie);
@@ -102,7 +107,7 @@ function ProductsProvider({
     data,
     isPending,
     isError,
-    setProducts,
+    // setProducts,
     initialProducts,
     trieMap,
     setTrie,
@@ -129,14 +134,16 @@ function ProductsProvider({
       value={{
         category,
         setCategory,
-        products,
-        setProducts,
+        // products: isPending ? [] : products,
+        // setProducts,
         trie,
         searchVal,
         setSearchVal,
         showAutoComplete,
         setShowAutoComplete,
         initialProducts,
+        loadingProducts,
+        errorProducts,
       }}
     >
       {children}
