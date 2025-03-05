@@ -11,10 +11,6 @@ import React, {
 import { Trie } from "../_lib/DataStructures/Trie";
 import { getAllProducts } from "../_lib/APIs/productsAPIs";
 
-//===============================================================================
-//========================= used for search =====================================
-//===============================================================================
-
 interface ProductsProviderProps {
   children: ReactNode;
   intitialCategories: any;
@@ -24,6 +20,7 @@ interface ProductsProviderProps {
 interface initialStateType {
   category: string;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
+  initialProducts: any[];
   products: any[];
   setProducts: React.Dispatch<React.SetStateAction<any[]>>;
   trie: Trie;
@@ -33,10 +30,11 @@ interface initialStateType {
   setShowAutoComplete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const initialState = {
+const initialState: initialStateType = {
   category: "All",
   setCategory: () => {},
   products: [],
+  initialProducts: [],
   setProducts: () => {},
   trie: new Trie(),
   searchVal: "",
@@ -53,7 +51,7 @@ function ProductsProvider({
   initialProducts,
 }: ProductsProviderProps) {
   type Category = (typeof intitialCategories)[number];
-  const { 0: category, 1: setCategory } = useState<Category>("All");
+  const { 0: category, 1: setCategory } = useState<Category>("mobile");
   const { 0: products, 1: setProducts } = useState<any[]>([]);
   const { 0: loadingProducts, 1: setLoadingProducts } =
     useState<boolean>(false);
@@ -66,15 +64,15 @@ function ProductsProvider({
 
   const { data, isPending, error, isError } = useQuery({
     queryKey: ["products by category", category],
-    enabled: category !== "All",
+    enabled: !!category && category !== "All",
     queryFn: async () => {
-      //todo : add api call to get products by category
-      const response = await getAllProducts({
-        category,
-      });
+      const response = await getAllProducts({ category });
       if (response.success) return response.products;
+      return [];
     },
   });
+
+  // console.log("Data : ", data);
 
   //// set products with each change in category
   useEffect(() => {
@@ -90,7 +88,7 @@ function ProductsProvider({
       }
       setTrie(trieMap.current.get("All")!);
     } else if (category !== "All" && data?.length && !isPending && !isError) {
-      setProducts(data);
+      setProducts(data ?? []);
       if (!trieMap.current.has(category)) {
         trieMap.current.set(category, new Trie());
         for (let product of data as any[]) {
@@ -140,6 +138,7 @@ function ProductsProvider({
         setSearchVal,
         showAutoComplete,
         setShowAutoComplete,
+        initialProducts,
       }}
     >
       {children}

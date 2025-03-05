@@ -8,7 +8,7 @@ import MainProductsCard from "./MainProductsCard";
 import TrendingMustHaveCard from "./TrendingMustHaveCard";
 
 function SecondMainSection({}) {
-  const { products } = useProducts();
+  const { initialProducts: products } = useProducts();
 
   const freshSalesProducts: any[] = products.length ? products.slice(0, 4) : [];
   const trending: any[] = products.length ? products.slice(40, 43) : [];

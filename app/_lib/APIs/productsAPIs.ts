@@ -20,7 +20,7 @@ export async function getAllProducts({
   priceMax?: number;
 } = {}) {
   const response: any = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
     // { next: { revalidate: 3600 * 24 } }
     { next: { revalidate: 3600 * 24 } }
   );
