@@ -22,18 +22,4 @@ export class apiFeatures {
     }
     return this;
   }
-
-  filter() {
-    const queryObj = { ...this.queryObj };
-    const excludedFields = ["page", "sort", "limit"];
-    excludedFields.forEach((el) => delete queryObj[el]);
-
-    let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(
-      /\b(eq|ne|gte|gt|lte|lt)\b/g,
-      (match) => `$${match}`
-    );
-    this.query = this.query.find(JSON.parse(queryStr));
-    return this;
-  }
 }

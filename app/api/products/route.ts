@@ -16,9 +16,11 @@ export async function GET(request: NextRequest) {
   const priceMax = searchParams.get("priceMax");
 
   let filter: any = {};
-  if (category) {
-    filter.category = category; // Directly filtering by category name
-  }
+  if (category) filter.category = category; // Directly filtering by category name
+  if (brand) filter.brand = { $in: brand.split("/") }; // Filtering by multiple brand names
+  if (color) filter.color = { $in: color.split("/") };
+  if (priceMin) filter.price = { $gte: parseFloat(priceMin) };
+  if (priceMax) filter.price = { $lte: parseFloat(priceMax) };
 
   const queryObj = {
     page: parseInt(page),
@@ -31,19 +33,12 @@ export async function GET(request: NextRequest) {
     priceMax,
   };
 
-  //   if (priceMin || priceMax) {
-  //     filter.price = {};
-  //     if (priceMin) filter.price.$gte = parseFloat(priceMin);
-  //     if (priceMax) filter.price.$lte = parseFloat(priceMax);
-  //   }
-
   const apiFeatureInstance = new apiFeatures(
     productsModel.find(filter),
     queryObj
   )
     .pagination()
     .sort();
-  // .filter();
 
   const products = await apiFeatureInstance.query;
 

@@ -2,20 +2,20 @@ export async function getAllProducts({
   page = 1,
   size = 149,
   category = "",
-  brand = [],
-  model = [],
+  brand = "",
+  model = "",
   sort = "",
-  color = [],
+  color = "",
   priceMin = 0,
   priceMax = 50000,
 }: {
   page?: number;
   size?: number;
   category?: string;
-  brand?: string[];
-  model?: string[];
+  brand?: string;
+  model?: string;
   sort?: string;
-  color?: string[];
+  color?: string;
   priceMin?: number;
   priceMax?: number;
 } = {}) {
