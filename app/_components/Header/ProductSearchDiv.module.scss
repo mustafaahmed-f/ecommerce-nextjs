@@ -1,0 +1,18 @@
+.dropdown {
+  position: relative;
+  .list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0%;
+    border-radius: 15px;
+    overflow: hidden;
+    z-index: 9999999;
+    p {
+      padding: 10px;
+    }
+  }
+}
+.dropdown:hover .list {
+  display: block;
+}

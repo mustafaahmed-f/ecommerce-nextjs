@@ -1,3 +1,4 @@
+import styles from "./ProductSearchDiv.module.scss";
 import { useProducts } from "@/app/_context/ProductsProvider";
 import { KeyboardArrowDownOutlined, SearchOutlined } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -5,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import AutoCompleteDialog from "./AutoCompleteDialog";
+import { useCategories } from "@/app/_context/CategoriesProvider";
 
 function ProductSearchDiv() {
   const {
@@ -14,12 +16,20 @@ function ProductSearchDiv() {
     setShowAutoComplete,
     showAutoComplete,
     loadingProducts,
+    category,
+    setCategory,
   } = useProducts();
+  const { categories } = useCategories();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const pathName = usePathname();
   const route = useRouter();
   let productsArr = trie.search(searchVal);
+
+  function setCategoryHandler(category: string) {
+    setCategory(category);
+    setShowAutoComplete(false);
+  }
 
   useEffect(() => {
     setShowAutoComplete(false);
@@ -73,7 +83,7 @@ function ProductSearchDiv() {
       )}
 
       <div
-        className="flex h-full bg-white cursor-pointer whitespace-nowrap flex-nowrap"
+        className={`${styles.dropdown} flex h-full bg-white cursor-pointer whitespace-nowrap flex-nowrap`}
         onClick={() => setShowAutoComplete(false)}
       >
         {searchVal && (
@@ -86,7 +96,32 @@ function ProductSearchDiv() {
             <CloseIcon fontSize="small" />
           </div>
         )}
-        All categories
+        <div>
+          <p>{category === "All" ? "All categories" : category}</p>
+          <div className={`${styles.list} bg-slate-50 border-2`}>
+            <p
+              onClick={() => setCategoryHandler("All")}
+              className={`${
+                category === "All" ? "bg-neutral-200" : ""
+              } hover:bg-neutral-300`}
+            >
+              All categories
+            </p>
+            {categories.categories.map((categoryEl: string) => (
+              <p
+                key={categoryEl}
+                onClick={() => {
+                  setCategoryHandler(categoryEl);
+                }}
+                className={`${
+                  category === categoryEl ? "bg-neutral-200" : ""
+                } hover:bg-neutral-300`}
+              >
+                {categoryEl}
+              </p>
+            ))}
+          </div>
+        </div>
         <span>
           <KeyboardArrowDownOutlined />
         </span>

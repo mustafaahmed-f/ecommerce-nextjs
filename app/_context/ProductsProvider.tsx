@@ -55,7 +55,7 @@ function ProductsProvider({
   initialProducts,
 }: ProductsProviderProps) {
   type Category = (typeof intitialCategories)[number];
-  const { 0: category, 1: setCategory } = useState<Category>("gaming");
+  const { 0: category, 1: setCategory } = useState<Category>("All");
   // const { 0: products, 1: setProducts } = useState<any[]>([]);
   const { 0: loadingProducts, 1: setLoadingProducts } = useState<boolean>(true);
   const { 0: errorProducts, 1: setErrorProducts } = useState<string>("");
@@ -121,7 +121,8 @@ function ProductsProvider({
 
   //// Used to set error messages and loading state
   useEffect(() => {
-    if (isPending) setLoadingProducts(true);
+    if (category === "All" && loadingProducts) setLoadingProducts(false);
+    if (isPending && category !== "All") setLoadingProducts(true);
     else if (!isPending && loadingProducts) setLoadingProducts(false);
     if (isError) setErrorProducts(error.message);
     else if (!isError && errorProducts) setErrorProducts("");
@@ -133,6 +134,7 @@ function ProductsProvider({
     setErrorProducts,
     errorProducts,
     loadingProducts,
+    category,
   ]);
 
   if (!isHydrated) return null;
