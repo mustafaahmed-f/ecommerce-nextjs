@@ -9,13 +9,13 @@ export async function getCategories() {
   return response.json();
 }
 
-export async function getProductsByCategories(category: string) {
-  const response = await fetch(
-    `https://fakestoreapi.in/api/products/category?type=${category}`
-  );
+// export async function getProductsByCategories(category: string) {
+//   const response = await fetch(
+//     `https://fakestoreapi.in/api/products/category?type=${category}`
+//   );
 
-  if (!response.ok)
-    throw new Error(`Couldn't get products of category ${category} !!`);
+//   if (!response.ok)
+//     throw new Error(`Couldn't get products of category ${category} !!`);
 
-  return response.json();
-}
+//   return response.json();
+// }

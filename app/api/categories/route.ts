@@ -1,7 +1,7 @@
 import categoriesModel from "@/app/_mongodb/models/categoriesModel";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const categories = await categoriesModel.find();
 
   if (!categories.length) {

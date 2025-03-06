@@ -4,7 +4,9 @@ import {
   fetchCategoriesFromAPI,
   fetchProductsFromAPI,
 } from "../_lib/AddProductsToDB";
+import { addBrandsAndModelsToDB } from "../_lib/AddModels&BrandsToDB";
 //TODO : Change the uri to Atlas uri
+//TODO : add same data on local to the atlas
 // const uri = process.env.MONGODB_URI_ATLAS as string;
 const uri = process.env.MONGODB_URI as string;
 
@@ -14,6 +16,7 @@ const connectDB = async () => {
     // await fetchProductsFromAPI();
     // await fetchCategoriesFromAPI();
     // await addSizeToProducts();
+    // await addBrandsAndModelsToDB();
     return true;
   }
 

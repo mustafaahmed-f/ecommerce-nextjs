@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const categoriesSchema = new Schema(
+const brandsSchema = new Schema(
   {
     title: { type: String, required: true },
   },
@@ -9,5 +9,4 @@ const categoriesSchema = new Schema(
   }
 );
 
-export default mongoose.models.Category ||
-  mongoose.model("Category", categoriesSchema);
+export default mongoose.models.Brand || mongoose.model("Brand", brandsSchema);

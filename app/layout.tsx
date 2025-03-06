@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 // import { Inter } from "next/font/google";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Footer from "./_components/Footer/Footer";
 import Header from "./_components/Header/Header";
 import { getCategories } from "./_lib/APIs/categoriesAPIs";
 import { getAllProducts } from "./_lib/APIs/productsAPIs";
+import AuthHandler from "./_lib/AuthHandler";
 import connectDB from "./_mongodb/dbConnect";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
-import { Providers } from "./Providers";
-import AuthHandler from "./_lib/AuthHandler";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
