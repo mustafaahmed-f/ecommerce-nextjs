@@ -34,13 +34,15 @@ export async function GET(request: NextRequest) {
   };
 
   const apiFeatureInstance = new apiFeatures(
-    productsModel.find(filter),
+    productsModel.find(filter).select("+rating"),
     queryObj
   )
     .pagination()
     .sort();
 
   const products = await apiFeatureInstance.query;
+
+  console.log("Called");
 
   if (!products.length) {
     return NextResponse.json(

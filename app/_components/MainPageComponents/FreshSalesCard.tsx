@@ -3,7 +3,6 @@ import Image from "next/image";
 import Rating from "../Rating";
 
 function FreshSalesCard({ product }: { product: any }) {
-  const rating: number = getRandomRating();
   return (
     <div className="flex flex-col min-w-48 sm:px-5 px-2 py-2 shadow-[0px_0px_2px_3px_#F3F3F3]  rounded-md cursor-pointer FreshSalesCard">
       <div className="flex flex-col items-center justify-center gap-2 py-2 text-center">
@@ -28,8 +27,8 @@ function FreshSalesCard({ product }: { product: any }) {
         <p className="font-bold text-black">{product.title}</p>
         <p className="text-textGrey">{product.brand}</p>
         <div className="flex flex-row flex-wrap items-center justify-start gap-2">
-          <Rating ratingValue={rating} />
-          <p className="text-textGrey">{rating}</p>
+          <Rating ratingValue={product.rating} />
+          <p className="text-textGrey">{product.rating}</p>
         </div>
         <div className="flex flex-row items-center justify-start gap-[2px] sm:gap-3 ">
           <p className="text-base text-red-600 sm:text-lg">

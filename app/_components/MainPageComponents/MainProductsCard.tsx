@@ -5,7 +5,6 @@ import Rating from "../Rating";
 import Link from "next/link";
 
 function MainProductsCard({ product }: { product: any }) {
-  const rating = getRandomRating();
   return (
     <div className="flex flex-col shadow-[0px_0px_2px_3px_#F3F3F3]  min-w-48  rounded-md  flashSalesCard ">
       <div className=" overflow-hidden text-center">
@@ -27,8 +26,8 @@ function MainProductsCard({ product }: { product: any }) {
           </Link>
           <p className="text-xs text-textGrey">{product.brand}</p>
           <div className="flex flex-row flex-wrap items-center justify-start gap-2">
-            <Rating ratingValue={rating} />
-            <p className="text-textGrey">{rating}</p>
+            <Rating ratingValue={product.rating} />
+            <p className="text-textGrey">{product.rating}</p>
           </div>
           <div className="flex flex-row items-center justify-start gap-[2px] sm:gap-3 w-full">
             <p className="text-base text-red-600 sm:text-lg">

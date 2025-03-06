@@ -16,6 +16,8 @@ function SecondMainSection({}) {
 
   if (!products.length) return <Spinner />;
 
+  console.log("Products : ", products);
+
   return (
     <div className="flex flex-col gap-16 px-5 sm:px-16 sm:pt-16 ">
       {/* ////First sub section : fresh sales */}

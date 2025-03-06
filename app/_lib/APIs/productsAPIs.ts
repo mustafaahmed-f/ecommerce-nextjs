@@ -21,12 +21,16 @@ export async function getAllProducts({
 } = {}) {
   const response: any = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
-    // { next: { revalidate: 3600 * 24 } }
     { next: { revalidate: 3600 * 24 } }
+    // { cache: "no-store" }
   );
-
-  if (!response.ok) throw new Error("Couldn't get products !!");
-
+  // console.log(response);
+  if (!response.ok) {
+    const errorText = await response.text(); // Get error message from response
+    console.error("API Error:", errorText); // Log error in console
+    throw new Error("Couldn't get products!");
+  }
+  console.log("Called in method !!");
   return response.json();
 }
 

@@ -4,6 +4,7 @@ import categoriesModel from "../_mongodb/models/categoriesModel";
 import productsModel from "../_mongodb/models/productsModel";
 import { getCategories } from "./APIs/categoriesAPIs";
 import { getAllProducts } from "./APIs/productsAPIs";
+import { getRandomRating } from "./getRating";
 
 export async function fetchProductsFromAPI() {
   try {
@@ -52,6 +53,22 @@ export async function addSizeToProducts() {
     console.log("✅ Sizes successfully added to MongoDB");
   } catch (error) {
     console.log("Error adding sizes to products: ", error);
+  }
+}
+
+export async function addRatingToProducts() {
+  try {
+    const products = await productsModel.find();
+    if (!products || !products.length) throw new Error("No products found");
+    for (let product of products) {
+      const rating = getRandomRating();
+      product.rating = rating;
+      await product.save();
+    }
+
+    console.log("✅ Ratings successfully added to MongoDB");
+  } catch (error) {
+    console.log("Error adding ratings to products: ", error);
   }
 }
 
