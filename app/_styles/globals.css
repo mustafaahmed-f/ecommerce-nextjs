@@ -15,7 +15,7 @@
   @apply grid md:grid-cols-[1fr_1fr_1fr_1fr] text-[12px] sm:text-[14px] md:grid-rows-[auto] grid-rows-[1fr_1fr] grid-cols-[1fr_1fr] sm:gap-x-[90px] md:gap-x-[126px] gap-x-[23px] gap-y-[15px] sm:gap-y-[60px];
 }
 .desktop-header-first-section {
-  @apply grid px-7 py-3 md:grid-cols-[auto_auto] md:gap-9 gap-y-2 gap-x-3 md:grid-rows-[auto] grid-cols-[auto] grid-rows-[auto_auto];
+  @apply grid px-8 py-3 md:grid-cols-[auto_auto] md:gap-9 gap-y-2 gap-x-3 md:grid-rows-[auto] grid-cols-[auto] grid-rows-[auto_auto];
 }
 .filter-sections {
   @apply p-4 flex flex-col gap-4;

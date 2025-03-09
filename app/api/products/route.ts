@@ -42,8 +42,6 @@ export async function GET(request: NextRequest) {
 
   const products = await apiFeatureInstance.query;
 
-  console.log("Called");
-
   if (!products.length) {
     return NextResponse.json(
       { success: false, error: "No products found" },

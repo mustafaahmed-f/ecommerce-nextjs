@@ -30,7 +30,6 @@ export async function getAllProducts({
     console.error("API Error:", errorText); // Log error in console
     throw new Error("Couldn't get products!");
   }
-  console.log("Called in method !!");
   return response.json();
 }
 
