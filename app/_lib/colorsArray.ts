@@ -1,4 +1,4 @@
-const colorArray = [
+export const colorsArray = [
   { colorString: "silver", colorHex: "#C0C0C0" },
   { colorString: "white", colorHex: "#FFFFFF" },
   { colorString: "sand gold", colorHex: "#C2B280" },
@@ -29,5 +29,5 @@ const colorArray = [
 ];
 
 export const colorMap: Map<string | null, string | null> = new Map(
-  colorArray.map((item) => [item.colorString, item.colorHex])
+  colorsArray.map((item) => [item.colorString, item.colorHex])
 );

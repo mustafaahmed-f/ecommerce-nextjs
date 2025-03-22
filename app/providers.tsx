@@ -8,6 +8,7 @@ import CategoriesProvider from "./_context/CategoriesProvider";
 import { store } from "./_lib/store/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProductsProvider from "./_context/ProductsProvider";
+import NextNavigationProvider from "./_context/NextNavigationProvider";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -39,7 +40,9 @@ export function Providers({
             intitialCategories={intitialCategories}
             initialProducts={initialProducts}
           >
-            <AlertContextProvider>{children}</AlertContextProvider>
+            <AlertContextProvider>
+              <NextNavigationProvider>{children}</NextNavigationProvider>
+            </AlertContextProvider>
           </ProductsProvider>
         </CategoriesProvider>
       </QueryClientProvider>

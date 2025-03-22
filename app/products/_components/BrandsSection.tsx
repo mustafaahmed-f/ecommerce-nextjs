@@ -1,28 +1,13 @@
 import React from "react";
+import BrandsSectionClients from "./BrandsSectionClients";
 
 interface BrandsSectionProps {
-  brands: string[];
-  isSelected?: boolean;
+  brands: any[];
 }
 
-function BrandsSection({ brands, isSelected = false }: BrandsSectionProps) {
-  return (
-    <div className="filter-sections">
-      <p className="font-semibold">Brands</p>
-      <div className="flex flex-wrap items-center">
-        {brands.map((el, i) => (
-          <div
-            className={`py-1 px-2 border-2 border-[#D9D9D9] rounded-sm m-1 font-semibold${
-              isSelected ? "bg-[#D1E2EB]" : ""
-            }`}
-            key={i}
-          >
-            {el}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+function BrandsSection({ brands }: BrandsSectionProps) {
+  // const brands: { success: boolean; brands: string[] } = await getBrands();
+  return <BrandsSectionClients brands={brands} />;
 }
 
 export default BrandsSection;

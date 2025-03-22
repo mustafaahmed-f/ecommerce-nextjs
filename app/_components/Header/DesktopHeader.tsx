@@ -7,11 +7,9 @@ import {
 } from "@mui/icons-material";
 // import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 
-import Image from "next/image";
-import Link from "next/link";
-import LogoAndSearch from "./LogoAndSearch";
-import PagesLinks from "./PagesLinks";
-import SocialLinks from "./SocialLinks";
+import { logOutAction } from "@/app/_actions/authActions";
+import { useNextNavigation } from "@/app/_context/NextNavigationProvider";
+import { logOut } from "@/app/_lib/store/slices/userSlice/userSlice";
 import { useAppDispatch, useAppSelector } from "@/app/_lib/store/store";
 import {
   Avatar,
@@ -22,12 +20,12 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
-import { instance } from "@/app/_lib/axiosInstance";
-import { useRouter } from "next/navigation";
-import { logOut } from "@/app/_lib/store/slices/userSlice/userSlice";
-import { signOut } from "@/app/_lib/auth";
-import { logOutAction } from "@/app/_actions/authActions";
+import LogoAndSearch from "./LogoAndSearch";
+import PagesLinks from "./PagesLinks";
+import SocialLinks from "./SocialLinks";
 
 const settings = ["Update Profile", "Logout"];
 
@@ -36,8 +34,7 @@ function DesktopHeader() {
   const { 0: loading, 1: setLoading } = useState<boolean>(false);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  // console.log("user", user);
-  const router = useRouter();
+  const { router } = useNextNavigation();
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };

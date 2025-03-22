@@ -1,10 +1,37 @@
-import React from "react";
+import { getAllProducts } from "../_lib/APIs/productsAPIs";
+import ProductsPage from "./_components/ProductsPage";
 
-interface PageProps {}
+interface PageProps {
+  searchParams: {
+    page?: string;
+    size?: string;
+    sort?: string;
+    brand?: string;
+    color?: string;
+    priceMin?: string;
+    priceMax?: string;
+  };
+}
 
-function Page({}: PageProps) {
-  let filter = "";
-  return <div>All products</div>;
+async function Page({ searchParams }: PageProps) {
+  const page = searchParams.page ?? "1";
+  const size = searchParams.size ?? "15";
+  const sort = searchParams.sort ?? "";
+  const brand = searchParams.brand ?? "";
+  const color = searchParams.color ?? "";
+  const priceMin = searchParams.priceMin ?? "0";
+  const priceMax = searchParams.priceMax ?? "50000";
+
+  const products = await getAllProducts({
+    page: parseInt(page),
+    size: parseInt(size),
+    sort,
+    brand,
+    color,
+    priceMin: parseInt(priceMin),
+    priceMax: parseInt(priceMax),
+  });
+  return <ProductsPage products={products} />;
 }
 
 export default Page;

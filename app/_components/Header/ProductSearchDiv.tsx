@@ -1,12 +1,12 @@
-import styles from "./ProductSearchDiv.module.scss";
+import { useCategories } from "@/app/_context/CategoriesProvider";
+import { useNextNavigation } from "@/app/_context/NextNavigationProvider";
 import { useProducts } from "@/app/_context/ProductsProvider";
 import { KeyboardArrowDownOutlined, SearchOutlined } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import AutoCompleteDialog from "./AutoCompleteDialog";
-import { useCategories } from "@/app/_context/CategoriesProvider";
+import styles from "./ProductSearchDiv.module.scss";
 
 function ProductSearchDiv() {
   const {
@@ -22,8 +22,7 @@ function ProductSearchDiv() {
   const { categories } = useCategories();
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const pathName = usePathname();
-  const route = useRouter();
+  const { pathName, router: route } = useNextNavigation();
   let productsArr = trie.search(searchVal);
 
   function setCategoryHandler(category: string) {
@@ -38,6 +37,7 @@ function ProductSearchDiv() {
   useEffect(() => {
     const inputElement = inputRef.current;
     function handleSearch(e: KeyboardEvent) {
+      if (!productsArr.length) return;
       if (e.key === "Enter" && searchVal && productsArr.length > 0) {
         route.push(`/product/${String(productsArr[0]?.prodId)}`);
       }

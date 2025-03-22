@@ -22,6 +22,8 @@ export async function GET(request: NextRequest) {
   if (priceMin) filter.price = { $gte: parseFloat(priceMin) };
   if (priceMax) filter.price = { $lte: parseFloat(priceMax) };
 
+  const totalProducts = await productsModel.countDocuments(filter);
+
   const queryObj = {
     page: parseInt(page),
     size: parseInt(size),
@@ -44,12 +46,12 @@ export async function GET(request: NextRequest) {
 
   if (!products.length) {
     return NextResponse.json(
-      { success: false, error: "No products found" },
+      { success: false, message: "No products found" },
       { status: 404 }
     );
   }
   return NextResponse.json(
-    { success: true, products },
+    { success: true, products, totalProducts },
     {
       status: 200,
     }

@@ -18,7 +18,11 @@
   @apply grid px-8 py-3 md:grid-cols-[auto_auto] md:gap-9 gap-y-2 gap-x-3 md:grid-rows-[auto] grid-cols-[auto] grid-rows-[auto_auto];
 }
 .filter-sections {
-  @apply p-4 flex flex-col gap-4;
+  @apply p-4 flex flex-col gap-4 w-full;
+}
+
+.filter-sections:not(:last-child) {
+  border-bottom: 1px solid #a5a4a4;
 }
 
 .store-name {
@@ -173,4 +177,24 @@ body::-webkit-scrollbar-thumb {
   /* height: 0px; */
   width: 8px;
   transition: height 5s;
+}
+
+.brands-section::-webkit-scrollbar-track {
+  opacity: 0.3;
+  background-color: #f5f5f5;
+}
+.brands-section::-webkit-scrollbar-thumb {
+  background-color: #a5a4a4;
+}
+.brands-section::-webkit-scrollbar {
+  /* height: 0px; */
+  width: 7px;
+  transition: height 5s;
+}
+
+.color-tooltip {
+  transition: all 0.1s;
+}
+.color-indicator:hover .color-tooltip {
+  visibility: visible;
 }

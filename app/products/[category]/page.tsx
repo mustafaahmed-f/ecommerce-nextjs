@@ -1,9 +1,20 @@
-import BreadCrumb from "@/app/_components/BreadCrumb";
+import BreadCrumb from "@/app/products/_components/BreadCrumb";
 import { getCategories } from "@/app/_lib/APIs/categoriesAPIs";
 import { getAllProducts } from "@/app/_lib/APIs/productsAPIs";
+import ProductsPage from "../_components/ProductsPage";
+import { NextRequest } from "next/server";
 
 interface pageProps {
   params: any;
+  searchParams: {
+    page?: string;
+    size?: string;
+    sort?: string;
+    brand?: string;
+    color?: string;
+    priceMin?: string;
+    priceMax?: string;
+  };
 }
 
 export const revalidate = 3600 * 24;
@@ -23,33 +34,29 @@ export async function generateStaticParams() {
 //   }));
 // }
 
-async function page({ params }: pageProps) {
+async function page({ params, searchParams }: pageProps) {
   const { category } = params;
-  const products = await getAllProducts({ category });
 
-  const breadCrumbOptions = [
-    {
-      label: "Home",
-      href: "/",
-    },
-    {
-      label: category,
-      href: `/products/${category}`,
-      current: true,
-    },
-  ];
+  const page = searchParams.page ?? "1";
+  const size = searchParams.size ?? "15";
+  const sort = searchParams.sort ?? "";
+  const brand = searchParams.brand ?? "";
+  const color = searchParams.color ?? "";
+  const priceMin = searchParams.priceMin ?? "0";
+  const priceMax = searchParams.priceMax ?? "50000";
 
-  // console.log(`PRoducts of category ${category} : `, products);
+  const products = await getAllProducts({
+    category,
+    page: parseInt(page),
+    size: parseInt(size),
+    sort,
+    brand,
+    color,
+    priceMin: parseInt(priceMin),
+    priceMax: parseInt(priceMax),
+  });
 
-  return (
-    <>
-      {/* Breadcrumb section */}
-
-      <div className="flex items-center justify-start bg-slate-100 w-full md:mx-0 px-2 list-none py-5  sm:gap-3 md:gap-16  sm:px-8 md:px-20 categoryList">
-        <BreadCrumb breadCrumbOptions={breadCrumbOptions} />
-      </div>
-    </>
-  );
+  return <ProductsPage products={products} />;
 }
 
 export default page;

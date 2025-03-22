@@ -1,8 +1,6 @@
-import React from "react";
+interface AllCategoriesSVGProps {}
 
-interface VectorProps {}
-
-function Vector({}: VectorProps) {
+function AllCategoriesSVG({}: AllCategoriesSVGProps) {
   return (
     <svg
       width="18"
@@ -35,4 +33,4 @@ function Vector({}: VectorProps) {
   );
 }
 
-export default Vector;
+export default AllCategoriesSVG;

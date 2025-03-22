@@ -1,13 +1,12 @@
-import { getRandomRating } from "@/app/_lib/getRating";
 import { FavoriteBorder } from "@mui/icons-material";
 import Image from "next/image";
-import Rating from "../Rating";
 import Link from "next/link";
+import Rating from "../Rating";
 
 function MainProductsCard({ product }: { product: any }) {
   return (
-    <div className="flex flex-col shadow-[0px_0px_2px_3px_#F3F3F3]  min-w-48  rounded-md  flashSalesCard ">
-      <div className=" overflow-hidden text-center">
+    <div className="flex flex-col shadow-[0px_0px_2px_3px_#F3F3F3]  min-w-36  rounded-md  flashSalesCard ">
+      <div className=" overflow-hidden text-center p-2 sm:p-4">
         <Image
           width={300}
           height={300}
@@ -16,11 +15,11 @@ function MainProductsCard({ product }: { product: any }) {
           src={product.image}
         />
       </div>
-      <div className="flex flex-row items-center justify-between gap-2 p-2 sm:p-4 ">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 p-2 sm:p-4 ">
         <div className="flex flex-col items-start justify-center gap-2 text-start ">
           <Link
             href={`/product/${product.productId}`}
-            className="text-sm font-bold text-black hover:underline cursor-pointer"
+            className="text-sm font-bold text-black hover:underline cursor-pointer whitespace-break-spaces text-wrap"
           >
             {product.title}
           </Link>

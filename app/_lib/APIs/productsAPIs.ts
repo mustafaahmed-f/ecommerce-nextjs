@@ -19,16 +19,20 @@ export async function getAllProducts({
   priceMin?: number;
   priceMax?: number;
 } = {}) {
-  const response: any = await fetch(
+  const response: Response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
     { next: { revalidate: 3600 * 24 } }
     // { cache: "no-store" }
   );
-  // console.log(response);
+  const clonedResponse = await response.clone().json();
+
+  if (!clonedResponse.success && clonedResponse.message === "No products found")
+    return { ...clonedResponse, products: [] };
+
   if (!response.ok) {
-    const errorText = await response.text(); // Get error message from response
+    const errorText = await response.text();
     console.error("API Error:", errorText); // Log error in console
-    throw new Error("Couldn't get products!");
+    throw new Error("Couldn't get products! " + errorText);
   }
   return response.json();
 }

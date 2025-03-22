@@ -14,9 +14,9 @@ function ArrowDown({}: ArrowDownProps) {
       <path
         d="M1 0.9375L6 5.3125L11 0.9375"
         stroke="#7B7B7B"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
