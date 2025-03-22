@@ -18,7 +18,6 @@ function SortBtn({}: SortBtnProps) {
       ?.split("/")
       .filter((el) => /^-/.test(el)) ?? [],
   );
-  console.log("descending:", descending);
   const { 0: showDropList, 1: setShowDropList } = useState<boolean>(false);
 
   const sortOptions: string[] = ["title", "price", "rating"];

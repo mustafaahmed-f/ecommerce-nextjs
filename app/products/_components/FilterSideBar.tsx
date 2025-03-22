@@ -16,8 +16,6 @@ function FilterSideBar({ brands }: FilterSideBarProps) {
 
   const isFilter = searchParams.get("filter") ?? "";
 
-  console.log("isFilter", isFilter);
-
   function handleCloseSideBar() {
     let params = new URLSearchParams(searchParams);
     params.set("filter", "false");
@@ -28,23 +26,23 @@ function FilterSideBar({ brands }: FilterSideBarProps) {
     <div
       className={`${
         isFilter === "true"
-          ? "block max-sm:absolute max-sm:top-0 max-sm:bottom-0 max-sm:left-0 max-sm:z-50"
+          ? "block max-sm:absolute max-sm:bottom-0 max-sm:left-0 max-sm:top-0 max-sm:z-50"
           : "hidden"
       } sm:block`}
     >
-      <div className="flex flex-col bg-slate-50 items-center min-h-full gap-5 max-w-[320px] py-4 px-3 ">
-        <div className="flex items-center sm:justify-center max-sm:justify-between w-full p-4 ">
-          <div className="flex items-center justify-start gap-3 sidebar-item">
+      <div className="flex min-h-full max-w-[320px] flex-col items-center gap-5 bg-slate-50 px-3 py-4">
+        <div className="flex w-full items-center p-4 max-sm:justify-between sm:justify-center">
+          <div className="sidebar-item flex items-center justify-start gap-3">
             <AllCategoriesSVG />
             <Link
               href={`/products?${searchParams.toString()}`}
-              className="font-bold text-base"
+              className="text-base font-bold"
             >
               All Categories
             </Link>
           </div>
           <button
-            className="cursor-pointer max-sm:block hidden"
+            className="hidden cursor-pointer max-sm:block"
             onClick={handleCloseSideBar}
           >
             X

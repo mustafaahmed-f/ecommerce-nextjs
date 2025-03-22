@@ -19,7 +19,6 @@ export async function getAllProducts({
   priceMin?: number | undefined;
   priceMax?: number | undefined;
 } = {}) {
-  console.log("Price Min:", priceMin, "Price Max:", priceMax);
   if (priceMin === undefined) priceMin = 0;
   if (priceMax === undefined) priceMax = 50000;
   const response: Response = await fetch(
