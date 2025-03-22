@@ -22,14 +22,17 @@ function SortDropListOption({
   handleSelection,
   setSelected,
 }: SortDropListOptionProps) {
+  const regex = new RegExp(`^-?${text}$`);
   const { searchParams, pathName, router } = useNextNavigation();
-  const [checked, setChecked] = useState(descending.includes(text)); //// Default ascending; false = ascending, true = descending
+  const [checked, setChecked] = useState(
+    descending.some((el) => regex.test(el)),
+  ); //// Default ascending; false = ascending, true = descending
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
     let params = new URLSearchParams(searchParams);
     setChecked(event.target.checked);
-    const regex = new RegExp(`^-?${text}$`);
+
     const sortOption = `${event.target.checked ? "-" : ""}${text}`;
     const checkExistenceOfSelection = selected.some((option) =>
       regex.test(option),
@@ -49,8 +52,6 @@ function SortDropListOption({
       setDescending((prev) => prev.filter((item) => item !== text));
     }
   };
-
-  const regex = new RegExp(`^-?${text}$`);
 
   return (
     <div

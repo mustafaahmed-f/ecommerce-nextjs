@@ -9,8 +9,16 @@ interface SortBtnProps {}
 
 function SortBtn({}: SortBtnProps) {
   const { searchParams, pathName, router } = useNextNavigation();
-  const { 0: selected, 1: setSelected } = useState<string[]>([]);
-  const { 0: descending, 1: setDescending } = useState<string[]>([]);
+  const { 0: selected, 1: setSelected } = useState<string[]>(
+    searchParams.get("sort")?.split("/") ?? [],
+  );
+  const { 0: descending, 1: setDescending } = useState<string[]>(
+    searchParams
+      .get("sort")
+      ?.split("/")
+      .filter((el) => /^-/.test(el)) ?? [],
+  );
+  console.log("descending:", descending);
   const { 0: showDropList, 1: setShowDropList } = useState<boolean>(false);
 
   const sortOptions: string[] = ["title", "price", "rating"];

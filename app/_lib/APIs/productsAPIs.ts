@@ -6,8 +6,8 @@ export async function getAllProducts({
   model = "",
   sort = "",
   color = "",
-  priceMin = 0,
-  priceMax = 50000,
+  priceMin = undefined,
+  priceMax = undefined,
 }: {
   page?: number;
   size?: number;
@@ -16,12 +16,15 @@ export async function getAllProducts({
   model?: string;
   sort?: string;
   color?: string;
-  priceMin?: number;
-  priceMax?: number;
+  priceMin?: number | undefined;
+  priceMax?: number | undefined;
 } = {}) {
+  console.log("Price Min:", priceMin, "Price Max:", priceMax);
+  if (priceMin === undefined) priceMin = 0;
+  if (priceMax === undefined) priceMax = 50000;
   const response: Response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
-    { next: { revalidate: 3600 * 24 } }
+    { next: { revalidate: 3600 } },
     // { cache: "no-store" }
   );
   const clonedResponse = await response.clone().json();
@@ -41,7 +44,7 @@ export async function getAllProducts({
 
 export async function getSingleProduct(id: number) {
   const response = await fetch(
-    `https://fakestoreapi.in/api/products/${String(id)}`
+    `https://fakestoreapi.in/api/products/${String(id)}`,
   );
   if (!response.ok) throw new Error("Couldn't get the product !!");
 
@@ -57,8 +60,8 @@ export async function getProductsWithPagination({
 }) {
   const response = await fetch(
     `https://fakestoreapi.in/api/products?page=${String(page)}&limit=${String(
-      limit
-    )}`
+      limit,
+    )}`,
   );
   if (!response.ok) throw new Error("Couldn't get products !!");
 
@@ -88,7 +91,7 @@ export async function updateProduct(id: number) {
         color: "Blue",
         discount: 47,
       }),
-    }
+    },
   );
 
   if (!updatedProduct.ok) throw new Error("Failed to update product !!");
@@ -101,7 +104,7 @@ export async function deleteProduct(id: number) {
     `https://fakestoreapi.in/api/products/${String(id)}`,
     {
       method: "DELETE",
-    }
+    },
   );
 
   if (!response.ok) throw new Error("Failed to update product !!");

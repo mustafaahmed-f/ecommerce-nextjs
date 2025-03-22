@@ -19,8 +19,8 @@ export async function GET(request: NextRequest) {
   if (category) filter.category = category; // Directly filtering by category name
   if (brand) filter.brand = { $in: brand.split("/") }; // Filtering by multiple brand names
   if (color) filter.color = { $in: color.split("/") };
-  if (priceMin) filter.price = { $gte: parseFloat(priceMin) };
-  if (priceMax) filter.price = { $lte: parseFloat(priceMax) };
+  if (priceMin) filter.price = { ...filter.price, $gte: parseFloat(priceMin) };
+  if (priceMax) filter.price = { ...filter.price, $lte: parseFloat(priceMax) };
 
   const totalProducts = await productsModel.countDocuments(filter);
 
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 
   const apiFeatureInstance = new apiFeatures(
     productsModel.find(filter).select("+rating"),
-    queryObj
+    queryObj,
   )
     .pagination()
     .sort();
@@ -47,13 +47,13 @@ export async function GET(request: NextRequest) {
   if (!products.length) {
     return NextResponse.json(
       { success: false, message: "No products found" },
-      { status: 404 }
+      { status: 404 },
     );
   }
   return NextResponse.json(
     { success: true, products, totalProducts },
     {
       status: 200,
-    }
+    },
   );
 }
