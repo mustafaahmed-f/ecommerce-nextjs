@@ -42,7 +42,7 @@ function FilterSideBar({ brands }: FilterSideBarProps) {
     <>
       {isMobileDevice && (
         <motion.div
-          initial={{ x: "-100%" }}
+          initial={false}
           animate={{ x: isFilter ? "0%" : "-100%" }}
           transition={{ type: "tween", duration: 0.4 }}
           // exit={{ x: "-100%" }}

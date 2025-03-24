@@ -1,9 +1,9 @@
 "use client";
+import { useNextNavigation } from "@/app/_context/NextNavigationProvider";
 import ArrowDown from "@/app/_icons/ArrowDown";
-import { MouseEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SortDropList from "./SortDropList";
 import SortPills from "./SortPills";
-import { useNextNavigation } from "@/app/_context/NextNavigationProvider";
 
 interface SortBtnProps {}
 
@@ -26,8 +26,6 @@ function SortBtn({}: SortBtnProps) {
   const { 0: showDropList, 1: setShowDropList } = useState<boolean>(false);
 
   const sortOptions: string[] = ["title", "price", "rating"];
-
-  console.log("Sort : ", searchParams.get("sort")?.split("/"));
 
   function handleSelection(
     option: string,
