@@ -50,6 +50,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.6.0",
     "@tanstack/eslint-plugin-query": "^5.66.1",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",

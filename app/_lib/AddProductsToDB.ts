@@ -5,6 +5,7 @@ import productsModel from "../_mongodb/models/productsModel";
 import { getCategories } from "./APIs/categoriesAPIs";
 import { getAllProducts } from "./APIs/productsAPIs";
 import { getRandomRating } from "./getRating";
+import { faker } from "@faker-js/faker";
 
 export async function fetchProductsFromAPI() {
   try {
@@ -96,4 +97,27 @@ export async function fetchCategoriesFromAPI() {
 export async function addReviewsToProducts() {
   //// Review consists of : Name ( if no name , make it anonymous ) , rating , title , review , likes , dislikes
   //// Review can be written by anonymous user or a registered user
+  try {
+    const products = await productsModel.find();
+    if (!products || !products.length) throw new Error("No products found");
+
+    for (let product of products) {
+      for (let i = 0; i < 5; i++) {
+        const review = {
+          name: faker.person.firstName() + " " + faker.person.lastName(),
+          rating: getRandomRating(),
+          title: faker.lorem.sentence(),
+          content: faker.lorem.paragraph(),
+          likes: Math.floor(Math.random() * 10),
+          dislikes: Math.floor(Math.random() * 10),
+        };
+        product.reviews.push(review);
+      }
+      await product.save();
+    }
+
+    console.log("✅ Reviews successfully added to MongoDB");
+  } catch (error) {
+    console.log("Error adding reviews to products: ", error);
+  }
 }

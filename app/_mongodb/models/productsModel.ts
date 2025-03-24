@@ -1,5 +1,14 @@
 import mongoose, { Schema } from "mongoose";
 
+const reviewSchema = new Schema({
+  name: { type: String, required: true },
+  rating: { type: Number, required: true, min: 1, max: 5 },
+  title: { type: String, required: true },
+  review: { type: String, required: true },
+  likes: { type: Number, default: 0 },
+  dislikes: { type: Number, default: 0 },
+});
+
 const productSchema = new Schema(
   {
     productId: { type: Number, required: true },
@@ -15,10 +24,11 @@ const productSchema = new Schema(
     discount: { type: Number, default: 0 },
     stock: { type: Number, default: 10 }, // Default stock value
     rating: { type: Number, default: 0 },
+    reviews: { type: [reviewSchema], default: [] },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
-  }
+  },
 );
 
 export default mongoose.models.Product ||
