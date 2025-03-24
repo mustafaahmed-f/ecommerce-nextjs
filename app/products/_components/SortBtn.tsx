@@ -9,8 +9,13 @@ interface SortBtnProps {}
 
 function SortBtn({}: SortBtnProps) {
   const { searchParams, pathName, router } = useNextNavigation();
+  const sortArray = searchParams.get("sort")?.split("/");
   const { 0: selected, 1: setSelected } = useState<string[]>(
-    searchParams.get("sort")?.split("/") ?? [],
+    sortArray
+      ? sortArray.length === 1 && sortArray[0] === ""
+        ? []
+        : sortArray
+      : [],
   );
   const { 0: descending, 1: setDescending } = useState<string[]>(
     searchParams
@@ -22,13 +27,12 @@ function SortBtn({}: SortBtnProps) {
 
   const sortOptions: string[] = ["title", "price", "rating"];
 
+  console.log("Sort : ", searchParams.get("sort")?.split("/"));
+
   function handleSelection(
     option: string,
     e: React.MouseEvent<HTMLDivElement>,
   ) {
-    // const sortSwitch = document.querySelector("#sortSwitch");
-    // if (sortSwitch?.contains(e.target as Node)) return;
-    console.log("Hanlde selection clicked !!");
     let params = new URLSearchParams(searchParams);
     const regex = new RegExp(`^-?${option}$`);
     let sortOption = `${descending.includes(option) ? "-" : ""}${option}`;

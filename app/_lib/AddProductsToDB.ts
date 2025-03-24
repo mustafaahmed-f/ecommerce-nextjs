@@ -92,3 +92,8 @@ export async function fetchCategoriesFromAPI() {
     console.log("Error fetching categories from API: ", error);
   }
 }
+
+export async function addReviewsToProducts() {
+  //// Review consists of : Name ( if no name , make it anonymous ) , rating , title , review , likes , dislikes
+  //// Review can be written by anonymous user or a registered user
+}

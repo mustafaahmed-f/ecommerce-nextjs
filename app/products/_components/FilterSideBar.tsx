@@ -38,8 +38,6 @@ function FilterSideBar({ brands }: FilterSideBarProps) {
       window.removeEventListener("resize", handleScreenSizeChangeHandler);
   }, []);
 
-  console.log("isMobileDevice", isMobileDevice);
-
   return (
     <>
       {isMobileDevice && (
