@@ -1,5 +1,4 @@
-import { getAllProducts } from "@/app/_lib/APIs/productsAPIs";
-import React, { ParamHTMLAttributes } from "react";
+import { getSingleProduct } from "@/app/_lib/APIs/productsAPIs";
 
 interface PageProps {
   params: any;
@@ -13,7 +12,9 @@ interface PageProps {
 //   }));
 // }
 
-function Page({ params }: PageProps) {
+async function Page({ params }: PageProps) {
+  const product = await getSingleProduct(params.id);
+  console.log(product);
   return <div>{params.id}</div>;
 }
 

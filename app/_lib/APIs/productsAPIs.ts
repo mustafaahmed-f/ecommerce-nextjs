@@ -43,9 +43,20 @@ export async function getAllProducts({
 
 export async function getSingleProduct(id: number) {
   const response = await fetch(
-    `https://fakestoreapi.in/api/products/${String(id)}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/product/${String(id)}`,
+    { next: { revalidate: 3600 } },
   );
-  if (!response.ok) throw new Error("Couldn't get the product !!");
+
+  const clonedResponse = await response.clone().json();
+
+  if (!clonedResponse.success && clonedResponse.message === "Product not found")
+    return { ...clonedResponse, product: null };
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("API Error:", errorText); // Log error in console
+    throw new Error("Couldn't get the product !!");
+  }
 
   return response.json();
 }
