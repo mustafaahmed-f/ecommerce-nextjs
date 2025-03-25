@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import {
   addRatingToProducts,
-  addReviewsToProducts,
+  // addReviewsToProducts,
   addSizeToProducts,
   fetchCategoriesFromAPI,
   fetchProductsFromAPI,

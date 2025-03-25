@@ -5,7 +5,7 @@ import productsModel from "../_mongodb/models/productsModel";
 import { getCategories } from "./APIs/categoriesAPIs";
 import { getAllProducts } from "./APIs/productsAPIs";
 import { getRandomRating } from "./getRating";
-import { faker } from "@faker-js/faker";
+// import { faker } from "@faker-js/faker";
 
 export async function fetchProductsFromAPI() {
   try {
@@ -94,36 +94,36 @@ export async function fetchCategoriesFromAPI() {
   }
 }
 
-export async function addReviewsToProducts() {
-  //// Review consists of : Name ( if no name , make it anonymous ) , rating , title , review , likes , dislikes
-  //// Review can be written by anonymous user or a registered user
-  try {
-    const products = await productsModel.find();
-    if (!products || !products.length) throw new Error("No products found");
+// export async function addReviewsToProducts() {
+//   //// Review consists of : Name ( if no name , make it anonymous ) , rating , title , review , likes , dislikes
+//   //// Review can be written by anonymous user or a registered user
+//   try {
+//     const products = await productsModel.find();
+//     if (!products || !products.length) throw new Error("No products found");
 
-    const updatePromises = products.map(async (product) => {
-      const reviewsArr = Array.from({ length: 3 }, () => ({
-        name: faker.person.firstName() + " " + faker.person.lastName(),
-        rating: getRandomRating(),
-        title: faker.lorem.sentence(),
-        content: faker.lorem.paragraph(),
-        likes: Math.floor(Math.random() * 10),
-        dislikes: Math.floor(Math.random() * 10),
-      }));
+//     const updatePromises = products.map(async (product) => {
+//       const reviewsArr = Array.from({ length: 3 }, () => ({
+//         name: faker.person.firstName() + " " + faker.person.lastName(),
+//         rating: getRandomRating(),
+//         title: faker.lorem.sentence(),
+//         content: faker.lorem.paragraph(),
+//         likes: Math.floor(Math.random() * 10),
+//         dislikes: Math.floor(Math.random() * 10),
+//       }));
 
-      // console.log(`📝 Adding reviews to product: ${product.title}`); // ✅ Debug log
+//       // console.log(`📝 Adding reviews to product: ${product.title}`); // ✅ Debug log
 
-      product.reviews = reviewsArr;
-      // product.markModified("reviews"); // Ensure MongoDB detects change
+//       product.reviews = reviewsArr;
+//       // product.markModified("reviews"); // Ensure MongoDB detects change
 
-      return product.save();
-      // console.log(`✅ Successfully updated: ${product.title}`); // ✅ Check if save() runs
-    });
+//       return product.save();
+//       // console.log(`✅ Successfully updated: ${product.title}`); // ✅ Check if save() runs
+//     });
 
-    await Promise.all(updatePromises); // Wait for all saves to complete
+//     await Promise.all(updatePromises); // Wait for all saves to complete
 
-    console.log("✅ Reviews successfully added to MongoDB");
-  } catch (error) {
-    console.log("Error adding reviews to products: ", error);
-  }
-}
+//     console.log("✅ Reviews successfully added to MongoDB");
+//   } catch (error) {
+//     console.log("Error adding reviews to products: ", error);
+//   }
+// }
