@@ -1,10 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
 const reviewSchema = new Schema({
-  name: { type: String, required: true },
-  rating: { type: Number, required: true, min: 1, max: 5 },
-  title: { type: String, required: true },
-  review: { type: String, required: true },
+  name: { type: String },
+  rating: { type: Number },
+  title: { type: String },
+  content: { type: String },
   likes: { type: Number, default: 0 },
   dislikes: { type: Number, default: 0 },
 });

@@ -101,20 +101,26 @@ export async function addReviewsToProducts() {
     const products = await productsModel.find();
     if (!products || !products.length) throw new Error("No products found");
 
-    for (let product of products) {
-      for (let i = 0; i < 5; i++) {
-        const review = {
-          name: faker.person.firstName() + " " + faker.person.lastName(),
-          rating: getRandomRating(),
-          title: faker.lorem.sentence(),
-          content: faker.lorem.paragraph(),
-          likes: Math.floor(Math.random() * 10),
-          dislikes: Math.floor(Math.random() * 10),
-        };
-        product.reviews.push(review);
-      }
-      await product.save();
-    }
+    const updatePromises = products.map(async (product) => {
+      const reviewsArr = Array.from({ length: 3 }, () => ({
+        name: faker.person.firstName() + " " + faker.person.lastName(),
+        rating: getRandomRating(),
+        title: faker.lorem.sentence(),
+        content: faker.lorem.paragraph(),
+        likes: Math.floor(Math.random() * 10),
+        dislikes: Math.floor(Math.random() * 10),
+      }));
+
+      // console.log(`📝 Adding reviews to product: ${product.title}`); // ✅ Debug log
+
+      product.reviews = reviewsArr;
+      // product.markModified("reviews"); // Ensure MongoDB detects change
+
+      return product.save();
+      // console.log(`✅ Successfully updated: ${product.title}`); // ✅ Check if save() runs
+    });
+
+    await Promise.all(updatePromises); // Wait for all saves to complete
 
     console.log("✅ Reviews successfully added to MongoDB");
   } catch (error) {

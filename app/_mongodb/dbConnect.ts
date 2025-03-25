@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import {
   addRatingToProducts,
+  addReviewsToProducts,
   addSizeToProducts,
   fetchCategoriesFromAPI,
   fetchProductsFromAPI,
@@ -19,6 +20,7 @@ const connectDB = async () => {
     // await addSizeToProducts();
     // await addBrandsAndModelsToDB();
     // await addRatingToProducts();
+    // await addReviewsToProducts();
     return true;
   }
 
