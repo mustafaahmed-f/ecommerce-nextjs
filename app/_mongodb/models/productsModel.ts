@@ -18,8 +18,15 @@ const productSchema = new Schema(
     description: { type: String, required: true },
     brand: { type: String, required: true },
     model: { type: String, required: true },
+
     color: { type: String, default: null },
-    size: { type: String, default: null },
+    size: { type: String, default: null }, // For cloths
+    ram: { type: String, default: null }, // For laptops & mobiles
+    power: { type: String, default: null }, // For appliances
+    fps: { type: String, default: null }, // For gaming
+    soundOutput: { type: String, default: null }, // For audio
+    screenSize: { type: String, default: null }, // For TVs
+
     category: { type: String, required: true },
     discount: { type: Number, default: 0 },
     stock: { type: Number, default: 10 }, // Default stock value
