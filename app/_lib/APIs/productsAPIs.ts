@@ -61,23 +61,6 @@ export async function getSingleProduct(id: number) {
   return response.json();
 }
 
-export async function getProductsWithPagination({
-  page = 1,
-  limit = 20,
-}: {
-  page: number;
-  limit: number;
-}) {
-  const response = await fetch(
-    `https://fakestoreapi.in/api/products?page=${String(page)}&limit=${String(
-      limit,
-    )}`,
-  );
-  if (!response.ok) throw new Error("Couldn't get products !!");
-
-  return response.json();
-}
-
 export async function addProduct(body: any) {
   const newProduct = await fetch("https://fakestoreapi.in/api/products", {
     method: "POST",
