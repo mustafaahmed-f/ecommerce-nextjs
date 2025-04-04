@@ -1,7 +1,8 @@
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: any) {
+export async function GET(request: NextRequest, props: any) {
+  const params = await props.params;
   const product = await productsModel.findOne({ productId: params.id });
   if (!product) {
     return NextResponse.json(

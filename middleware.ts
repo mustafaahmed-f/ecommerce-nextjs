@@ -4,8 +4,8 @@ import { auth } from "./app/_lib/auth";
 import { cookies } from "next/headers";
 
 export default async function middleware(request: NextRequest) {
-  const nextAuthToken = cookies().get("authjs.session-token")?.value;
-  const systemAuthToken = cookies().get("next_ecommerce_token")?.value;
+  const nextAuthToken = (await cookies()).get("authjs.session-token")?.value;
+  const systemAuthToken = (await cookies()).get("next_ecommerce_token")?.value;
 
   if (request.nextUrl.pathname === "/updateprofile") {
     if (nextAuthToken || systemAuthToken) {

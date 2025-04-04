@@ -2,7 +2,7 @@ import { getAllProducts } from "../_lib/APIs/productsAPIs";
 import ProductsPage from "./_components/ProductsPage";
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     size?: string;
     sort?: string;
@@ -10,10 +10,11 @@ interface PageProps {
     color?: string;
     priceMin?: string;
     priceMax?: string;
-  };
+  }>;
 }
 
-async function Page({ searchParams }: PageProps) {
+async function Page(props: PageProps) {
+  const searchParams = await props.searchParams;
   const page = searchParams.page ?? "1";
   const size = searchParams.size ?? "15";
   const sort = searchParams.sort ?? "";

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import {
+  addDifferentPropertiesToProducts,
   addRatingToProducts,
   // addReviewsToProducts,
   addSizeToProducts,
@@ -21,6 +22,7 @@ const connectDB = async () => {
     // await addBrandsAndModelsToDB();
     // await addRatingToProducts();
     // await addReviewsToProducts();
+    // await addDifferentPropertiesToProducts();
     return true;
   }
 

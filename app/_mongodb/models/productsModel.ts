@@ -20,12 +20,13 @@ const productSchema = new Schema(
     model: { type: String, required: true },
 
     color: { type: String, default: null },
+
     size: { type: String, default: null }, // For cloths
-    ram: { type: String, default: null }, // For laptops & mobiles
-    power: { type: String, default: null }, // For appliances
-    fps: { type: String, default: null }, // For gaming
-    soundOutput: { type: String, default: null }, // For audio
-    screenSize: { type: String, default: null }, // For TVs
+    ram: { type: Number, default: null }, // For laptops & mobiles
+    power: { type: Number, default: null }, // For appliances
+    fps: { type: Number, default: null }, // For gaming
+    soundOutput: { type: Number, default: null }, // For audio
+    screenSize: { type: Number, default: null }, // For TVs
 
     category: { type: String, required: true },
     discount: { type: Number, default: 0 },

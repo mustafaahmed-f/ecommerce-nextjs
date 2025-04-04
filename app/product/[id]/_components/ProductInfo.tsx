@@ -79,13 +79,13 @@ function ProductInfo({
           </button>
         </div>
       </div>
-      <div className="mt-6 flex w-full items-center gap-3">
+      <div className="mt-6 grid w-full grid-cols-2 gap-2 max-md:text-sm md:gap-3">
         <button className="flex-1 rounded-lg bg-[#4172DC] py-2 text-center uppercase text-white hover:bg-[#466fc8]">
           shop now
         </button>
-        <button className="flex flex-1 items-center justify-center gap-2 rounded-lg border-[1px] border-[#434343] py-2 text-center text-[#555555] hover:bg-[#f5f5f5]">
+        <button className="flex flex-1 items-center justify-center gap-1 rounded-lg border-[1px] border-[#434343] px-[2px] py-2 text-center text-[#555555] hover:bg-[#f5f5f5] md:gap-2">
           <AddToBasketIcon />
-          <span className="uppercase">Add to basket</span>
+          <span className="uppercase max-md:w-fit">Add to cart</span>
         </button>
       </div>
     </div>

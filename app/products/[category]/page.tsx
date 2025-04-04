@@ -5,8 +5,8 @@ import ProductsPage from "../_components/ProductsPage";
 import { NextRequest } from "next/server";
 
 interface pageProps {
-  params: any;
-  searchParams: {
+  params: Promise<any>;
+  searchParams: Promise<{
     page?: string;
     size?: string;
     sort?: string;
@@ -14,7 +14,7 @@ interface pageProps {
     color?: string;
     priceMin?: string;
     priceMax?: string;
-  };
+  }>;
 }
 
 export const revalidate = 3600 * 24;
@@ -34,7 +34,9 @@ export async function generateStaticParams() {
 //   }));
 // }
 
-async function page({ params, searchParams }: pageProps) {
+async function page(props: pageProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const { category } = params;
 
   const page = searchParams.page ?? "1";

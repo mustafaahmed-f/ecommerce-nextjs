@@ -94,6 +94,52 @@ export async function fetchCategoriesFromAPI() {
   }
 }
 
+export async function addDifferentPropertiesToProducts() {
+  try {
+    const categories = await categoriesModel.find();
+    const updatedPromises = categories.map(async (category) => {
+      const products = await productsModel.find({ category: category.title });
+      for (let product of products) {
+        switch (category.title) {
+          case "tv":
+            product.screenSize = Math.floor(Math.random() * 45) + 30;
+            break;
+
+          case "gaming":
+            product.fps = Math.floor(Math.random() * 300) + 30;
+            break;
+
+          case "audio":
+            product.soundOutput = Math.floor(Math.random() * 50) + 1;
+            break;
+
+          case "appliances":
+            product.power = Math.floor(Math.random() * 1000) + 100;
+            break;
+
+          case "laptop":
+            product.ram = Math.floor(Math.random() * 28) + 4;
+            break;
+
+          case "mobile":
+            product.ram = Math.floor(Math.random() * 16) + 4;
+            break;
+
+          default:
+            break;
+        }
+        await product.save(); // Save each product after updating
+      }
+    });
+
+    await Promise.all(updatedPromises); // Wait for all saves to complete
+
+    console.log("✅ Properties successfully added to MongoDB");
+  } catch (error) {
+    console.log("Error adding different properties to products: ", error);
+  }
+}
+
 // export async function addReviewsToProducts() {
 //   //// Review consists of : Name ( if no name , make it anonymous ) , rating , title , review , likes , dislikes
 //   //// Review can be written by anonymous user or a registered user

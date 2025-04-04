@@ -21,7 +21,7 @@ async function AuthHandler({
   if (session?.user) {
     user = session.user;
   } else {
-    const token = cookies().get("next_ecommerce_token")?.value;
+    const token = (await cookies()).get("next_ecommerce_token")?.value;
     if (token) {
       try {
         // Verify token and decode user info
