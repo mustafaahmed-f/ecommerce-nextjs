@@ -1,12 +1,12 @@
 import { Star, ThumbsUpDown } from "@mui/icons-material";
 
 interface SingleReviewProps {
-  name: string;
-  rating: number;
-  title: string;
-  content: string;
-  likes: number;
-  dislikes: number;
+  name?: string;
+  rating?: number;
+  title?: string;
+  content?: string;
+  likes?: number;
+  dislikes?: number;
 }
 
 function SingleReview({
@@ -25,7 +25,7 @@ function SingleReview({
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
-              className={`h-4 w-4 ${i < rating ? "fill-yellow-400" : "fill-gray-300"}`}
+              className={`h-4 w-4 ${i < rating! ? "fill-yellow-400" : "fill-gray-300"}`}
             />
           ))}
         </div>

@@ -1,13 +1,14 @@
+import { Review } from "../_types/Product.type";
 import SingleReview from "./SingleReview";
 
-type Review = {
-  name: string;
-  rating: number;
-  title: string;
-  content: string;
-  likes: number;
-  dislikes: number;
-};
+// type Review = {
+//   name: string;
+//   rating: number;
+//   title: string;
+//   content: string;
+//   likes: number;
+//   dislikes: number;
+// };
 
 interface ProductReviewsSectionProps {
   reviews: Review[];

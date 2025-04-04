@@ -2,6 +2,7 @@ import { getSingleProduct } from "@/app/_lib/APIs/productsAPIs";
 import BreadCrumb from "@/app/products/_components/BreadCrumb";
 import Image from "next/image";
 import ProductInfo from "./_components/ProductInfo";
+import ProductTabs from "./_components/ProductTabs";
 
 interface PageProps {
   params: Promise<any>;
@@ -45,6 +46,7 @@ async function Page(props: PageProps) {
         {/* Second seciton ( description and reviews ) */}
         <div></div>
       </div>
+      <ProductTabs product={product.product} />
     </section>
   );
 }
