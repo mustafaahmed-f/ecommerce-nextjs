@@ -10,21 +10,8 @@ interface PageProps {
 async function Page(props: PageProps) {
   const params = await props.params;
   const product = await getSingleProduct(parseInt(params.id));
-  const {
-    productId,
-    title,
-    image,
-    price,
-    description,
-    color,
-    size,
-    ram,
-    category,
-    discount,
-    stock,
-    rating,
-    reviews,
-  } = product.product;
+  const { productId, title, image, description, category, rating, reviews } =
+    product.product;
   const breadCrumbOptions = [
     {
       label: "Home",
