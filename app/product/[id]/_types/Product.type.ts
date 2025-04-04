@@ -18,6 +18,10 @@ export interface ProductType {
   color?: string | null;
   size?: string | null;
   ram?: string | null;
+  power?: number | null;
+  fps?: number | null;
+  soundOutput?: number | null;
+  screenSize?: number | null;
   category: string;
   discount?: number;
   stock?: number;

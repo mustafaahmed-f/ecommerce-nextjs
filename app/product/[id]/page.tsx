@@ -52,14 +52,7 @@ async function Page(props: PageProps) {
             <Image src={image} alt={title} fill className="object-contain" />
           </div>
           <div className="my-auto w-full sm:ps-7 md:ps-9">
-            <ProductInfo
-              title={title}
-              price={price}
-              color={color}
-              size={size}
-              ram={ram}
-              discount={discount}
-            />
+            <ProductInfo product={product.product} />
           </div>
         </div>
         {/* Second seciton ( description and reviews ) */}

@@ -5,24 +5,26 @@ import { colorMap } from "@/app/_lib/colorsArray";
 import IncreaseQuantity from "@/app/_icons/IncreaseQuantity";
 import DecreaseQuantity from "@/app/_icons/DecreaseQuantity";
 import AddToBasketIcon from "@/app/_icons/AddToBasketIcon";
+import ProductProperty from "./ProductProperty";
 
 interface ProductInfoProps {
-  title: string;
-  price: number;
-  color: string;
-  size: string;
-  ram: string;
-  discount: number;
+  product: ProductType;
 }
 
-function ProductInfo({
-  title,
-  price,
-  color,
-  size,
-  ram,
-  discount,
-}: ProductInfoProps) {
+function ProductInfo({ product }: ProductInfoProps) {
+  const {
+    title,
+    price,
+    color,
+    size,
+    ram,
+    screenSize,
+    fps,
+    power,
+    soundOutput,
+    category,
+    discount,
+  } = product;
   return (
     <div className="my-auto flex flex-col gap-2">
       {/* ( title and price ) */}
@@ -50,16 +52,34 @@ function ProductInfo({
       </div>
       {/* Other details */}
       <div className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-6">
-        {/* Size */}
-        <p className="my-auto">Size</p>
-        <p className="w-fit rounded-md border-[1px] border-black px-1 text-center">
-          {size}
-        </p>
-        {/* RAM */}
-        <p className="my-auto">RAM</p>
-        <p className="w-fit rounded-md border-[1px] border-black px-1 text-center">
-          {ram}
-        </p>
+        {(() => {
+          switch (category) {
+            case "tv":
+              return (
+                <ProductProperty
+                  label="screen size"
+                  value={`${screenSize} inch`}
+                />
+              );
+            case "laptop":
+              return <ProductProperty label="ram" value={`${ram} GB`} />;
+            case "gaming":
+              return <ProductProperty label="power" value={`${fps} watts`} />;
+            case "audio":
+              return (
+                <ProductProperty
+                  label="sound output"
+                  value={`${soundOutput} dB`}
+                />
+              );
+            case "appliances":
+              return <ProductProperty label="power" value={`${power} watts`} />;
+            case "mobile":
+              return <ProductProperty label="ram" value={`${ram} GB`} />;
+            default:
+              return <ProductProperty label="size" value={size} />;
+          }
+        })()}
         {/* Color */}
         <p className="my-auto">Color</p>
         <ColorIndicator

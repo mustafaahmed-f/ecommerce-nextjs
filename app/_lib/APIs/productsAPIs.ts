@@ -23,7 +23,7 @@ export async function getAllProducts({
   if (priceMax === undefined) priceMax = 50000;
   const response: Response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
-    { next: { revalidate: 3600 } },
+    { next: { revalidate: 0 } },
     // { cache: "no-store" }
   );
   const clonedResponse = await response.clone().json();
