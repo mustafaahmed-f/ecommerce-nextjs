@@ -1,5 +1,6 @@
-import { Star, ThumbsUpDown } from "@mui/icons-material";
-
+import DislikeIcon from "@/app/_icons/DislikeIcon";
+import LikeIcon from "@/app/_icons/LikeIcon";
+import { Rating } from "@mui/material";
 interface SingleReviewProps {
   name?: string;
   rating?: number;
@@ -22,25 +23,20 @@ function SingleReview({
       <div className="mb-2 flex items-center justify-between">
         <h3 className="text-lg font-semibold">{title}</h3>
         <div className="flex gap-1">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              className={`h-4 w-4 ${i < rating! ? "fill-yellow-400" : "fill-gray-300"}`}
-            />
-          ))}
+          <Rating name="read-only" value={rating} readOnly />
         </div>
       </div>
 
-      <p className="text-sm text-gray-600">By {name}</p>
+      <p className="text-sm text-cyan-500">By {name}</p>
 
       <p className="mt-2 text-gray-700">{content}</p>
 
       <div className="mt-4 flex items-center gap-3">
         <button className="flex items-center gap-1 text-gray-600 hover:text-green-600">
-          <ThumbsUpDown className="h-4 w-4" /> {likes}
+          <LikeIcon /> {likes}
         </button>
         <button className="flex items-center gap-1 text-gray-600 hover:text-red-600">
-          <ThumbsUpDown className="h-4 w-4" /> {dislikes}
+          <DislikeIcon /> {dislikes}
         </button>
       </div>
     </div>
