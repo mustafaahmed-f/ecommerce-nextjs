@@ -36,8 +36,8 @@ async function Page(props: PageProps) {
       <div className="flex flex-col px-5 py-6 sm:px-14 sm:py-10 md:px-20">
         {/* First section ( image and product info ) */}
         <div className="grid min-h-96 grid-cols-1 gap-2 sm:grid-cols-2">
-          <div className="relative h-full border-e-0 sm:border-e sm:border-slate-300">
-            <Image src={image} alt={title} fill className="object-contain" />
+          <div className="flex h-full items-center justify-center border-e-0 sm:border-e sm:border-slate-300">
+            <Image src={image} alt={title} width={500} height={500} />
           </div>
           <div className="my-auto w-full sm:ps-7 md:ps-9">
             <ProductInfo product={product.product} />
