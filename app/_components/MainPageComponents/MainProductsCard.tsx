@@ -2,6 +2,7 @@ import { FavoriteBorder } from "@mui/icons-material";
 import Image from "next/image";
 import Link from "next/link";
 import Rating from "../Rating";
+import AddToCartBtn from "../AddToCartBtn";
 
 function MainProductsCard({ product }: { product: any }) {
   return (
@@ -45,10 +46,11 @@ function MainProductsCard({ product }: { product: any }) {
             </div>
           </div>
         </div>
-        <div className="flex h-full flex-row items-start justify-center">
+        <div className="flex h-full flex-row items-center justify-center gap-5 sm:flex-col sm:justify-start">
           <div className="cursor-pointer text-black hover:text-sky-500">
             <FavoriteBorder />
           </div>
+          <AddToCartBtn />
         </div>
       </div>
     </div>

@@ -25,6 +25,7 @@ export async function getAllProducts({
     `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
     { next: { revalidate: 0 } },
     // { cache: "no-store" }
+    //TODO: make revalidate : 3600
   );
   const clonedResponse = await response.clone().json();
 
