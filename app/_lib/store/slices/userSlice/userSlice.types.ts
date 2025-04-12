@@ -16,9 +16,9 @@ export interface User {
   email: string; // Required
   firstName: string;
   lastName: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   role: string;
   profileImage: string;
-  address: Address; // Required
+  address?: Address; // Required
   provider: "" | "system" | "google";
 }

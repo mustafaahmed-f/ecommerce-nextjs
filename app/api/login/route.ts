@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
         message: "Logged in successfully !",
         user,
       },
-      { status: 200 }
+      { status: 200 },
     );
 
     // Set cookie
@@ -71,8 +71,8 @@ export async function POST(request: NextRequest) {
       // "http://localhost:3000/" i=21 .. l=22
       process.env.NEXTAUTH_URL?.substring(
         0,
-        process.env.NEXTAUTH_URL.length - 1
-      ) as string
+        process.env.NEXTAUTH_URL.length - 1,
+      ) as string,
     );
     response.headers.set("Access-Control-Allow-Credentials", "true");
     response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");

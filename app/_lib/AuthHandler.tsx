@@ -4,6 +4,8 @@ import { Providers } from "../Providers";
 import { auth } from "./auth";
 import { instance } from "./axiosInstance";
 import { verifyToken } from "./tokenMethods";
+import { first } from "lodash";
+import { User } from "./store/slices/userSlice/userSlice.types";
 
 interface AuthHandlerProps {
   children: React.ReactNode;
@@ -16,10 +18,19 @@ async function AuthHandler({
   intitialCategories,
   initialProducts,
 }: AuthHandlerProps) {
-  let user = null;
+  console.log("Auth handler called");
+  let user: User | null = null;
   const session = await auth();
   if (session?.user) {
-    user = session.user;
+    user = {
+      email: session.user.email,
+      userName: session.user.name,
+      firstName: session.user.name.split(" ")[0],
+      lastName: session.user.name.split(" ")[1],
+      provider: "google",
+      profileImage: session.user.image,
+      role: "user",
+    };
   } else {
     const token = (await cookies()).get("next_ecommerce_token")?.value;
     if (token) {

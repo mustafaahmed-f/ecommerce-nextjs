@@ -46,12 +46,10 @@ function DesktopHeader() {
     if (!user.email || !user.provider) return;
     setLoading(true);
     const response = await logOutAction(user.provider);
-    if (user.provider === "google") {
-      dispatch(logOut());
-      handleCloseUserMenu();
-      router.push("/");
-    }
-    if (user.provider === "system" && response?.success) {
+    if (
+      user.provider === "google" ||
+      (user.provider === "system" && response?.success)
+    ) {
       dispatch(logOut());
       handleCloseUserMenu();
       router.push("/");
@@ -77,9 +75,9 @@ function DesktopHeader() {
 
       {/* ////Second section for secondary pages ,favourites and cart//// */}
 
-      <div className="grid sm:grid-cols-[1fr_1fr] md:grid-cols-[1fr_1fr_1fr] bg-black text-white py-3">
-        <div className="flex items-center md:px-20 sm:px-7  sm:gap-10 md:gap-12">
-          <div className="flex gap-2 cursor-pointer hover:text-sky-600">
+      <div className="grid bg-black py-3 text-white sm:grid-cols-[1fr_1fr] md:grid-cols-[1fr_1fr_1fr]">
+        <div className="flex items-center sm:gap-10 sm:px-7 md:gap-12 md:px-20">
+          <div className="flex cursor-pointer gap-2 hover:text-sky-600">
             <div className="-scale-x-100">
               <Segment />
             </div>
@@ -100,11 +98,11 @@ function DesktopHeader() {
             </p>
           </div>
         </div>
-        <div className="items-center  justify-center md:flex sm:hidden border-s-[1px] border-s-neutral-400">
+        <div className="items-center justify-center border-s-[1px] border-s-neutral-400 sm:hidden md:flex">
           <Image
             alt="header photo"
             src="/header photo.png"
-            className="w-16 h-16 "
+            className="h-16 w-16"
             width={300}
             height={300}
           />
@@ -115,7 +113,7 @@ function DesktopHeader() {
             </p>
           </div>
         </div>
-        <div className="flex items-center justify-center sm:gap-4 md:gap-6 border-s-[1px] border-s-neutral-400">
+        <div className="flex items-center justify-center border-s-[1px] border-s-neutral-400 sm:gap-4 md:gap-6">
           {user.userName || user.email ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
@@ -126,7 +124,7 @@ function DesktopHeader() {
                     sx={{ width: 23, height: 23 }}
                   />
                   <p
-                    className="mb-0 ms-2 text-white  text-lg"
+                    className="mb-0 ms-2 text-lg text-white"
                     style={{ fontWeight: "400" }}
                   >
                     Profile
@@ -169,22 +167,25 @@ function DesktopHeader() {
               </Menu>
             </Box>
           ) : (
-            <div className="flex items-center gap-2 cursor-pointer hover:text-sky-600">
+            <div className="flex cursor-pointer items-center gap-2 hover:text-sky-600">
               <Person2Outlined />
               <Link href="/login">Sign in</Link>
             </div>
           )}
-          <div className="flex items-center gap-2 cursor-pointer hover:text-sky-600">
+          <div className="flex cursor-pointer items-center gap-2 hover:text-sky-600">
             <FavoriteBorder />
             <Link href="">Favorites</Link>
           </div>
-          <div className="flex items-center gap-2 cursor-pointer hover:text-sky-600">
+          <Link
+            href="/cart"
+            className="flex cursor-pointer items-center gap-2 hover:text-sky-600"
+          >
             <ShoppingBag />
-            <Link href="">Cart</Link>
-            <span className="flex items-center justify-center text-white bg-green-500 rounded-[50%] p-1 w-6 h-6">
+            <p>Cart</p>
+            <span className="flex h-6 w-6 items-center justify-center rounded-[50%] bg-green-500 p-1 text-white">
               3
             </span>
-          </div>
+          </Link>
         </div>
       </div>
     </div>

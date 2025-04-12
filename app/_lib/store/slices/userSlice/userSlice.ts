@@ -65,6 +65,8 @@ const userSlice = createSlice({
       state.lastName = initialState.lastName;
       state.phoneNumber = initialState.phoneNumber;
       state.provider = initialState.provider;
+      state.profileImage = initialState.profileImage;
+      state.role = initialState.role;
     },
   },
 });

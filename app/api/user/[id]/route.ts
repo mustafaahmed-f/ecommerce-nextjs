@@ -5,14 +5,14 @@ import { NextRequest, NextResponse } from "next/server";
 //// Get user info api
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     await connectDB();
     const { id } = await params;
-    console.log("User's id : ", id);
+    // console.log("User's id : ", id);
     const user = await userModel.findById(id).select("-password");
-    console.log("User : ", user);
+    // console.log("User : ", user);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

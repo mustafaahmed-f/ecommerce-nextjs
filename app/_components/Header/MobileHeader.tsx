@@ -21,7 +21,7 @@ function MobileHeader() {
 
       return window.removeEventListener("resize", eventListnerFunc);
     },
-    [setShowMenu]
+    [setShowMenu],
   );
 
   return (
@@ -29,10 +29,10 @@ function MobileHeader() {
       {showMenu ? (
         <Menu setShowMenu={setShowMenu} />
       ) : (
-        <div className="grid sm:hidden  grid-rows-[auto_auto] fixed z-50 w-full bg-white">
+        <div className="fixed z-50 grid w-full grid-rows-[auto_auto] bg-white sm:hidden">
           {/* First section Logo,cart and menu */}
 
-          <div className="flex items-center justify-between px-2 py-3 flex-nowrap">
+          <div className="flex flex-nowrap items-center justify-between px-2 py-3">
             <div
               className="cursor-pointer hover:text-sky-600"
               onClick={() => setShowMenu(true)}
@@ -40,13 +40,16 @@ function MobileHeader() {
               <Reorder />
             </div>
             <MainLogo />
-            <div className="flex items-center gap-1 cursor-pointer hover:text-sky-600">
+            <Link
+              href="/cart"
+              className="flex cursor-pointer items-center gap-1 hover:text-sky-600"
+            >
               <ShoppingBag />
-              <Link href="">Cart</Link>
-              <span className="flex items-center justify-center text-white bg-green-500 rounded-[50%] p-1 w-6 h-6">
+              <p>Cart</p>
+              <span className="flex h-6 w-6 items-center justify-center rounded-[50%] bg-green-500 p-1 text-white">
                 3
               </span>
-            </div>
+            </Link>
           </div>
 
           {/* Second section : search */}

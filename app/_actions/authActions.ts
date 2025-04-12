@@ -8,10 +8,10 @@ export async function logInGoogleAction() {
 }
 
 export async function logOutAction(provider: string) {
-  await signOut({ redirectTo: "/" });
+  // await signOut({ redirectTo: "/" });
   try {
     if (provider === "google") {
-      await signOut();
+      await signOut({ redirectTo: "/" });
     } else {
       const response = await instance.post("/api/logout", {});
       if (!response.data.success) {
