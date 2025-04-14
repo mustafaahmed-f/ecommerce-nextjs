@@ -54,9 +54,7 @@ function DesktopHeader() {
     ) {
       dispatch(logOut());
       handleCloseUserMenu();
-      setTimeout(() => {
-        router.push("/");
-      }, 100);
+      window.location.href = "/";
     } else {
       console.log("Error logging out : ", response.error);
     }
