@@ -66,13 +66,16 @@ export async function signUpSystemAction(data: {
   };
 }) {
   try {
-    const routeResponse = await fetch(`${process.env.NEXTAUTH_URL}api/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "multipart/form-data",
+    const routeResponse = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/signup`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        body: JSON.stringify(data),
       },
-      body: JSON.stringify(data),
-    });
+    );
     const response = await routeResponse.json();
     if (response.success) {
       return { success: true, message: "Account created successfully" };
