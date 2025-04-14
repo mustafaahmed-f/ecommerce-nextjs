@@ -55,8 +55,6 @@ async function AuthHandler({
     }
   }
 
-  console.log("User in auth handler : ", user);
-
   return (
     <Providers
       intitialCategories={intitialCategories}

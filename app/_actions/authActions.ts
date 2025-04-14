@@ -2,6 +2,7 @@
 
 import { signIn, signOut } from "@/app/_lib/auth";
 import { instance } from "../_lib/axiosInstance";
+import { cookies } from "next/headers";
 
 export async function logInGoogleAction() {
   await signIn("google", { redirectTo: "/" });
@@ -14,14 +15,24 @@ export async function logOutAction(provider: string) {
       await signOut({ redirect: false });
       return { success: true, message: "Logged out successfully" };
     } else {
-      const response = await instance.post("/api/logout", {});
-      if (!response.data.success) {
+      const cookieStore = cookies();
+      const token = cookieStore.get("next_ecommerce_token");
+
+      if (!token) {
         return {
           success: false,
-          message: "Error logging out",
-          error: response.data.error,
+          message: "Token not found",
         };
       }
+
+      // Clear the cookie by setting it with maxAge = 0
+      cookieStore.set("next_ecommerce_token", "", {
+        httpOnly: true,
+        path: "/",
+        maxAge: 0,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+      });
     }
     return { success: true, message: "Logged out successfully" };
   } catch (error: any) {
