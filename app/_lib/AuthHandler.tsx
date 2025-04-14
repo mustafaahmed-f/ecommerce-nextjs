@@ -55,7 +55,7 @@ async function AuthHandler({
     }
   }
 
-  // console.log("User in auth handler : ", user);
+  console.log("User in auth handler : ", user);
 
   return (
     <Providers

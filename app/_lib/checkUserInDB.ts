@@ -4,7 +4,7 @@ import userModel from "../_mongodb/models/userModel";
 export async function checkUserInDB(profile: any) {
   // await connectDB();
   const user = await userModel.findOne({ email: profile.email });
-  console.log("User: ", user);
+
   if (!user) {
     const newUser = new userModel({
       email: profile.email,

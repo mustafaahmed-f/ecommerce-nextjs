@@ -101,9 +101,9 @@ export const authOptions = {
         //// check if user is already logged in using system:
         // if (cookies().get("next_ecommerce_token")?.value) return false;
         //// check if user is on the database:
-        console.log("Here 1");
+
         await checkUserInDB(profile);
-        console.log("Here 2");
+
         return true;
       } catch (error) {
         console.log("Error signing in : ", error);

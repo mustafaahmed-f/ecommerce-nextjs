@@ -11,7 +11,8 @@ export async function logOutAction(provider: string) {
   // await signOut({ redirectTo: "/" });
   try {
     if (provider === "google") {
-      await signOut({ redirectTo: "/" });
+      await signOut({ redirect: false });
+      return { success: true, message: "Logged out successfully" };
     } else {
       const response = await instance.post("/api/logout", {});
       if (!response.data.success) {
@@ -23,8 +24,12 @@ export async function logOutAction(provider: string) {
       }
     }
     return { success: true, message: "Logged out successfully" };
-  } catch (error) {
-    return { success: false, message: "Error logging out", error };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: "Error logging out",
+      error: error?.message,
+    };
   }
 }
 

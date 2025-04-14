@@ -1,3 +1,5 @@
+"use client";
+
 import {
   FavoriteBorder,
   KeyboardArrowDownOutlined,
@@ -47,12 +49,14 @@ function DesktopHeader() {
     setLoading(true);
     const response = await logOutAction(user.provider);
     if (
-      user.provider === "google" ||
+      (user.provider === "google" && response?.success) ||
       (user.provider === "system" && response?.success)
     ) {
       dispatch(logOut());
       handleCloseUserMenu();
-      router.push("/");
+      setTimeout(() => {
+        router.push("/");
+      }, 100);
     } else {
       console.log("Error logging out : ", response.error);
     }

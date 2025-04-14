@@ -1,7 +1,7 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../_lib/store/store";
-import { signIn } from "../_lib/store/slices/userSlice/userSlice";
+import { logOut, signIn } from "../_lib/store/slices/userSlice/userSlice";
 
 interface UserProviderProps {
   children: React.ReactNode;
@@ -9,19 +9,17 @@ interface UserProviderProps {
 }
 
 function UserProvider({ children, user }: UserProviderProps) {
-  console.log("User provider called");
   const dispatch = useAppDispatch();
-  // const reduxUser = useAppSelector((state) => state.user);
+  const isFirstRender = useRef<boolean>(true);
 
-  if (user) {
-    dispatch(signIn(user));
+  if (isFirstRender.current) {
+    isFirstRender.current = false;
+    if (user) {
+      dispatch(signIn(user));
+    } else {
+      dispatch(logOut());
+    }
   }
-
-  // useEffect(() => {
-  //   if (user && (!reduxUser.email || !reduxUser.userName)) {
-  //     dispatch(signIn(user));
-  //   }
-  // }, [user, dispatch, reduxUser]);
 
   return <>{children}</>;
 }
