@@ -16,11 +16,13 @@ function HorizontalScrollWrapper({ children }: HorizontalScrollWrapperProps) {
     if (!el) return;
 
     function handleScroll() {
-      setScrollLeft(el?.scrollLeft ? el?.scrollLeft > 0 : false);
+      setScrollLeft(el?.scrollLeft ? el?.scrollLeft > 5 : false);
       setScrollRight(
-        el?.scrollWidth && el.scrollLeft && el.clientWidth
-          ? !el.scrollLeft ||
-              el?.scrollWidth - el?.scrollLeft > el?.clientWidth + 0
+        el?.scrollWidth && el.clientWidth
+          ? el.scrollLeft
+            ? el.scrollLeft === 0 ||
+              el?.scrollWidth - el?.scrollLeft > el?.clientWidth + 5
+            : true
           : false,
       );
     }
