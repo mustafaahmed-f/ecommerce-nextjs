@@ -1,3 +1,4 @@
+"use client";
 import Button from "../_components/Button";
 
 interface PageProps {}
