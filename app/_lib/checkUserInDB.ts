@@ -1,5 +1,6 @@
 import connectDB from "../_mongodb/dbConnect";
 import userModel from "../_mongodb/models/userModel";
+import { v4 as uuidv4 } from "uuid";
 
 export async function checkUserInDB(profile: any) {
   // await connectDB();
@@ -8,7 +9,7 @@ export async function checkUserInDB(profile: any) {
   if (!user) {
     const newUser = new userModel({
       email: profile.email,
-      userName: profile.name,
+      userName: `${profile.name.split(" ").join("") + Math.floor(Math.random() * 1000)}_${uuidv4()}`,
       profileImage: profile.image,
       phoneNumber: "",
       password: "",

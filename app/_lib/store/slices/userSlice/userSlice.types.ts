@@ -12,6 +12,7 @@ interface Address {
 }
 
 export interface User {
+  id: string; // Required
   userName: string; // Required
   email: string; // Required
   firstName: string;

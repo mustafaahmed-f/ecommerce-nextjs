@@ -6,6 +6,7 @@ import { instance } from "./axiosInstance";
 import { verifyToken } from "./tokenMethods";
 import { first } from "lodash";
 import { User } from "./store/slices/userSlice/userSlice.types";
+import userModel from "../_mongodb/models/userModel";
 
 interface AuthHandlerProps {
   children: React.ReactNode;
@@ -22,9 +23,14 @@ async function AuthHandler({
   let user: User | null = null;
   const session = await auth();
   if (session?.user) {
-    user = {
+    const userInfoFromDB = await userModel.findOne({
       email: session.user.email,
-      userName: session.user.name,
+    });
+    user = {
+      id: String(userInfoFromDB?._id),
+      email: session.user.email,
+      userName: userInfoFromDB.userName,
+      phoneNumber: userInfoFromDB.phoneNumber,
       firstName: session.user.name.split(" ")[0],
       lastName: session.user.name.split(" ")[1],
       provider: "google",
@@ -32,7 +38,7 @@ async function AuthHandler({
       role: "user",
     };
   } else {
-    const token = (await cookies()).get("next_ecommerce_token")?.value;
+    const token = cookies().get("next_ecommerce_token")?.value;
     if (token) {
       try {
         // Verify token and decode user info

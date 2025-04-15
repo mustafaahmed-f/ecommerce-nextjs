@@ -10,7 +10,6 @@ import {
 // import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 
 import { logOutAction } from "@/app/_actions/authActions";
-import { useNextNavigation } from "@/app/_context/NextNavigationProvider";
 import { logOut } from "@/app/_lib/store/slices/userSlice/userSlice";
 import { useAppDispatch, useAppSelector } from "@/app/_lib/store/store";
 import {
@@ -36,7 +35,6 @@ function DesktopHeader() {
   const { 0: loading, 1: setLoading } = useState<boolean>(false);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  const { router } = useNextNavigation();
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -158,7 +156,9 @@ function DesktopHeader() {
                   onClick={handleCloseUserMenu}
                 >
                   <Typography sx={{ textAlign: "center" }}>
-                    <Link href="/updateprofile">{settings[0]}</Link>
+                    <Link href={`/updateprofile/${user.id}`}>
+                      {settings[0]}
+                    </Link>
                   </Typography>
                 </MenuItem>
                 <MenuItem key={"logout menu item"} onClick={logOutFn}>

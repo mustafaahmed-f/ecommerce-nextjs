@@ -3,6 +3,7 @@ import { User } from "./userSlice.types";
 
 // Initial State for userSlice
 const initialState: User = {
+  id: "",
   userName: "", // Default value for required field
   email: "", // Default value for required field
   firstName: "", // Optional field with default value
@@ -32,6 +33,7 @@ const userSlice = createSlice({
   reducers: {
     // 1. Sign In - Add user's data to the Redux store
     signIn: (state, action: PayloadAction<User>) => {
+      if (action.payload.id) state.id = action.payload.id;
       if (action.payload.userName) state.userName = action.payload.userName;
       if (action.payload.address) state.address = action.payload.address;
       if (action.payload.email) state.email = action.payload.email;
@@ -58,6 +60,8 @@ const userSlice = createSlice({
 
     // 3. Log Out - Reset the state to initial state
     logOut: (state) => {
+      // Resetting the state to initial values
+      state.id = initialState.id;
       state.address = initialState.address;
       state.userName = initialState.userName;
       state.email = initialState.email;
