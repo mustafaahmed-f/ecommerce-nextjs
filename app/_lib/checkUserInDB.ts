@@ -9,7 +9,7 @@ export async function checkUserInDB(profile: any) {
   if (!user) {
     const newUser = new userModel({
       email: profile.email,
-      userName: `${profile.name.split(" ").join("") + Math.floor(Math.random() * 1000)}_${uuidv4()}`,
+      userName: `${profile.name.split(" ").join("") + Math.floor(Math.random() * 1000)}_${uuidv4().substring(0, 8)}`,
       profileImage: profile.image,
       phoneNumber: "",
       password: "",
