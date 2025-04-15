@@ -21,18 +21,19 @@ async function SecondMainSection({}) {
 
       <div>
         <HomeHeadlines headline="fresh sales" />
-        <div className="flashSalesSection grid grid-cols-[1fr_1fr_1fr_1fr] grid-rows-[1fr] gap-2 overflow-x-scroll p-1 sm:grid-cols-[1fr_1fr] sm:grid-rows-[1fr_1fr] sm:gap-4 md:grid-cols-[1fr_1fr_1fr_1fr] md:grid-rows-[1fr]">
+
+        <HorizontalScrollWrapper>
           {freshSalesProducts.map((el) => {
             return <FreshSalesCard product={el} key={el._id} />;
           })}
-        </div>
+        </HorizontalScrollWrapper>
       </div>
 
       {/* ////Second sub section : trending must have */}
 
       <div>
         <HomeHeadlines headline="trending must have" />
-        <div className="flashSalesSection grid grid-cols-[auto_auto_auto] grid-rows-[1fr] gap-3 overflow-y-hidden overflow-x-scroll p-1 sm:grid-cols-[1fr] sm:grid-rows-[1fr_1fr_1fr] sm:gap-4 md:grid-cols-[1fr_1fr_1fr] md:grid-rows-[1fr]">
+        <div className="flashSalesSection grid h-fit grid-cols-[auto_auto_auto] grid-rows-[1fr] gap-3 overflow-x-scroll p-1 sm:grid-cols-[1fr] sm:grid-rows-[1fr_1fr_1fr] sm:gap-4 md:grid-cols-[1fr_1fr_1fr] md:grid-rows-[1fr]">
           {trending.slice(0, 3).map((el) => {
             return <TrendingMustHaveCard product={el} key={el._id} />;
           })}

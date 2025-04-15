@@ -19,7 +19,8 @@ function HorizontalScrollWrapper({ children }: HorizontalScrollWrapperProps) {
       setScrollLeft(el?.scrollLeft ? el?.scrollLeft > 0 : false);
       setScrollRight(
         el?.scrollWidth && el.scrollLeft && el.clientWidth
-          ? el?.scrollWidth - el?.scrollLeft > el?.clientWidth + 0
+          ? !el.scrollLeft ||
+              el?.scrollWidth - el?.scrollLeft > el?.clientWidth + 0
           : false,
       );
     }
@@ -39,7 +40,7 @@ function HorizontalScrollWrapper({ children }: HorizontalScrollWrapperProps) {
       )}
       <div
         ref={scrollableContainerRef}
-        className="flashSalesSection grid grid-cols-[1fr_1fr_1fr_1fr] grid-rows-[1fr] gap-2 overflow-x-scroll p-1 sm:grid-cols-[1fr_1fr] sm:grid-rows-[1fr_1fr] sm:gap-4 md:grid-cols-[1fr_1fr_1fr_1fr] md:grid-rows-[1fr]"
+        className="flashSalesSection grid grid-cols-[1fr_1fr_1fr_1fr] gap-2 overflow-x-scroll p-1 sm:grid-cols-[1fr_1fr] sm:grid-rows-[1fr_1fr] sm:gap-4 md:grid-cols-[1fr_1fr_1fr_1fr] md:grid-rows-[1fr]"
       >
         {children}
       </div>

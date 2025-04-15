@@ -4,31 +4,31 @@ import Image from "next/image";
 function TrendingMustHaveCard({ product }: { product: any }) {
   let productPrice = product.price - product.price * (product.discount / 100);
   return (
-    <div className="relative w-full rounded-md min-w-80 max-h-96">
+    <div className="relative flex h-full w-full min-w-80 flex-col justify-between rounded-md">
       {product.id % 2 !== 0 && (
-        <div className="absolute flex items-center justify-center gap-1 p-1 sm:text-base text-[10px] text-white bg-green-500 rounded-md w-fit max-w-[70%] sm:max-w-full top-2 left-2">
+        <div className="absolute left-2 top-2 flex w-fit max-w-[70%] items-center justify-center gap-1 rounded-md bg-green-500 p-1 text-[10px] text-white sm:max-w-full sm:text-base">
           <Luggage fontSize="small" />
           <p className="capitalize">new arrival</p>
         </div>
       )}
-      <div className="">
-        <Image
-          alt={`${product.title}`}
-          width={300}
-          height={300}
-          className="w-full max-h-[250px]"
-          src={`${product.image}`}
-        />
-      </div>
-      <div className="p-3 text-white bg-black">
+
+      <Image
+        alt={`${product.title}`}
+        width={300}
+        height={300}
+        className="max-h-[250px] w-full"
+        src={`${product.image}`}
+      />
+
+      <div className="bg-black p-3 text-white">
         <div className="flex flex-row items-center justify-center gap-8 sm:justify-between sm:gap-0">
           <div className="flex flex-col items-start gap-2 text-sm sm:text-base">
             <p>{product.title}</p>
             <p className="text-sm text-textLowerGrey">{product.brand}</p>
           </div>
-          <button className="bg-transparent sm:text-base text-xs border-[1px] p-1 gap-1 sm:gap-2 whitespace-nowrap hover:text-sky-500 text-nowrap  border-white rounded-md flex items-center justify-start">
+          <button className="flex items-center justify-start gap-1 whitespace-nowrap text-nowrap rounded-md border-[1px] border-white bg-transparent p-1 text-xs hover:text-sky-500 sm:gap-2 sm:text-base">
             <p>{productPrice}</p>
-            <p className="capitalize text-start">shop now</p>
+            <p className="text-start capitalize">shop now</p>
           </button>
         </div>
       </div>
