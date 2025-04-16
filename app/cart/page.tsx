@@ -1,78 +1,141 @@
 "use client";
+import Image from "next/image";
 import Button from "../_components/Button";
+import { useState } from "react";
 
 interface PageProps {}
 
 function Page({}: PageProps) {
-  const cartItems = [
+  const initialCart = [
     {
-      _id: "1",
-      title: "Product One",
-      price: 100,
-      color: "Red",
-      quantity: 2,
+      productID: "1",
+      title: "Gaming Laptop",
+      image: "/images/laptop.jpg",
+      unitPaymentPrice: 1500,
+      discount: 10,
+      quantity: 1,
+      category: "electronics",
+      brand: "AlienTech",
     },
     {
-      _id: "2",
-      title: "Product Two",
-      price: 200,
-      color: "Blue",
-      quantity: 1,
+      productID: "2",
+      title: "Bluetooth Speaker",
+      image: "/images/speaker.jpg",
+      unitPaymentPrice: 200,
+      discount: 0,
+      quantity: 2,
+      category: "audio",
+      brand: "SoundBoom",
     },
   ];
-  const removeItem = () => {};
-  const emptyCart = () => {};
 
-  const total = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0,
-  );
+  const [cartItems, setCartItems] = useState(initialCart);
+
+  const handleQtyChange = (index: number, qty: number) => {
+    setCartItems((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, quantity: Math.max(1, qty) } : item,
+      ),
+    );
+  };
+
+  const incrementQty = (index: number) => {
+    handleQtyChange(index, cartItems[index].quantity + 1);
+  };
+
+  const decrementQty = (index: number) => {
+    handleQtyChange(index, cartItems[index].quantity - 1);
+  };
+
+  const getTotal = () =>
+    cartItems.reduce((acc, item) => {
+      const discounted =
+        item.unitPaymentPrice * (1 - (item.discount ?? 0) / 100);
+      return acc + discounted * item.quantity;
+    }, 0);
+
   return (
-    <div className="mx-auto max-w-5xl p-6">
-      <h1 className="mb-6 text-3xl font-bold">Your Cart</h1>
+    <div className="mx-auto max-w-4xl p-4 py-8">
+      <h1 className="mb-6 text-center text-2xl font-bold">Shopping Cart</h1>
+      <div className="space-y-6">
+        {cartItems.map((item, index) => {
+          const discountedPrice =
+            item.unitPaymentPrice * (1 - (item.discount ?? 0) / 100);
+          const hasDiscount = (item.discount ?? 0) > 0;
 
-      {cartItems.length === 0 ? (
-        <p className="text-gray-500">Your cart is empty.</p>
-      ) : (
-        <>
-          <div className="space-y-4">
-            {cartItems.map((item) => (
-              <div
-                key={item._id}
-                className="flex items-center justify-between rounded-lg border p-4 shadow-sm"
-              >
-                <div>
-                  <h2 className="text-xl font-semibold">{item.title}</h2>
-                  <p className="text-sm text-gray-500">Color: {item.color}</p>
-                  <p className="text-sm text-gray-500">
-                    Quantity: {item.quantity}
-                  </p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <p className="font-semibold">${item.price}</p>
-                  <Button
-                    label="Remove"
-                    onClick={() => removeItem()}
-                    variant="secondary"
-                    size="small"
-                    disabled={false}
-                  />
+          return (
+            <div
+              key={item.productID}
+              className="flex flex-col items-center gap-6 border-b pb-4 sm:flex-row"
+            >
+              <div className="relative h-32 w-32">
+                <Image
+                  src={item.image}
+                  alt={item.title || "Product Image"}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+
+              <div className="w-full flex-1 space-y-2 md:w-auto">
+                <h2 className="text-lg font-semibold">{item.title}</h2>
+                <p className="text-sm text-gray-500">{item.brand}</p>
+                <div className="text-gray-700">
+                  {hasDiscount ? (
+                    <div className="space-x-2">
+                      <span className="text-lg font-bold text-red-500">
+                        ${discountedPrice.toFixed(2)}
+                      </span>
+                      <span className="text-sm text-gray-500 line-through">
+                        ${item.unitPaymentPrice.toFixed(2)}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-lg font-bold">
+                      ${item.unitPaymentPrice}
+                    </span>
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
 
-          <div className="mt-8 flex items-center justify-between border-t pt-4">
-            <Button label="Empty Cart" onClick={() => emptyCart()} />
-            <div className="text-right">
-              <p className="text-lg font-semibold">Total: ${total}</p>
-              <button className="mt-2 rounded-lg bg-black px-4 py-2 text-white hover:bg-gray-800">
-                Proceed to Checkout
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  className="rounded border px-3 py-1"
+                  onClick={() => decrementQty(index)}
+                >
+                  −
+                </button>
+                <input
+                  type="text"
+                  className="w-14 rounded border py-1 text-center"
+                  value={item.quantity}
+                  min={1}
+                  minLength={1}
+                  onChange={(e) => {
+                    if (isNaN(Number(e.target.value))) return;
+                    handleQtyChange(index, Number(e.target.value));
+                  }}
+                />
+                <button
+                  className="rounded border px-3 py-1"
+                  onClick={() => incrementQty(index)}
+                >
+                  +
+                </button>
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          );
+        })}
+      </div>
+
+      <div className="mt-8 flex flex-col items-end">
+        <div className="mb-4 text-xl font-semibold">
+          Total: ${getTotal().toFixed(2)}
+        </div>
+        <button className="rounded bg-black px-6 py-2 text-white transition hover:bg-gray-800">
+          Checkout
+        </button>
+      </div>
     </div>
   );
 }

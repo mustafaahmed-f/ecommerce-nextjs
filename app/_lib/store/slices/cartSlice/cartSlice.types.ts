@@ -9,6 +9,7 @@ export interface Product {
   color?: string | null;
   category?: string | null;
   brand?: string | null;
+  image?: string;
 }
 
 export interface Cart {
