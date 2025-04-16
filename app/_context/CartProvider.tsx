@@ -1,17 +1,21 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { useSelector } from "react-redux";
+import { Cart } from "../_lib/store/slices/cartSlice/cartSlice.types";
 
 interface initialStateType {
-  cart: any[];
+  cart: Cart[];
 }
 
-const cartContext = createContext<any>({});
+const cartContext = createContext<initialStateType>({
+  cart: [],
+});
 
 interface CartProviderProps {}
 
 function CartProvider({}: CartProviderProps) {
+  const { 0: cart, 1: setCart } = useState<Cart[]>([]);
   const user = useSelector((state: any) => state.user);
-  return <cartContext.Provider value={{}}></cartContext.Provider>;
+  return <cartContext.Provider value={{ cart }}></cartContext.Provider>;
 }
 
 export default CartProvider;
