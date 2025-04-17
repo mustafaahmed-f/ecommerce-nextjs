@@ -60,7 +60,7 @@ export const POST = withMiddleWare({
         );
 
       //// Check if product already exists in DB
-      const product: ProductType | null = await productsModel.findOne({
+      const product = await productsModel.findOne({
         productId: parseInt(searchParams.get("productId")!),
       });
       if (!product)
@@ -105,6 +105,10 @@ export const POST = withMiddleWare({
       cart.products = cartProducts;
       cart.subTotal = subTotal;
       await cart.save();
+
+      //// Reduce product's stock by one:
+      product.stock! -= 1;
+      await product.save();
 
       return NextResponse.json({
         success: true,
