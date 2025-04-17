@@ -11,7 +11,7 @@ const cartSchema = new Schema(
     products: [
       {
         productID: {
-          type: Types.ObjectId,
+          type: Number,
           required: true,
         },
         title: { type: String },

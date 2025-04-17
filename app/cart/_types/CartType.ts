@@ -1,5 +1,5 @@
 export interface CartProduct {
-  productID: string;
+  productID: number;
   title?: string;
   unitPaymentPrice: number;
   discount?: number;
