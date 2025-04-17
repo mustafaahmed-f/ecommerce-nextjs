@@ -5,10 +5,11 @@ import Footer from "./_components/Footer/Footer";
 import Header from "./_components/Header/Header";
 import { getCategories } from "./_lib/APIs/categoriesAPIs";
 import { getAllProducts } from "./_lib/APIs/productsAPIs";
-import AuthHandler from "./_lib/AuthHandler";
+
 import connectDB from "./_mongodb/dbConnect";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
+import AuthHandler from "./_context/AuthHandler";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -38,7 +39,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${Josefin_sans.variable} antialiased min-h-screen grid grid-rows-[auto_1fr] max-w-screen max-sm:relative`}
+        className={`${Josefin_sans.variable} max-w-screen grid min-h-screen grid-rows-[auto_1fr] antialiased max-sm:relative`}
         suppressHydrationWarning
       >
         <AuthHandler
@@ -49,7 +50,7 @@ export default async function RootLayout({
         >
           <ReactQueryDevtools initialIsOpen={false} />
           <Header />
-          <main className="flex flex-grow overflow-x-auto pt-[124px] sm:pt-0 pb-2  max-sm:px-2 overflow-hidden ">
+          <main className="flex flex-grow overflow-hidden overflow-x-auto pb-2 pt-[124px] max-sm:px-2 sm:pt-0">
             {children}
           </main>
           <Footer />

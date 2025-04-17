@@ -1,7 +1,6 @@
 "use server";
 
 import { signIn, signOut } from "@/app/_lib/auth";
-import { instance } from "../_lib/axiosInstance";
 import { cookies } from "next/headers";
 
 export async function logInGoogleAction() {

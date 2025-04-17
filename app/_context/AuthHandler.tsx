@@ -1,12 +1,11 @@
 import { cookies } from "next/headers";
 import UserProvider from "../_context/UserProvider";
 import { Providers } from "../Providers";
-import { auth } from "./auth";
-import { instance } from "./axiosInstance";
-import { verifyToken } from "./tokenMethods";
-import { first } from "lodash";
-import { User } from "./store/slices/userSlice/userSlice.types";
 import userModel from "../_mongodb/models/userModel";
+import { User } from "../_lib/store/slices/userSlice/userSlice.types";
+import { auth } from "../_lib/auth";
+import { verifyToken } from "../_lib/tokenMethods";
+import { instance } from "../_lib/axiosInstance";
 
 interface AuthHandlerProps {
   children: React.ReactNode;
@@ -19,7 +18,6 @@ async function AuthHandler({
   intitialCategories,
   initialProducts,
 }: AuthHandlerProps) {
-  console.log("Auth handler called");
   let user: User | null = null;
   const session = await auth();
   if (session?.user) {

@@ -13,6 +13,7 @@ export interface Product {
 }
 
 export interface Cart {
+  _id?: string;
   userID: string; // Assuming ObjectId is represented as a string in TypeScript
   products: Product[];
   subTotal: number;

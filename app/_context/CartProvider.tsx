@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Cart } from "../_lib/store/slices/cartSlice/cartSlice.types";
 
 interface initialStateType {
@@ -15,6 +15,7 @@ interface CartProviderProps {}
 function CartProvider({}: CartProviderProps) {
   const { 0: cart, 1: setCart } = useState<Cart[]>([]);
   const user = useSelector((state: any) => state.user);
+  const dispatch = useDispatch();
   return <cartContext.Provider value={{ cart }}></cartContext.Provider>;
 }
 

@@ -12,10 +12,11 @@ export async function applyMiddlewares({
   applyAuth = false,
 }: {
   request: NextRequest;
-  middlewares: Middleware[];
+  middlewares?: Middleware[];
   applyAuth?: boolean;
 }) {
   if (applyAuth) {
+    console.log("Auth applied !!");
     const authMiddleware = await chooseMiddleware(request);
     if (authMiddleware) {
       return authMiddleware;

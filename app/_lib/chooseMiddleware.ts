@@ -8,15 +8,20 @@ import { signToken, verifyToken } from "./tokenMethods";
 export async function chooseMiddleware(request: NextRequest) {
   const session = await auth();
   console.log("Session : ", session);
-  const cookie = request.cookies.get("next_ecommerce_token");
 
   if (session?.user) {
     return null;
   }
+  const cookie = request.cookies.get("next_ecommerce_token");
+
+  console.log("Cookie : ", cookie);
 
   // Check if the cookie exists and contains the 'token=' string
   if (!cookie) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { success: false, error: "Please login first !!" },
+      { status: 401 },
+    );
   }
 
   // Extract the token value from the cookie string
@@ -28,13 +33,13 @@ export async function chooseMiddleware(request: NextRequest) {
     if (!decoded || !decoded.provider) {
       return NextResponse.json(
         { error: "Invalid token structure" },
-        { status: 400 }
+        { status: 400 },
       );
     }
   } catch (error) {
     return NextResponse.json(
       { error: "Invalid token structure" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -47,7 +52,7 @@ export async function chooseMiddleware(request: NextRequest) {
       token,
       signature:
         provider === authProviders.system
-          ? process.env.SYSTEM_SECRET
+          ? process.env.SIGNATURE
           : process.env.NEXTAUTH_SECRET,
     });
 
