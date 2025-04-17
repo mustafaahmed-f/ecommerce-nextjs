@@ -23,11 +23,11 @@ const cartSchema = new Schema(
         brand: { type: String, default: null },
       },
     ],
-    subTotal: { type: Number, required: true },
+    subTotal: { type: Number, required: true, default: 0 },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-export default mongoose.models.User || mongoose.model("Cart", cartSchema);
+export default mongoose.models.Cart || mongoose.model("Cart", cartSchema);
