@@ -16,7 +16,6 @@ export async function applyMiddlewares({
   applyAuth?: boolean;
 }) {
   if (applyAuth) {
-    console.log("Auth applied !!");
     const authMiddleware = await chooseMiddleware(request);
     if (authMiddleware) {
       return authMiddleware;
