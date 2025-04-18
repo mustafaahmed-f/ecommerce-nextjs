@@ -42,6 +42,7 @@ export const GET = withMiddleWare({
 //// add to cart
 export const POST = withMiddleWare({
   handler: async (request: NextRequest) => {
+    //TODO : Re-use session inside the save method when convert to mongoDB atlas
     //// Start session of mongoose so if one of the updating processes ( product or cart ) failed, both of the processes stop:
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -138,11 +139,11 @@ export const POST = withMiddleWare({
       console.log("Sub total : ", subTotal);
       cart.products = cartProducts;
       cart.subTotal = subTotal;
-      await cart.save({ session });
+      await cart.save();
 
       //// Reduce product's stock by one:
       product.stock! -= 1;
-      await product.save({ session });
+      await product.save();
 
       await session.commitTransaction();
       session.endSession();
@@ -268,9 +269,9 @@ export const PATCH = withMiddleWare({
           return p;
         },
       );
-      console.log("New cart products: ", newCartProducts);
+
       const newSubTotal = getSubTotal(newCartProducts);
-      console.log("New sub total: ", newSubTotal);
+
       cart.products = newCartProducts;
       cart.subTotal = newSubTotal;
       await cart.save();
