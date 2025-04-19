@@ -81,7 +81,6 @@ export const PATCH = withMiddleWare({
         });
       }
 
-      //TODO: update product's stock + reCalculate the subTotal + update cart's product array:
       let newProductStock = productInCart.quantity + product.stock;
       let newCartProducts: CartProduct[] = cart.products.filter(
         (p: CartProduct) =>

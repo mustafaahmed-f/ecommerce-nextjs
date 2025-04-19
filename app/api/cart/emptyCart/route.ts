@@ -32,10 +32,6 @@ export const PATCH = withMiddleWare({
         );
       }
 
-      //TODO : loop over products, Find each one and update its stock and save it
-      //TODO : try to find best practice for this and use parallel updating of products
-      //TODO : make the products array in cart empty ( [] ) and save cart
-
       const missingProducts: number[] = [];
 
       const updatedPromises = cart.products.map(async (p: CartProduct) => {
