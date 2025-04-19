@@ -4,7 +4,6 @@ import { withMiddleWare } from "@/app/_lib/withMiddleWare";
 import cartModel from "@/app/_mongodb/models/cartModel";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { CartProduct } from "@/app/cart/_types/CartType";
-import { ProductType } from "@/app/product/[id]/_types/Product.type";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 

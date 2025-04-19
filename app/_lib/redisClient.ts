@@ -1,16 +1,20 @@
-// lib/redisClient.ts
-import { createClient } from "redis";
+// import { Redis } from "@upstash/redis";
 
-const client = createClient({
-  url: process.env.REDIS_URL,
-});
+let redisClient: any = null;
 
-client.on("error", (err) => {
-  console.log("Redis Client Error", err);
-});
-
-if (!client.isOpen) {
-  client.connect();
+export async function getRedisClient() {
+  if (!redisClient) {
+    const { Redis } = await import("@upstash/redis");
+    redisClient = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    });
+  }
+  return redisClient;
 }
 
-export { client };
+// Only initialize the Redis client when it's actually needed
+export async function useRedisClient() {
+  const redis = await getRedisClient();
+  return redis;
+}
