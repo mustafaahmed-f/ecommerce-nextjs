@@ -32,7 +32,10 @@ export const GET = withMiddleWare({
         cart,
       });
     } catch (error: any) {
-      return NextResponse.json({ success: false, error: error?.message });
+      return NextResponse.json(
+        { success: false, error: error?.message },
+        { status: 500 },
+      );
     }
   },
   middleWares: [],
