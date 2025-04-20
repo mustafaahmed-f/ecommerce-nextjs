@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Cart } from "../_lib/store/slices/cartSlice/cartSlice.types";
 
@@ -16,6 +16,8 @@ function CartProvider({}: CartProviderProps) {
   const { 0: cart, 1: setCart } = useState<Cart[]>([]);
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
+  const isFirstRender = useRef<boolean>(true);
+
   return <cartContext.Provider value={{ cart }}></cartContext.Provider>;
 }
 
