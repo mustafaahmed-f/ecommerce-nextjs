@@ -40,6 +40,10 @@ export const PATCH = withMiddleWare({
           product.stock += p.quantity;
           return product.save();
         } else {
+          //// Remove product from cart if not found :
+          cart.products = cart.products.filter(
+            (p: CartProduct) => p.productID !== p.productID,
+          );
           missingProducts.push(p.productID);
         }
       });
@@ -62,7 +66,7 @@ export const PATCH = withMiddleWare({
 
       return NextResponse.json({
         success: true,
-        message: "Product has been removed successfully !!",
+        message: "Cart has been emptied successfully !!",
         cart,
       });
     } catch (error: any) {
