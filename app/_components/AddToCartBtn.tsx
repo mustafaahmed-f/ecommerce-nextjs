@@ -24,6 +24,9 @@ function AddToCartBtn({ productId }: AddToCartBtnProps) {
   const user = useAppSelector((state) => state.user);
   const isAuth: boolean = user.email.length > 0 || user.userName.length > 0;
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
+
+  //TODO : use useOptimistic instead of loading state to show product is added while add operation is done in background
+
   const mockCart: ICart = {
     _id: "mock-cart-123",
     userID: "user-456",
