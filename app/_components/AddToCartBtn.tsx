@@ -46,6 +46,7 @@ function AddToCartBtn({ productId }: AddToCartBtnProps) {
     createdAt: new Date(),
     updatedAt: new Date(),
   };
+
   const addMethod: (cartId: string, productId: string) => Promise<any> = isAuth
     ? addToUserCart
     : addToOfflineCart;

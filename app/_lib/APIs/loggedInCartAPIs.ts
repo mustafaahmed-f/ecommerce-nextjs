@@ -2,8 +2,8 @@ import { instance } from "../axiosInstance";
 
 let mainURL = `${process.env.NEXT_PUBLIC_API_URL}/api/cart`;
 
-export async function getUserCart() {
-  const response = await instance.get(`${mainURL}`);
+export async function getUserCart(cookieHeader: any) {
+  const response = await instance.get(`${mainURL}`, { headers: cookieHeader });
   return response.data;
 }
 

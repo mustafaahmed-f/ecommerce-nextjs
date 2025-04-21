@@ -18,11 +18,18 @@ async function InitialDataProvider({
   children,
 }: InitialDataProviderProps) {
   const isAuth: boolean = user ? true : false;
-  const offLineCartId = cookies().get(
+  const cookieStore = cookies();
+
+  const offLineCartId = cookieStore.get(
     process.env.NEXT_PUBLIC_OFFLINE_CART_KEY!,
   )?.value;
+
+  const cookieHeader = {
+    Cookie: cookieStore.toString(), // this includes next_ecommerce_token
+  };
+
   const getCartMethod = isAuth
-    ? getUserCart
+    ? async () => await getUserCart(cookieHeader)
     : offLineCartId
       ? async () => await getOfflineCart(offLineCartId)
       : async () => await Promise.resolve();

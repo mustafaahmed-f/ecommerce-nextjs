@@ -19,7 +19,7 @@ import AuthInputfield from "./AuthInputField";
 
 // Type guard to check if `response` has `data` property
 function hasUserInResponse(
-  response: any
+  response: any,
 ): response is { success: boolean; message: string; user: any } {
   return "user" in response;
 }
@@ -97,7 +97,7 @@ function AuthForm({
         dispatch(signIn(routeResponse.data.user));
         setIsLoading(false);
         setTimeout(() => {
-          router.push("/");
+          window.location.href = "/";
         }, 2000);
       }
     } catch (error: any) {
@@ -150,13 +150,13 @@ function AuthForm({
         )}
 
         {extraField && (
-          <div className="flex justify-end w-full my-4">
+          <div className="my-4 flex w-full justify-end">
             <Button variant="text" color="inherit">
               <Link href={extraLink}>{extraField}</Link>
             </Button>
           </div>
         )}
-        <div className="w-full mt-4">
+        <div className="mt-4 w-full">
           <AuthButton disabledHandler={isLoading || !isValid}>
             {isLoading ? "Loading ..." : purpose}
           </AuthButton>
