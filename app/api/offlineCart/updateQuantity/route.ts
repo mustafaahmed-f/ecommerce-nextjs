@@ -95,6 +95,7 @@ export const PATCH = withMiddleWare({
               color: p.color,
               category: p.category,
               brand: p.brand,
+              image: p.image,
             };
           }
           return p;

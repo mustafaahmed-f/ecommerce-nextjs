@@ -34,6 +34,8 @@ function DesktopHeader() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const { 0: loading, 1: setLoading } = useState<boolean>(false);
   const user = useAppSelector((state) => state.user);
+  const cart = useAppSelector((state) => state.cart);
+
   const dispatch = useAppDispatch();
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -185,7 +187,7 @@ function DesktopHeader() {
             <ShoppingBag />
             <p>Cart</p>
             <span className="flex h-6 w-6 items-center justify-center rounded-[50%] bg-green-500 p-1 text-white">
-              3
+              {cart.products.length}
             </span>
           </Link>
         </div>

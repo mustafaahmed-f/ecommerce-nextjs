@@ -19,12 +19,8 @@ const cartSlice = createSlice({
       state.products = action.payload.products;
       state.subTotal = action.payload.subTotal;
     },
-
-    resetCart: () => {
-      return initialState;
-    },
   },
 });
 
-export const { resetCart, storeCart } = cartSlice.actions;
+export const { storeCart } = cartSlice.actions;
 export default cartSlice.reducer;

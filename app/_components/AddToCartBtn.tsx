@@ -12,9 +12,10 @@ import {
   addToOfflineCart,
   removeFromOfflineCart,
 } from "../_lib/APIs/offlineCartAPIs";
-import { useAppSelector } from "../_lib/store/store";
+import { useAppDispatch, useAppSelector } from "../_lib/store/store";
 import { CartProduct, ICart } from "../cart/_types/CartType";
 import { ErrorToast, SuccessToast } from "../_lib/toasts";
+import { storeCart } from "../_lib/store/slices/cartSlice/cartSlice";
 
 interface AddToCartBtnProps {
   productId: number;
@@ -22,6 +23,7 @@ interface AddToCartBtnProps {
 
 function AddToCartBtn({ productId }: AddToCartBtnProps) {
   const { cart, setCart } = useCart();
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
   const isAuth: boolean = user.email.length > 0 || user.userName.length > 0;
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
@@ -72,6 +74,7 @@ function AddToCartBtn({ productId }: AddToCartBtnProps) {
       return;
     }
     setCart(response.cart);
+    dispatch(storeCart(response.cart));
     SuccessToast.fire({
       title: `Product ${isAdd ? "added" : "removed"} successfully`,
     });

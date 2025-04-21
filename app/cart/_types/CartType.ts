@@ -7,6 +7,7 @@ export interface CartProduct {
   color?: string | null;
   category?: string | null;
   brand?: string | null;
+  image?: string;
 }
 
 export interface ICart {

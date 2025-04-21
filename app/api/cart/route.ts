@@ -131,6 +131,7 @@ export const POST = withMiddleWare({
         color: product.color,
         category: product.category,
         brand: product.brand,
+        image: product.image,
       };
 
       const cartProducts: CartProduct[] = [
@@ -266,6 +267,7 @@ export const PATCH = withMiddleWare({
               color: p.color,
               category: p.category,
               brand: p.brand,
+              image: p.image,
             };
           }
           return p;

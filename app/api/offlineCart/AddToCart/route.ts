@@ -83,6 +83,7 @@ export const POST = withMiddleWare({
         color: product.color,
         category: product.category,
         brand: product.brand,
+        image: product.image,
       };
 
       const newProducts: CartProduct[] = [...cart.products, newProduct];

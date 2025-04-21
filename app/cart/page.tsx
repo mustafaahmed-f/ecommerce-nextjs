@@ -2,42 +2,15 @@
 import Image from "next/image";
 import Button from "../_components/Button";
 import { useState } from "react";
+import { useCart } from "../_context/CartProvider";
 
 interface PageProps {}
 
 function Page({}: PageProps) {
-  const initialCart = [
-    {
-      productID: "1",
-      title: "Gaming Laptop",
-      image: "/images/laptop.jpg",
-      unitPaymentPrice: 1500,
-      discount: 10,
-      quantity: 1,
-      category: "electronics",
-      brand: "AlienTech",
-    },
-    {
-      productID: "2",
-      title: "Bluetooth Speaker",
-      image: "/images/speaker.jpg",
-      unitPaymentPrice: 200,
-      discount: 0,
-      quantity: 2,
-      category: "audio",
-      brand: "SoundBoom",
-    },
-  ];
+  const { cart, setCart } = useCart();
+  const cartItems = cart.products;
 
-  const [cartItems, setCartItems] = useState(initialCart);
-
-  const handleQtyChange = (index: number, qty: number) => {
-    setCartItems((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, quantity: Math.max(1, qty) } : item,
-      ),
-    );
-  };
+  const handleQtyChange = (index: number, qty: number) => {};
 
   const incrementQty = (index: number) => {
     handleQtyChange(index, cartItems[index].quantity + 1);
@@ -47,20 +20,14 @@ function Page({}: PageProps) {
     handleQtyChange(index, cartItems[index].quantity - 1);
   };
 
-  const getTotal = () =>
-    cartItems.reduce((acc, item) => {
-      const discounted =
-        item.unitPaymentPrice * (1 - (item.discount ?? 0) / 100);
-      return acc + discounted * item.quantity;
-    }, 0);
+  function emptyCart() {}
 
   return (
     <div className="mx-auto max-w-4xl p-4 py-8">
       <h1 className="mb-6 text-center text-2xl font-bold">Shopping Cart</h1>
       <div className="space-y-6">
         {cartItems.map((item, index) => {
-          const discountedPrice =
-            item.unitPaymentPrice * (1 - (item.discount ?? 0) / 100);
+          const discountedPrice = item.unitPaymentPrice - item.discount!;
           const hasDiscount = (item.discount ?? 0) > 0;
 
           return (
@@ -70,7 +37,7 @@ function Page({}: PageProps) {
             >
               <div className="relative h-32 w-32">
                 <Image
-                  src={item.image}
+                  src={item?.image ?? ""}
                   alt={item.title || "Product Image"}
                   fill
                   className="object-contain"
@@ -130,11 +97,19 @@ function Page({}: PageProps) {
 
       <div className="mt-8 flex flex-col items-end">
         <div className="mb-4 text-xl font-semibold">
-          Total: ${getTotal().toFixed(2)}
+          Total: ${cart.subTotal.toFixed(2)}
         </div>
-        <button className="rounded bg-black px-6 py-2 text-white transition hover:bg-gray-800">
-          Checkout
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={emptyCart}
+            className="rounded bg-red-500 px-6 py-2 text-white transition hover:bg-red-600"
+          >
+            Empty Cart
+          </button>
+          <button className="rounded bg-black px-6 py-2 text-white transition hover:bg-gray-800">
+            Checkout
+          </button>
+        </div>
       </div>
     </div>
   );

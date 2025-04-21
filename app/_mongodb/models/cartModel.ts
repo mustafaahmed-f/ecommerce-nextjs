@@ -21,6 +21,7 @@ const cartSchema = new Schema(
         color: { type: String, default: null },
         category: { type: String, default: null },
         brand: { type: String, default: null },
+        image: { type: String, default: null },
       },
     ],
     subTotal: { type: Number, required: true, default: 0 },
