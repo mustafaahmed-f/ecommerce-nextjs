@@ -93,6 +93,7 @@ function Page({}: PageProps) {
   };
 
   const decrementQty = async (productId: number) => {
+    if (quantityObj[productId] === 1) return;
     const response = await updateQuantityMethod(
       cart._id!,
       String(productId),

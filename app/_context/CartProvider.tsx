@@ -43,6 +43,10 @@ function CartProvider({ cart: fetchedCart, children }: CartProviderProps) {
     dispatch(storeCart(fetchedCart));
   }, [user, fetchedCart, setCart, dispatch]);
 
+  useEffect(() => {
+    dispatch(storeCart(cart));
+  }, [cart, dispatch]);
+
   return (
     <cartContext.Provider value={{ cart, setCart }}>
       {children}

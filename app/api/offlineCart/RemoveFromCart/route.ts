@@ -70,13 +70,13 @@ export const PATCH = withMiddleWare({
         (p: CartProduct) => p.productID !== product.productId,
       );
 
+      let newSubTotal = getSubTotal(newProducts);
+
       let newCart = {
         ...cart,
         products: newProducts,
+        subTotal: newSubTotal,
       };
-
-      let newSubTotal = getSubTotal(newCart.products);
-      newCart.subTotal = newSubTotal;
 
       await redis.set(`cart:${cartId}`, newCart);
 
