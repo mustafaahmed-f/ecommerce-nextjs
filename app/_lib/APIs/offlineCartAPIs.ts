@@ -2,8 +2,10 @@ import { instance } from "../axiosInstance";
 
 let mainURL = `${process.env.NEXT_PUBLIC_API_URL}/api/offlineCart`;
 
-export async function getOfflineCart() {
-  const response = await instance.get(`${mainURL}`);
+export async function getOfflineCart(cartId: string) {
+  const params = new URLSearchParams();
+  params.append("cartId", cartId);
+  const response = await instance.get(`${mainURL}?${params.toString()}`);
   return response.data;
 }
 

@@ -1,6 +1,8 @@
-import { createContext, useContext, useRef, useState } from "react";
+"use client";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ICart } from "../cart/_types/CartType";
+import { storeCart } from "../_lib/store/slices/cartSlice/cartSlice";
 
 interface initialStateType {
   cart: ICart;
@@ -19,16 +21,32 @@ let initialState: initialStateType = {
 
 const cartContext = createContext<initialStateType>(initialState);
 
-interface CartProviderProps {}
+interface CartProviderProps {
+  cart: ICart;
+  children: React.ReactNode;
+}
 
-function CartProvider({}: CartProviderProps) {
+function CartProvider({ cart: fetchedCart, children }: CartProviderProps) {
   const { 0: cart, 1: setCart } = useState<ICart>(initialState.cart);
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   const isFirstRender = useRef<boolean>(true);
 
+  if (isFirstRender.current) {
+    isFirstRender.current = false;
+    setCart(fetchedCart);
+    dispatch(storeCart(fetchedCart));
+  }
+
+  useEffect(() => {
+    setCart(fetchedCart);
+    dispatch(storeCart(fetchedCart));
+  }, [user, fetchedCart, setCart, dispatch]);
+
   return (
-    <cartContext.Provider value={{ cart, setCart }}></cartContext.Provider>
+    <cartContext.Provider value={{ cart, setCart }}>
+      {children}
+    </cartContext.Provider>
   );
 }
 

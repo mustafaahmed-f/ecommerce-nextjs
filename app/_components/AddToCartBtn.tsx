@@ -51,7 +51,7 @@ function AddToCartBtn({ productId }: AddToCartBtnProps) {
     : addToOfflineCart;
   const deleteMethod: (cartId: string, productId: string) => Promise<any> =
     isAuth ? removeFromUserCart : removeFromOfflineCart;
-  const productExistsInCart: boolean = mockCart.products.some(
+  const productExistsInCart: boolean = cart.products.some(
     (p: CartProduct) => p.productID === productId,
   );
 

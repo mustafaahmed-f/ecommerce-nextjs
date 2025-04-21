@@ -6,17 +6,18 @@ import { User } from "../_lib/store/slices/userSlice/userSlice.types";
 import { auth } from "../_lib/auth";
 import { verifyToken } from "../_lib/tokenMethods";
 import { instance } from "../_lib/axiosInstance";
+import InitialDataProvider from "./InitialDataProvider";
 
 interface AuthHandlerProps {
   children: React.ReactNode;
-  intitialCategories: any;
-  initialProducts: any[];
+  // intitialCategories: any;
+  // initialProducts: any[];
 }
 
 async function AuthHandler({
   children,
-  intitialCategories,
-  initialProducts,
+  // intitialCategories,
+  // initialProducts,
 }: AuthHandlerProps) {
   let user: User | null = null;
   const session = await auth();
@@ -59,14 +60,7 @@ async function AuthHandler({
     }
   }
 
-  return (
-    <Providers
-      intitialCategories={intitialCategories}
-      initialProducts={initialProducts}
-    >
-      <UserProvider user={user}>{children}</UserProvider>
-    </Providers>
-  );
+  return <InitialDataProvider user={user}>{children}</InitialDataProvider>;
 }
 
 export default AuthHandler;

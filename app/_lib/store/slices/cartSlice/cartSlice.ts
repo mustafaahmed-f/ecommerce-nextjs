@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Cart, Product } from "./cartSlice.types";
+import { ICart } from "@/app/cart/_types/CartType";
 
-const initialState: Cart = {
+const initialState: ICart = {
   _id: "",
   userID: "",
   products: [],
@@ -12,55 +13,11 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    storeCart: (state: Cart, action: PayloadAction<Cart>) => {
+    storeCart: (state: ICart, action: PayloadAction<ICart>) => {
       state._id = action.payload._id;
       state.userID = action.payload.userID;
       state.products = action.payload.products;
       state.subTotal = action.payload.subTotal;
-    },
-    addProduct: (state, action: PayloadAction<Product>) => {
-      const product: Product = action.payload;
-      const isExistingProduct = state.products.find(
-        (product) => product.productID === product.productID,
-      );
-      if (isExistingProduct) {
-        isExistingProduct.quantity += product.quantity;
-      } else {
-        state.products.push(product);
-      }
-
-      state.subTotal = state.products.reduce(
-        (acc, el) => el.quantity * el.unitPaymentPrice + acc,
-        0,
-      );
-    },
-
-    removeProduct: (state: Cart, action: PayloadAction<Product>) => {
-      const product: Product = action.payload;
-      const isExistingProduct = state.products.find(
-        (product) => product.productID === product.productID,
-      );
-      if (!isExistingProduct) return;
-      state.products = state.products.filter(
-        (el) => el.productID !== product.productID,
-      );
-      state.subTotal = state.products.reduce(
-        (acc, el) => el.quantity * el.unitPaymentPrice + acc,
-        0,
-      );
-    },
-
-    updateQuantity: (state: Cart, action: PayloadAction<Product>) => {
-      const product: Product = action.payload;
-      const isExistingProduct = state.products.find(
-        (product) => product.productID === product.productID,
-      );
-      if (!isExistingProduct) return;
-      isExistingProduct.quantity = product.quantity;
-      state.subTotal = state.products.reduce(
-        (acc, el) => el.quantity * el.unitPaymentPrice + acc,
-        0,
-      );
     },
 
     resetCart: () => {
@@ -69,11 +26,5 @@ const cartSlice = createSlice({
   },
 });
 
-export const {
-  addProduct,
-  removeProduct,
-  updateQuantity,
-  resetCart,
-  storeCart,
-} = cartSlice.actions;
+export const { resetCart, storeCart } = cartSlice.actions;
 export default cartSlice.reducer;
