@@ -22,6 +22,7 @@ import DeleteProductIcon from "../_icons/DeleteProductIcon";
 interface PageProps {}
 
 function Page({}: PageProps) {
+  //TODO : use useOptimistic for updating quantity and deleting products
   const { cart, setCart } = useCart();
   const { 0: quantityObj, 1: setQuantityObj } = useState<
     Record<number, number>

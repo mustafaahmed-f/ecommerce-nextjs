@@ -49,9 +49,12 @@ export const PATCH = withMiddleWare({
 
       await Promise.all(promiseArr);
 
-      cart.products = [];
-      cart.subTotal = 0;
-      await redis.set(`cart:${cartId}`, cart);
+      let newCart = {
+        ...cart,
+        products: [],
+        subTotal: 0,
+      };
+      await redis.set(`cart:${cartId}`, newCart);
 
       await session.commitTransaction();
       session.endSession();
@@ -60,7 +63,7 @@ export const PATCH = withMiddleWare({
         {
           success: true,
           message: "Cart has been emptied successfully !",
-          cart,
+          cart: newCart,
         },
         { status: 200 },
       );

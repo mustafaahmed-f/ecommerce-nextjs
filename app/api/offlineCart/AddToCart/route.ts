@@ -1,9 +1,11 @@
+import { instance } from "@/app/_lib/axiosInstance";
 import { getSubTotal } from "@/app/_lib/getSubTotal";
 import { redis } from "@/app/_lib/redisClient";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { CartProduct, ICart } from "@/app/cart/_types/CartType";
 import mongoose from "mongoose";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = withMiddleWare({
@@ -17,10 +19,29 @@ export const POST = withMiddleWare({
 
     try {
       const searchParams = request.nextUrl.searchParams;
-      const cartId = searchParams.get("cartId");
+      const cartIdFromCookies = cookies().get(
+        process.env.NEXT_PUBLIC_OFFLINE_CART_KEY as string,
+      )?.value;
+      let cartId;
+      if (!cartIdFromCookies) {
+        const response = await instance.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/offlineCart`,
+        );
+        if (!response.data.success) {
+          {
+            throw new Error("Error while creating cart !!", {
+              cause: 500,
+            });
+          }
+        } else {
+          cartId = response.data.cart._id;
+        }
+      } else {
+        cartId = cartIdFromCookies;
+      }
       const productId = searchParams.get("productId");
       const fetchedCart = await redis.get(`cart:${cartId}`);
-      console.log("🚀 ~ fetchedCart : ", fetchedCart);
+      // console.log("🚀 ~ fetchedCart : ", fetchedCart);
       if (!fetchedCart)
         throw new Error("Cart is not found or error while fetching cart !!", {
           cause: 404,
@@ -101,7 +122,7 @@ export const POST = withMiddleWare({
       await session.commitTransaction();
       session.endSession();
 
-      return NextResponse.json(
+      const response = NextResponse.json(
         {
           success: true,
           message: "Product added to cart successfully !",
@@ -109,6 +130,19 @@ export const POST = withMiddleWare({
         },
         { status: 200 },
       );
+
+      if (!cartIdFromCookies) {
+        response.cookies.set({
+          name: process.env.NEXT_PUBLIC_OFFLINE_CART_KEY as string,
+          value: cartId,
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 60 * 60 * 24 * 5, // 30 days
+        });
+      }
+
+      return response;
     } catch (error: any) {
       await session.abortTransaction();
       session.endSession();

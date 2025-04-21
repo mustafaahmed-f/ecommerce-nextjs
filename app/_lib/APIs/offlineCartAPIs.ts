@@ -16,11 +16,11 @@ export async function createOfflineCart() {
 
 export async function addToOfflineCart(cartId: string, productId: string) {
   const params = new URLSearchParams();
-  params.append("cartId", cartId);
   params.append("productId", productId);
   const response = await instance.post(
     `${mainURL + "/AddToCart"}?${params.toString()}`,
   );
+  console.log("Response : ", response);
   return response.data;
 }
 
