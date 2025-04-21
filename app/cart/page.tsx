@@ -16,7 +16,7 @@ import {
   removeFromOfflineCart,
   updateProductQuantityOfOfflineCart,
 } from "../_lib/APIs/offlineCartAPIs";
-import { ErrorToast } from "../_lib/toasts";
+import { ErrorToast, SuccessToast } from "../_lib/toasts";
 import DeleteProductIcon from "../_icons/DeleteProductIcon";
 
 interface PageProps {}
@@ -134,6 +134,9 @@ function Page({}: PageProps) {
       const newQuantityObj = { ...quantityObj };
       delete newQuantityObj[productId];
       setQuantityObj(newQuantityObj);
+      SuccessToast.fire({
+        title: "Product removed successfully",
+      });
     }
   }
 
@@ -195,8 +198,13 @@ function Page({}: PageProps) {
                     min={1}
                     minLength={1}
                     onChange={(e) => {
-                      if (isNaN(Number(e.target.value))) return;
-                      handleQtyChange(item.productID, Number(e.target.value));
+                      if (isNaN(Number(e.target.value))) {
+                        return;
+                      } else if (Number(e.target.value) === 0) {
+                        handleQtyChange(item.productID, 1);
+                      } else {
+                        handleQtyChange(item.productID, Number(e.target.value));
+                      }
                     }}
                   />
                   <button
