@@ -50,7 +50,7 @@ function MainProductsCard({ product }: { product: any }) {
           <div className="cursor-pointer text-black hover:text-sky-500">
             <FavoriteBorder />
           </div>
-          <AddToCartBtn />
+          <AddToCartBtn productId={product.productId} />
         </div>
       </div>
     </div>
