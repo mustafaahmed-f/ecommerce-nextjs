@@ -30,26 +30,6 @@ function AddToCartBtn({ productId }: AddToCartBtnProps) {
 
   //TODO : use useOptimistic instead of loading state to show product is added while add operation is done in background
 
-  const mockCart: ICart = {
-    _id: "mock-cart-123",
-    userID: "user-456",
-    products: [
-      {
-        productID: 1,
-        title: "Test Product",
-        unitPaymentPrice: 100,
-        discount: 10,
-        quantity: 1,
-        color: "Red",
-        category: "Electronics",
-        brand: "TestBrand",
-      },
-    ],
-    subTotal: 90, // 100 - 10 discount
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
   const addMethod: (cartId: string, productId: string) => Promise<any> = isAuth
     ? addToUserCart
     : addToOfflineCart;
