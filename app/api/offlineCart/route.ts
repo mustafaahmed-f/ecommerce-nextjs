@@ -74,19 +74,6 @@ export const POST = withMiddleWare({
         { status: 200 },
       );
 
-      // // Set cookie
-      // response.cookies.set(
-      //   process.env.NEXT_PUBLIC_OFFLINE_CART_KEY as string,
-      //   cartId,
-      //   {
-      //     httpOnly: true,
-      //     path: "/",
-      //     sameSite: "strict", // Necessary for cross-origin cookies
-      //     maxAge: 86400,
-      //     secure: process.env.NODE_ENV === "production", // True in production for HTTPS
-      //   },
-      // );
-
       return response;
     } catch (error: any) {
       await session.abortTransaction();
