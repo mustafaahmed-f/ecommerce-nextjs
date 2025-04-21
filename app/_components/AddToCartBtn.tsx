@@ -14,13 +14,14 @@ import {
 } from "../_lib/APIs/offlineCartAPIs";
 import { useAppSelector } from "../_lib/store/store";
 import { CartProduct, ICart } from "../cart/_types/CartType";
+import { ErrorToast, SuccessToast } from "../_lib/toasts";
 
 interface AddToCartBtnProps {
   productId: number;
 }
 
 function AddToCartBtn({ productId }: AddToCartBtnProps) {
-  const { cart } = useCart();
+  const { cart, setCart } = useCart();
   const user = useAppSelector((state) => state.user);
   const isAuth: boolean = user.email.length > 0 || user.userName.length > 0;
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
@@ -56,19 +57,39 @@ function AddToCartBtn({ productId }: AddToCartBtnProps) {
     (p: CartProduct) => p.productID === productId,
   );
 
+  async function handleClick(
+    isAdd: boolean,
+    cartId: string,
+    productId: string,
+  ) {
+    const response = isAdd
+      ? await addMethod(cartId, productId)
+      : await deleteMethod(cartId, productId);
+    if (!response.success) {
+      ErrorToast.fire({
+        title: `Failed to ${isAdd ? "add" : "remove"} product to cart : ${response.error}`,
+      });
+      return;
+    }
+    setCart(response.cart);
+    SuccessToast.fire({
+      title: `Product ${isAdd ? "added" : "removed"} successfully`,
+    });
+  }
+
   return (
     <div>
       {!productExistsInCart ? (
         <button
           className="flex cursor-pointer items-center overflow-visible hover:text-sky-500"
-          onClick={() => addMethod(cart._id!, productId.toString())}
+          onClick={() => handleClick(true, cart._id!, productId.toString())} //TODO : use useOptimistic(cart._id!, productId.toString())}
         >
           <CartPlusIcon />
         </button>
       ) : (
         <button
           className="cursor-pointer hover:text-sky-500"
-          onClick={() => deleteMethod(cart._id!, productId.toString())}
+          onClick={() => handleClick(false, cart._id!, productId.toString())} //TODO : use useOptimistic(cart._id!, productId.toString())}
         >
           <CartCheckIcon />
         </button>
