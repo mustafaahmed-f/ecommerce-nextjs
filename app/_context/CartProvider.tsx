@@ -4,6 +4,7 @@ import { ICart } from "../cart/_types/CartType";
 
 interface initialStateType {
   cart: ICart;
+  setCart: React.Dispatch<React.SetStateAction<ICart>>;
 }
 
 let initialState: initialStateType = {
@@ -13,6 +14,7 @@ let initialState: initialStateType = {
     products: [],
     subTotal: 0,
   },
+  setCart: () => {},
 };
 
 const cartContext = createContext<initialStateType>(initialState);
@@ -25,7 +27,9 @@ function CartProvider({}: CartProviderProps) {
   const dispatch = useDispatch();
   const isFirstRender = useRef<boolean>(true);
 
-  return <cartContext.Provider value={{ cart }}></cartContext.Provider>;
+  return (
+    <cartContext.Provider value={{ cart, setCart }}></cartContext.Provider>
+  );
 }
 
 export default CartProvider;

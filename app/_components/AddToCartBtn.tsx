@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useCart } from "../_context/CartProvider";
 import CartCheckIcon from "../_icons/CartCheckIcon";
 import CartPlusIcon from "../_icons/CartPlusIcon";
@@ -22,6 +23,7 @@ function AddToCartBtn({ productId }: AddToCartBtnProps) {
   const { cart } = useCart();
   const user = useAppSelector((state) => state.user);
   const isAuth: boolean = user.email.length > 0 || user.userName.length > 0;
+  const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const mockCart: ICart = {
     _id: "mock-cart-123",
     userID: "user-456",
