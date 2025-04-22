@@ -9,7 +9,7 @@ import { useAppSelector } from "@/app/_lib/store/store";
 import { ErrorToast } from "@/app/_lib/toasts";
 import { CartProduct } from "@/app/cart/_types/CartType";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface UpdateProductQuantityProps {
   productId: number;
@@ -23,6 +23,8 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
     );
     return product ? product.quantity : 1;
   });
+
+  const quantityChangeTimeOut = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const product = cart.products.find(
@@ -49,20 +51,25 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
   );
 
   const handleQtyChange = async (productId: number, qty: number) => {
-    const response = await updateQuantityMethod(
-      cart._id!,
-      String(productId),
-      qty,
-    );
-    if (!response.success) {
-      ErrorToast.fire({
-        title: response.error,
-      });
-    } else {
-      setCart(response.cart);
-      setQuantity(qty);
-    }
-    router.refresh();
+    const oldQty = quantity;
+    setQuantity(qty);
+    clearTimeout(quantityChangeTimeOut.current!);
+    quantityChangeTimeOut.current = setTimeout(async () => {
+      const response = await updateQuantityMethod(
+        cart._id!,
+        String(productId),
+        qty,
+      );
+      if (!response.success) {
+        ErrorToast.fire({
+          title: response.error,
+        });
+        setQuantity(oldQty);
+      } else {
+        setCart(response.cart);
+      }
+      router.refresh();
+    }, 1500);
   };
 
   const incrementQty = async (productId: number) => {

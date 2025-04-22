@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { useCart } from "../_context/CartProvider";
 import DeleteProductIcon from "../_icons/DeleteProductIcon";
@@ -40,6 +40,8 @@ function Page({}: PageProps) {
   const isAuth: boolean = user.email.length > 0 || user.userName.length > 0;
   const cartItems = cart.products;
 
+  const quantityChangeTimeOut = useRef<NodeJS.Timeout | null>(null);
+
   const updateQuantityMethod: (
     cartId: string,
     productId: string,
@@ -56,23 +58,30 @@ function Page({}: PageProps) {
     isAuth ? removeFromUserCart : removeFromOfflineCart;
 
   const handleQtyChange = async (productId: number, qty: number) => {
-    const response = await updateQuantityMethod(
-      cart._id!,
-      String(productId),
-      qty,
-    );
-    if (!response.success) {
-      ErrorToast.fire({
-        title: response.error,
-      });
-    } else {
-      setCart(response.cart);
-      setQuantityObj({
-        ...quantityObj,
-        [productId]: qty,
-      });
-    }
-    router.refresh();
+    const oldQty = quantityObj[productId];
+    console.log("Old Qty : ", oldQty);
+    setQuantityObj((prev) => ({
+      ...prev,
+      [productId]: qty,
+    }));
+
+    clearTimeout(quantityChangeTimeOut.current!);
+    quantityChangeTimeOut.current = setTimeout(async () => {
+      const response = await updateQuantityMethod(
+        cart._id!,
+        String(productId),
+        qty,
+      );
+      if (!response.success) {
+        ErrorToast.fire({
+          title: response.error,
+        });
+        setQuantityObj((prev) => ({ ...prev, [productId]: oldQty }));
+      } else {
+        setCart(response.cart);
+      }
+      router.refresh();
+    }, 1500);
   };
 
   const incrementQty = async (productId: number) => {
@@ -236,7 +245,7 @@ function Page({}: PageProps) {
                   <input
                     type="text"
                     className="w-14 rounded border py-1 text-center"
-                    value={item.quantity}
+                    value={quantityObj[item.productID] ?? 1}
                     min={1}
                     minLength={1}
                     onChange={(e) => {
