@@ -68,7 +68,7 @@ function AddToCartBtn({
     setCart(response.cart);
     dispatch(storeCart(response.cart));
     SuccessToast.fire({
-      title: `Product ${isAdd ? "added" : "removed"} successfully`,
+      title: `Product ${isAdd ? "added to cart" : "removed from cart"} successfully`,
     });
     setIsLoading(false);
     router.refresh();

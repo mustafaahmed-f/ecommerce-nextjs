@@ -1,3 +1,4 @@
+import { ICart } from "@/app/cart/_types/CartType";
 import { instance } from "../axiosInstance";
 
 let mainURL = `${process.env.NEXT_PUBLIC_API_URL}/api/cart`;
@@ -44,6 +45,23 @@ export async function emptyUserCart(cartId: string) {
   params.append("cartId", cartId);
   const response = await instance.patch(
     `${mainURL + "/emptyCart"}?${params.toString()}`,
+  );
+  return response.data;
+}
+
+export async function mergeCarts(
+  cartId: string,
+  mergedCart: ICart,
+  cookieHeader: any,
+) {
+  const params = new URLSearchParams();
+  params.append("cartId", cartId);
+  const response = await instance.patch(
+    `${mainURL + "/afterMerge"}`,
+    { mergedCart },
+    {
+      headers: cookieHeader,
+    },
   );
   return response.data;
 }

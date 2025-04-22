@@ -150,17 +150,19 @@ function Page({}: PageProps) {
       confirmButtonText: "Yes, empty it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
+        setIsLoading(true);
         const response = await emptyCartMethod(cart._id!);
         if (!response.success) {
           ErrorToast.fire({
             title: response.error,
           });
+          setIsLoading(false);
         } else {
           setCart(response.cart);
           setQuantityObj({});
         }
+        setIsLoading(false);
         router.refresh();
-
         Swal.fire({
           title: "Emptied !",
           text: "Your cart is now empty !!",
