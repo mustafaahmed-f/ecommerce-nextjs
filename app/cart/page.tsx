@@ -23,7 +23,7 @@ import Link from "next/link";
 interface PageProps {}
 
 function Page({}: PageProps) {
-  //TODO : use useOptimistic for updating quantity and deleting products
+  const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const { cart, setCart } = useCart();
   const { 0: quantityObj, 1: setQuantityObj } = useState<
     Record<number, number>
@@ -181,11 +181,13 @@ function Page({}: PageProps) {
       confirmButtonText: "Yes, remove it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
+        setIsLoading(true);
         const response = await deleteMethod(cart._id!, String(productId));
         if (!response.success) {
           ErrorToast.fire({
             title: response.error,
           });
+          setIsLoading(false);
         } else {
           setCart(response.cart);
           //// remove product from quantity object :
@@ -194,7 +196,7 @@ function Page({}: PageProps) {
           setQuantityObj(newQuantityObj);
         }
         router.refresh();
-
+        setIsLoading(false);
         Swal.fire({
           title: "Removed !",
           text: "Product has been removed successfully !!",
@@ -207,7 +209,9 @@ function Page({}: PageProps) {
   return (
     <div className="mx-auto max-w-4xl p-4 py-8">
       <h1 className="mb-6 text-center text-2xl font-bold">Shopping Cart</h1>
-      <div className="space-y-6">
+      <div
+        className={`space-y-6 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
+      >
         {cartItems.map((item, index) => {
           const discountedPrice = item.unitPaymentPrice - item.discount!;
           const hasDiscount = (item.discount ?? 0) > 0;
@@ -295,7 +299,9 @@ function Page({}: PageProps) {
       </div>
 
       {cartItems.length ? (
-        <div className="mt-8 flex flex-col items-end">
+        <div
+          className={`mt-8 flex flex-col items-end ${isLoading ? "pointer-events-none opacity-40" : ""}`}
+        >
           <div className="mb-4 text-xl font-semibold">
             Total: ${cart.subTotal.toFixed(2)}
           </div>
