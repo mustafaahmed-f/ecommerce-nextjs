@@ -7,6 +7,7 @@ import { FavoriteBorder } from "@mui/icons-material";
 import Link from "next/link";
 import { ProductType } from "../_types/Product.type";
 import ProductProperty from "./ProductProperty";
+import UpdateProductQuantity from "./UpdateProductQuantity";
 
 interface ProductInfoProps {
   product: ProductType;
@@ -92,7 +93,7 @@ function ProductInfo({ product }: ProductInfoProps) {
         />
         {/* Quantity */}
         <p className="my-auto">Quantity</p>
-        <div className="flex w-fit items-center gap-4 rounded-md border-[1px] border-[#C4C4C4] px-3 py-2 text-center">
+        {/* <div className="flex w-fit items-center gap-4 rounded-md border-[1px] border-[#C4C4C4] px-3 py-2 text-center">
           <button>
             <IncreaseQuantity />
           </button>
@@ -100,7 +101,8 @@ function ProductInfo({ product }: ProductInfoProps) {
           <button>
             <DecreaseQuantity />
           </button>
-        </div>
+        </div> */}
+        <UpdateProductQuantity productId={productId} />
         {/* out of stock indicator */}
         {/* <p className="mt-2 font-semibold text-red-500">Out of stock !!</p> */}
       </div>

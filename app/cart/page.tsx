@@ -170,9 +170,6 @@ function Page({}: PageProps) {
           const newQuantityObj = { ...quantityObj };
           delete newQuantityObj[productId];
           setQuantityObj(newQuantityObj);
-          // SuccessToast.fire({
-          //   title: "Product removed successfully",
-          // });
         }
         router.refresh();
 
