@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "../_context/CartProvider";
 import CartCheckIcon from "../_icons/CartCheckIcon";
@@ -12,11 +13,10 @@ import {
   addToOfflineCart,
   removeFromOfflineCart,
 } from "../_lib/APIs/offlineCartAPIs";
-import { useAppDispatch, useAppSelector } from "../_lib/store/store";
-import { CartProduct, ICart } from "../cart/_types/CartType";
-import { ErrorToast, SuccessToast } from "../_lib/toasts";
 import { storeCart } from "../_lib/store/slices/cartSlice/cartSlice";
-import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "../_lib/store/store";
+import { ErrorToast, SuccessToast } from "../_lib/toasts";
+import { CartProduct } from "../cart/_types/CartType";
 
 interface AddToCartBtnProps {
   productId: number;

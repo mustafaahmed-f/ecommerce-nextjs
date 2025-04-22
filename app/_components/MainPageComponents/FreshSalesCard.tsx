@@ -1,9 +1,13 @@
 import Image from "next/image";
 import Rating from "../Rating";
+import Link from "next/link";
 
 function FreshSalesCard({ product }: { product: any }) {
   return (
-    <div className="FreshSalesCard flex min-w-48 cursor-pointer flex-col rounded-md px-2 py-2 shadow-[0px_0px_2px_3px_#F3F3F3] sm:px-5">
+    <Link
+      href={`/product/${product.productId}`}
+      className="FreshSalesCard flex min-w-48 cursor-pointer flex-col rounded-md px-2 py-2 shadow-[0px_0px_2px_3px_#F3F3F3] sm:px-5"
+    >
       <div className="flex flex-col items-center justify-center gap-2 py-2 text-center">
         <p className="mb-0 font-bold text-textGrey">Deal of the day</p>
         <p className="w-full font-semibold">12 : 43 : 12</p>
@@ -44,7 +48,7 @@ function FreshSalesCard({ product }: { product: any }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

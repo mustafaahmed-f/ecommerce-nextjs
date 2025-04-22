@@ -43,8 +43,6 @@ async function Page(props: PageProps) {
             <ProductInfo product={product.product} />
           </div>
         </div>
-        {/* Second seciton ( description and reviews ) */}
-        <div></div>
       </div>
       <ProductTabs product={product.product} />
     </section>
