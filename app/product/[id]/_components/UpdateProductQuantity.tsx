@@ -75,6 +75,7 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
   };
 
   const incrementQty = async (productId: number) => {
+    setQuantity((prev) => prev + 1);
     // handleQtyChange(index, cartItems[index].quantity + 1);
     const response = await updateQuantityMethod(
       cart._id!,
@@ -85,15 +86,17 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
       ErrorToast.fire({
         title: response.error,
       });
+      setQuantity(quantityRef.current!);
     } else {
       setCart(response.cart);
-      setQuantity((prev) => prev + 1);
+      quantityRef.current = quantity + 1;
     }
     router.refresh();
   };
 
   const decrementQty = async (productId: number) => {
     if (quantity === 1) return;
+    setQuantity((prev) => prev - 1);
     const response = await updateQuantityMethod(
       cart._id!,
       String(productId),
@@ -103,9 +106,10 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
       ErrorToast.fire({
         title: response.error,
       });
+      setQuantity(quantityRef.current!);
     } else {
       setCart(response.cart);
-      setQuantity((prev) => prev - 1);
+      quantityRef.current = quantity - 1;
     }
     router.refresh();
   };

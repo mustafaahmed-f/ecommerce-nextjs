@@ -18,6 +18,7 @@ import {
 import { useAppSelector } from "../_lib/store/store";
 import { ErrorToast } from "../_lib/toasts";
 import { CartProduct } from "./_types/CartType";
+import Link from "next/link";
 
 interface PageProps {}
 
@@ -86,6 +87,11 @@ function Page({}: PageProps) {
   };
 
   const incrementQty = async (productId: number) => {
+    setQuantityObj({
+      ...quantityObj,
+      [productId]: quantityObj[productId] + 1,
+    });
+
     // handleQtyChange(index, cartItems[index].quantity + 1);
     const response = await updateQuantityMethod(
       cart._id!,
@@ -96,18 +102,23 @@ function Page({}: PageProps) {
       ErrorToast.fire({
         title: response.error,
       });
+      setQuantityObj(quantityRef.current!);
     } else {
       setCart(response.cart);
-      setQuantityObj({
+      quantityRef.current = {
         ...quantityObj,
         [productId]: quantityObj[productId] + 1,
-      });
+      };
     }
     router.refresh();
   };
 
   const decrementQty = async (productId: number) => {
     if (quantityObj[productId] === 1) return;
+    setQuantityObj({
+      ...quantityObj,
+      [productId]: quantityObj[productId] - 1,
+    });
     const response = await updateQuantityMethod(
       cart._id!,
       String(productId),
@@ -117,12 +128,13 @@ function Page({}: PageProps) {
       ErrorToast.fire({
         title: response.error,
       });
+      setQuantityObj(quantityRef.current!);
     } else {
       setCart(response.cart);
-      setQuantityObj({
+      quantityRef.current = {
         ...quantityObj,
         [productId]: quantityObj[productId] - 1,
-      });
+      };
     }
     router.refresh();
   };
@@ -215,7 +227,11 @@ function Page({}: PageProps) {
               </div>
 
               <div className="w-full flex-1 space-y-2 md:w-auto">
-                <h2 className="text-lg font-semibold">{item.title}</h2>
+                <Link href={`/product/${item.productID}`}>
+                  <h2 className="text-lg font-semibold hover:underline">
+                    {item.title}
+                  </h2>
+                </Link>
                 <p className="text-sm text-gray-500">{item.brand}</p>
                 <div className="text-gray-700">
                   {hasDiscount ? (
