@@ -1,11 +1,10 @@
 "use client";
 import Image from "next/image";
-import Button from "../_components/Button";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Swal from "sweetalert2";
 import { useCart } from "../_context/CartProvider";
-import { useAppSelector } from "../_lib/store/store";
-import { CartProduct } from "./_types/CartType";
-import { initial } from "lodash";
+import DeleteProductIcon from "../_icons/DeleteProductIcon";
 import {
   emptyUserCart,
   removeFromUserCart,
@@ -16,10 +15,9 @@ import {
   removeFromOfflineCart,
   updateProductQuantityOfOfflineCart,
 } from "../_lib/APIs/offlineCartAPIs";
-import { ErrorToast, SuccessToast } from "../_lib/toasts";
-import DeleteProductIcon from "../_icons/DeleteProductIcon";
-import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
+import { useAppSelector } from "../_lib/store/store";
+import { ErrorToast } from "../_lib/toasts";
+import { CartProduct } from "./_types/CartType";
 
 interface PageProps {}
 

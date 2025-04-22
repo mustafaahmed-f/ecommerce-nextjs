@@ -54,6 +54,7 @@ function AddToCartBtn({
     cartId: string,
     productId: string,
   ) {
+    setIsLoading(true);
     const response = isAdd
       ? await addMethod(cartId, productId)
       : await deleteMethod(cartId, productId);
@@ -61,6 +62,7 @@ function AddToCartBtn({
       ErrorToast.fire({
         title: `Failed to ${isAdd ? "add" : "remove"} product to cart : ${response.error}`,
       });
+      setIsLoading(false);
       return;
     }
     setCart(response.cart);
@@ -68,7 +70,7 @@ function AddToCartBtn({
     SuccessToast.fire({
       title: `Product ${isAdd ? "added" : "removed"} successfully`,
     });
-
+    setIsLoading(false);
     router.refresh();
   }
 
@@ -76,14 +78,14 @@ function AddToCartBtn({
     <div>
       {!productExistsInCart ? (
         <button
-          className={`flex cursor-pointer items-center overflow-visible hover:text-sky-500 ${stock === 0 ? "pointer-events-none opacity-50" : ""}`}
+          className={`flex cursor-pointer items-center overflow-visible hover:text-sky-500 ${stock === 0 || isLoading ? "pointer-events-none opacity-50" : ""}`}
           onClick={() => handleClick(true, cart._id!, productId.toString())} //TODO : use useOptimistic(cart._id!, productId.toString())}
         >
           <CartPlusIcon />
         </button>
       ) : (
         <button
-          className="cursor-pointer hover:text-sky-500"
+          className={`cursor-pointer ${isLoading ? "pointer-events-none opacity-50" : ""} hover:text-sky-500`}
           onClick={() => handleClick(false, cart._id!, productId.toString())} //TODO : use useOptimistic(cart._id!, productId.toString())}
         >
           <CartCheckIcon />
@@ -93,7 +95,7 @@ function AddToCartBtn({
   ) : !productExistsInCart ? (
     <button
       onClick={() => handleClick(true, cart._id!, productId.toString())}
-      className={`flex flex-1 items-center ${stock === 0 ? "pointer-events-none opacity-30" : ""} justify-center gap-1 rounded-lg border-[1px] border-[#434343] px-[2px] py-2 text-center text-[#555555] hover:bg-[#f5f5f5] md:gap-2`}
+      className={`flex flex-1 items-center ${stock === 0 || isLoading ? "pointer-events-none opacity-30" : ""} justify-center gap-1 rounded-lg border-[1px] border-[#434343] px-[2px] py-2 text-center text-[#555555] hover:bg-[#f5f5f5] md:gap-2`}
     >
       <AddToBasketIcon />
       <span className="uppercase max-md:w-fit">Add to cart</span>
@@ -101,7 +103,7 @@ function AddToCartBtn({
   ) : (
     <button
       onClick={() => handleClick(false, cart._id!, productId.toString())}
-      className={`flex flex-1 items-center ${stock === 0 ? "pointer-events-none opacity-30" : ""} justify-center gap-1 rounded-lg border-[1px] border-[#434343] px-[2px] py-2 text-center text-[#555555] hover:bg-[#f5f5f5] md:gap-2`}
+      className={`flex flex-1 items-center ${isLoading ? "pointer-events-none opacity-30" : ""} justify-center gap-1 rounded-lg border-[1px] border-[#434343] px-[2px] py-2 text-center text-[#555555] hover:bg-[#f5f5f5] md:gap-2`}
     >
       <InCartBasketIcon />
       <span className="uppercase max-md:w-fit">In cart</span>
