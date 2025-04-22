@@ -1,10 +1,11 @@
+import AddToCartBtn from "@/app/_components/AddToCartBtn";
+import DecreaseQuantity from "@/app/_icons/DecreaseQuantity";
+import IncreaseQuantity from "@/app/_icons/IncreaseQuantity";
+import { colorMap } from "@/app/_lib/colorsArray";
 import ColorIndicator from "@/app/products/_components/ColorIndicator";
 import { FavoriteBorder } from "@mui/icons-material";
+import Link from "next/link";
 import { ProductType } from "../_types/Product.type";
-import { colorMap } from "@/app/_lib/colorsArray";
-import IncreaseQuantity from "@/app/_icons/IncreaseQuantity";
-import DecreaseQuantity from "@/app/_icons/DecreaseQuantity";
-import AddToBasketIcon from "@/app/_icons/AddToBasketIcon";
 import ProductProperty from "./ProductProperty";
 
 interface ProductInfoProps {
@@ -24,6 +25,8 @@ function ProductInfo({ product }: ProductInfoProps) {
     soundOutput,
     category,
     discount,
+    productId,
+    stock,
   } = product;
   return (
     <div className="my-auto flex flex-col gap-2">
@@ -98,15 +101,17 @@ function ProductInfo({ product }: ProductInfoProps) {
             <DecreaseQuantity />
           </button>
         </div>
+        {/* out of stock indicator */}
+        {/* <p className="mt-2 font-semibold text-red-500">Out of stock !!</p> */}
       </div>
       <div className="mt-6 grid w-full grid-cols-2 gap-2 max-md:text-sm md:gap-3">
-        <button className="flex-1 rounded-lg bg-[#4172DC] py-2 text-center uppercase text-white hover:bg-[#466fc8]">
-          shop now
-        </button>
-        <button className="flex flex-1 items-center justify-center gap-1 rounded-lg border-[1px] border-[#434343] px-[2px] py-2 text-center text-[#555555] hover:bg-[#f5f5f5] md:gap-2">
-          <AddToBasketIcon />
-          <span className="uppercase max-md:w-fit">Add to cart</span>
-        </button>
+        <Link
+          href="/cartcheckout"
+          className="flex-1 rounded-lg bg-[#4172DC] py-2 text-center uppercase text-white hover:bg-[#466fc8]"
+        >
+          Checkout now
+        </Link>
+        <AddToCartBtn productId={productId} stock={stock!} isSingleProduct />
       </div>
     </div>
   );

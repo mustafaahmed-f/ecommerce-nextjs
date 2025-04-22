@@ -20,15 +20,6 @@ function FreshSalesCard({
   const timerInterval = useRef<NodeJS.Timeout | null>(null);
 
   const handleTimer = useCallback(() => {
-    // if (timer["hour"] === 0) {
-    //   setTimer(initialTimer);
-    // } else if (timer["min"] === 0 && timer["sec"] === 0) {
-    //   setTimer({ hour: timer["hour"] - 1, min: 59, sec: 59 });
-    // } else if (timer["sec"] === 0) {
-    //   setTimer({ ...timer, min: timer["min"] - 1, sec: 59 });
-    // } else {
-    //   setTimer({ ...timer, sec: timer["sec"] - 1 });
-    // }
     setTimer((prevTimer) => {
       if (prevTimer["hour"] === 0) {
         return initialTimer;
@@ -55,8 +46,13 @@ function FreshSalesCard({
   return (
     <Link
       href={`/product/${product.productId}`}
-      className="FreshSalesCard flex min-w-48 cursor-pointer flex-col rounded-md px-2 py-2 shadow-[0px_0px_2px_3px_#F3F3F3] sm:px-5"
+      className="FreshSalesCard realtive flex min-w-48 cursor-pointer flex-col rounded-md px-2 py-2 shadow-[0px_0px_2px_3px_#F3F3F3] sm:px-5"
     >
+      {product.stock === 0 ? (
+        <div className="absolute left-[-5px] top-8 z-10 w-[110px] -rotate-45 transform bg-red-600 py-1 text-center text-sm font-semibold text-white shadow-md">
+          Out of Stock
+        </div>
+      ) : null}
       <div className="flex flex-col items-center justify-center gap-2 py-2 text-center">
         <p className="mb-0 font-bold text-textGrey">Deal of the day</p>
         <div className="grid w-full grid-cols-5">

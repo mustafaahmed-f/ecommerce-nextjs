@@ -17,19 +17,26 @@ import { storeCart } from "../_lib/store/slices/cartSlice/cartSlice";
 import { useAppDispatch, useAppSelector } from "../_lib/store/store";
 import { ErrorToast, SuccessToast } from "../_lib/toasts";
 import { CartProduct } from "../cart/_types/CartType";
+import AddToBasketIcon from "../_icons/AddToBasketIcon";
+import InCartBasketIcon from "../_icons/InCartBasketIcon";
 
 interface AddToCartBtnProps {
   productId: number;
   stock: number;
+  isSingleProduct?: boolean;
 }
 
-function AddToCartBtn({ productId, stock }: AddToCartBtnProps) {
+function AddToCartBtn({
+  productId,
+  stock,
+  isSingleProduct = false,
+}: AddToCartBtnProps) {
   const { cart, setCart } = useCart();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
   const isAuth: boolean = user.email.length > 0 || user.userName.length > 0;
-  const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const router = useRouter();
+  const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
 
   //TODO : use useOptimistic instead of loading state to show product is added while add operation is done in background
 
@@ -65,7 +72,7 @@ function AddToCartBtn({ productId, stock }: AddToCartBtnProps) {
     router.refresh();
   }
 
-  return (
+  return !isSingleProduct ? (
     <div>
       {!productExistsInCart ? (
         <button
@@ -83,6 +90,22 @@ function AddToCartBtn({ productId, stock }: AddToCartBtnProps) {
         </button>
       )}
     </div>
+  ) : !productExistsInCart ? (
+    <button
+      onClick={() => handleClick(true, cart._id!, productId.toString())}
+      className={`flex flex-1 items-center ${stock === 0 ? "pointer-events-none opacity-30" : ""} justify-center gap-1 rounded-lg border-[1px] border-[#434343] px-[2px] py-2 text-center text-[#555555] hover:bg-[#f5f5f5] md:gap-2`}
+    >
+      <AddToBasketIcon />
+      <span className="uppercase max-md:w-fit">Add to cart</span>
+    </button>
+  ) : (
+    <button
+      onClick={() => handleClick(false, cart._id!, productId.toString())}
+      className={`flex flex-1 items-center ${stock === 0 ? "pointer-events-none opacity-30" : ""} justify-center gap-1 rounded-lg border-[1px] border-[#434343] px-[2px] py-2 text-center text-[#555555] hover:bg-[#f5f5f5] md:gap-2`}
+    >
+      <InCartBasketIcon />
+      <span className="uppercase max-md:w-fit">In cart</span>
+    </button>
   );
 }
 
