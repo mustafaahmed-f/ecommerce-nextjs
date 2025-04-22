@@ -6,7 +6,12 @@ import AddToCartBtn from "../AddToCartBtn";
 
 function MainProductsCard({ product }: { product: any }) {
   return (
-    <div className="flashSalesCard flex min-w-36 flex-col rounded-md shadow-[0px_0px_2px_3px_#F3F3F3]">
+    <div className="flashSalesCard relative flex min-w-36 flex-col rounded-md shadow-[0px_0px_2px_3px_#F3F3F3]">
+      {product.stock === 0 ? (
+        <div className="absolute left-[-5px] top-8 z-10 w-[110px] -rotate-45 transform bg-red-600 py-1 text-center text-sm font-semibold text-white shadow-md">
+          Out of Stock
+        </div>
+      ) : null}
       <div className="overflow-hidden p-2 text-center sm:p-4">
         <Image
           width={300}
@@ -50,7 +55,7 @@ function MainProductsCard({ product }: { product: any }) {
           <div className="cursor-pointer text-black hover:text-sky-500">
             <FavoriteBorder />
           </div>
-          <AddToCartBtn productId={product.productId} />
+          <AddToCartBtn productId={product.productId} stock={product.stock} />
         </div>
       </div>
     </div>

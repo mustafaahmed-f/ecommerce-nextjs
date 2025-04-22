@@ -16,17 +16,20 @@ import { useAppDispatch, useAppSelector } from "../_lib/store/store";
 import { CartProduct, ICart } from "../cart/_types/CartType";
 import { ErrorToast, SuccessToast } from "../_lib/toasts";
 import { storeCart } from "../_lib/store/slices/cartSlice/cartSlice";
+import { useRouter } from "next/navigation";
 
 interface AddToCartBtnProps {
   productId: number;
+  stock: number;
 }
 
-function AddToCartBtn({ productId }: AddToCartBtnProps) {
+function AddToCartBtn({ productId, stock }: AddToCartBtnProps) {
   const { cart, setCart } = useCart();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
   const isAuth: boolean = user.email.length > 0 || user.userName.length > 0;
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
+  const router = useRouter();
 
   //TODO : use useOptimistic instead of loading state to show product is added while add operation is done in background
 
@@ -58,13 +61,15 @@ function AddToCartBtn({ productId }: AddToCartBtnProps) {
     SuccessToast.fire({
       title: `Product ${isAdd ? "added" : "removed"} successfully`,
     });
+
+    router.refresh();
   }
 
   return (
     <div>
       {!productExistsInCart ? (
         <button
-          className="flex cursor-pointer items-center overflow-visible hover:text-sky-500"
+          className={`flex cursor-pointer items-center overflow-visible hover:text-sky-500 ${stock === 0 ? "pointer-events-none opacity-50" : ""}`}
           onClick={() => handleClick(true, cart._id!, productId.toString())} //TODO : use useOptimistic(cart._id!, productId.toString())}
         >
           <CartPlusIcon />

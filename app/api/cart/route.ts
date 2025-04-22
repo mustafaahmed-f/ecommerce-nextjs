@@ -151,6 +151,8 @@ export const POST = withMiddleWare({
       await session.commitTransaction();
       session.endSession();
 
+      // mutate("/api/products");
+
       return NextResponse.json({
         success: true,
         message: "Product has been added successfully !!",

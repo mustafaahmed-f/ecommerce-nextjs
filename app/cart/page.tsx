@@ -18,6 +18,7 @@ import {
 } from "../_lib/APIs/offlineCartAPIs";
 import { ErrorToast, SuccessToast } from "../_lib/toasts";
 import DeleteProductIcon from "../_icons/DeleteProductIcon";
+import { useRouter } from "next/navigation";
 
 interface PageProps {}
 
@@ -33,6 +34,8 @@ function Page({}: PageProps) {
     });
     return initial;
   });
+
+  const router = useRouter();
 
   const user = useAppSelector((state) => state.user);
   const isAuth: boolean = user.email.length > 0 || user.userName.length > 0;
@@ -70,6 +73,7 @@ function Page({}: PageProps) {
         [productId]: qty,
       });
     }
+    router.refresh();
   };
 
   const incrementQty = async (productId: number) => {
@@ -90,6 +94,7 @@ function Page({}: PageProps) {
         [productId]: quantityObj[productId] + 1,
       });
     }
+    router.refresh();
   };
 
   const decrementQty = async (productId: number) => {
@@ -110,6 +115,7 @@ function Page({}: PageProps) {
         [productId]: quantityObj[productId] - 1,
       });
     }
+    router.refresh();
   };
 
   async function emptyCart() {
@@ -122,6 +128,7 @@ function Page({}: PageProps) {
       setCart(response.cart);
       setQuantityObj({});
     }
+    router.refresh();
   }
 
   async function RemoveProduct(productId: number) {
@@ -140,6 +147,7 @@ function Page({}: PageProps) {
         title: "Product removed successfully",
       });
     }
+    router.refresh();
   }
 
   return (
