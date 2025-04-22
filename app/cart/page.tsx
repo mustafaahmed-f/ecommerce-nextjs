@@ -19,6 +19,7 @@ import {
 import { ErrorToast, SuccessToast } from "../_lib/toasts";
 import DeleteProductIcon from "../_icons/DeleteProductIcon";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 interface PageProps {}
 
@@ -119,35 +120,71 @@ function Page({}: PageProps) {
   };
 
   async function emptyCart() {
-    const response = await emptyCartMethod(cart._id!);
-    if (!response.success) {
-      ErrorToast.fire({
-        title: response.error,
-      });
-    } else {
-      setCart(response.cart);
-      setQuantityObj({});
-    }
-    router.refresh();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, empty it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const response = await emptyCartMethod(cart._id!);
+        if (!response.success) {
+          ErrorToast.fire({
+            title: response.error,
+          });
+        } else {
+          setCart(response.cart);
+          setQuantityObj({});
+        }
+        router.refresh();
+
+        Swal.fire({
+          title: "Emptied !",
+          text: "Your cart is now empty !!",
+          icon: "success",
+        });
+      }
+    });
   }
 
   async function RemoveProduct(productId: number) {
-    const response = await deleteMethod(cart._id!, String(productId));
-    if (!response.success) {
-      ErrorToast.fire({
-        title: response.error,
-      });
-    } else {
-      setCart(response.cart);
-      //// remove product from quantity object :
-      const newQuantityObj = { ...quantityObj };
-      delete newQuantityObj[productId];
-      setQuantityObj(newQuantityObj);
-      SuccessToast.fire({
-        title: "Product removed successfully",
-      });
-    }
-    router.refresh();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, remove it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const response = await deleteMethod(cart._id!, String(productId));
+        if (!response.success) {
+          ErrorToast.fire({
+            title: response.error,
+          });
+        } else {
+          setCart(response.cart);
+          //// remove product from quantity object :
+          const newQuantityObj = { ...quantityObj };
+          delete newQuantityObj[productId];
+          setQuantityObj(newQuantityObj);
+          // SuccessToast.fire({
+          //   title: "Product removed successfully",
+          // });
+        }
+        router.refresh();
+
+        Swal.fire({
+          title: "Removed !",
+          text: "Product has been removed successfully !!",
+          icon: "success",
+        });
+      }
+    });
   }
 
   return (

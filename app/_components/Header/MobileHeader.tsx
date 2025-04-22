@@ -5,9 +5,11 @@ import { Reorder, ShoppingBag } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import Menu from "./Menu";
 import Link from "next/link";
+import { useCart } from "@/app/_context/CartProvider";
 
 function MobileHeader() {
   const { 0: showMenu, 1: setShowMenu } = useState(false);
+  const { cart } = useCart();
 
   useEffect(
     function () {
@@ -47,7 +49,7 @@ function MobileHeader() {
               <ShoppingBag />
               <p>Cart</p>
               <span className="flex h-6 w-6 items-center justify-center rounded-[50%] bg-green-500 p-1 text-white">
-                3
+                {cart.products.length}
               </span>
             </Link>
           </div>
