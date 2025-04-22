@@ -40,6 +40,7 @@ function Page({}: PageProps) {
   const isAuth: boolean = user.email.length > 0 || user.userName.length > 0;
   const cartItems = cart.products;
 
+  const quantityRef = useRef(quantityObj); //// <= this ref is used to store last confirmed quantity
   const quantityChangeTimeOut = useRef<NodeJS.Timeout | null>(null);
 
   const updateQuantityMethod: (
@@ -58,14 +59,13 @@ function Page({}: PageProps) {
     isAuth ? removeFromUserCart : removeFromOfflineCart;
 
   const handleQtyChange = async (productId: number, qty: number) => {
-    const oldQty = quantityObj[productId];
-    console.log("Old Qty : ", oldQty);
     setQuantityObj((prev) => ({
       ...prev,
       [productId]: qty,
     }));
 
-    clearTimeout(quantityChangeTimeOut.current!);
+    if (quantityChangeTimeOut.current)
+      clearTimeout(quantityChangeTimeOut.current!);
     quantityChangeTimeOut.current = setTimeout(async () => {
       const response = await updateQuantityMethod(
         cart._id!,
@@ -76,9 +76,10 @@ function Page({}: PageProps) {
         ErrorToast.fire({
           title: response.error,
         });
-        setQuantityObj((prev) => ({ ...prev, [productId]: oldQty }));
+        setQuantityObj(quantityRef.current!);
       } else {
         setCart(response.cart);
+        quantityRef.current = { ...quantityObj, [productId]: qty };
       }
       router.refresh();
     }, 1500);

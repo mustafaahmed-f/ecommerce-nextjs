@@ -24,6 +24,7 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
     return product ? product.quantity : 1;
   });
 
+  const quantityRef = useRef(quantity); //// <= this ref is used to store last confirmed quantity
   const quantityChangeTimeOut = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -51,9 +52,9 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
   );
 
   const handleQtyChange = async (productId: number, qty: number) => {
-    const oldQty = quantity;
     setQuantity(qty);
-    clearTimeout(quantityChangeTimeOut.current!);
+    if (quantityChangeTimeOut.current)
+      clearTimeout(quantityChangeTimeOut.current!);
     quantityChangeTimeOut.current = setTimeout(async () => {
       const response = await updateQuantityMethod(
         cart._id!,
@@ -64,9 +65,10 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
         ErrorToast.fire({
           title: response.error,
         });
-        setQuantity(oldQty);
+        setQuantity(quantityRef.current!);
       } else {
         setCart(response.cart);
+        quantityRef.current = qty;
       }
       router.refresh();
     }, 1500);
