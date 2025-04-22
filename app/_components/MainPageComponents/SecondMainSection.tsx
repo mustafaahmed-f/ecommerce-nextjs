@@ -13,6 +13,13 @@ async function SecondMainSection({}) {
   const trending: any[] = products.length ? products.slice(40, 43) : [];
   const top100: any[] = products.length ? products.slice(20, 24) : [];
 
+  const flashSalesTimer: { hour: number; min: number; sec: number }[] = [
+    { hour: 12, min: 42, sec: 16 },
+    { hour: 6, min: 30, sec: 10 },
+    { hour: 2, min: 30, sec: 2 },
+    { hour: 10, min: 30, sec: 50 },
+  ];
+
   if (!products.length) return <Spinner />;
 
   return (
@@ -34,8 +41,14 @@ async function SecondMainSection({}) {
         <HomeHeadlines headline="fresh sales" />
 
         <HorizontalScrollWrapper>
-          {freshSalesProducts.map((el) => {
-            return <FreshSalesCard product={el} key={el._id} />;
+          {freshSalesProducts.map((el, i) => {
+            return (
+              <FreshSalesCard
+                product={el}
+                key={el._id}
+                initialTimer={flashSalesTimer[i]}
+              />
+            );
           })}
         </HorizontalScrollWrapper>
       </div>

@@ -5,8 +5,8 @@ import Image from "next/image";
 
 function Footer() {
   return (
-    <footer className="relative sm:mt-28 whitespace-nowrap">
-      <div className="bg-[#7296ab] hidden sm:flex flex-col gap-4 w-fit px-6 py-3 items-center rounded-md absolute top-0 right-1/2 translate-x-1/2 translate-y-[-50%]">
+    <footer className="relative whitespace-nowrap sm:mt-28">
+      <div className="absolute right-1/2 top-0 hidden w-fit translate-x-1/2 translate-y-[-50%] flex-col items-center gap-4 rounded-md bg-[#7296ab] px-6 py-3 sm:flex">
         <h2 className="text-3xl text-white">
           Luminae <span className="text-footer">Store</span>
         </h2>
@@ -16,7 +16,7 @@ function Footer() {
         <div className="relative w-fit">
           <input
             placeholder="Enter your email"
-            className="py-2 rounded-sm ps-2 pe-7"
+            className="rounded-sm py-2 pe-7 ps-2"
           />
           <div className="absolute inset-y-0 right-0 flex items-center justify-center">
             <NearMeOutlined />
@@ -26,48 +26,48 @@ function Footer() {
       <div className="footer">
         <div className="footer-main">
           <div className="flex flex-col gap-y-[25px]">
-            <p className="font-bold ">Company</p>
-            <ul className="list-none flex flex-col gap-[15px] capitalize">
+            <p className="font-bold">Company</p>
+            <ul className="flex list-none flex-col gap-[15px] capitalize">
               <li className="text-textGrey">About us</li>
               <li>Our store</li>
               <li>Contact us</li>
             </ul>
           </div>
           <div className="flex flex-col gap-y-[25px]">
-            <p className="font-bold ">Career opportunities</p>
-            <ul className="list-none flex flex-col gap-[15px] capitalize">
-              <li className="font-normal ">Selling programs</li>
+            <p className="font-bold">Career opportunities</p>
+            <ul className="flex list-none flex-col gap-[15px] capitalize">
+              <li className="font-normal">Selling programs</li>
               <li>Advertise</li>
               <li>Cooperation</li>
             </ul>
           </div>
           <div className="flex flex-col gap-y-[25px]">
-            <p className="font-bold ">How to buy</p>
-            <ul className="list-none flex flex-col gap-[15px] capitalize">
-              <li className="font-normal ">Making payments</li>
+            <p className="font-bold">How to buy</p>
+            <ul className="flex list-none flex-col gap-[15px] capitalize">
+              <li className="font-normal">Making payments</li>
               <li>Delivery Options</li>
               <li>Buyer Protection</li>
               <li>New user guide</li>
             </ul>
           </div>
           <div className="flex flex-col gap-y-[25px]">
-            <p className="font-bold ">Help</p>
-            <ul className="list-none flex flex-col gap-[15px] capitalize">
-              <li className="font-normal ">Contact Us</li>
+            <p className="font-bold">Help</p>
+            <ul className="flex list-none flex-col gap-[15px] capitalize">
+              <li className="font-normal">Contact Us</li>
               <li>FAQ</li>
               <li>Privacy Policy</li>
             </ul>
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-full px-6 py-4 bg-white">
-        <div className="flex  flex-row items-center justify-center gap-3 sm:pb-2 sm:mb-3 sm:border-b-2">
+      <div className="flex w-full flex-col bg-white px-6 py-4">
+        <div className="flex flex-row items-center justify-center gap-3 sm:mb-3 sm:border-b-2 sm:pb-2">
           <div>
             <Image
               width={300}
               height={300}
               alt="visa"
-              className="h-4 w-14 "
+              className="h-4 w-14"
               src="/VISA.png"
             ></Image>
           </div>
@@ -76,7 +76,7 @@ function Footer() {
               width={300}
               height={300}
               alt="mastercard"
-              className="h-6 w-14 "
+              className="h-6 w-14"
               src="/mastercard.png"
             ></Image>
           </div>
@@ -85,18 +85,18 @@ function Footer() {
               width={300}
               height={300}
               alt="paypal"
-              className="w-16 h-6 "
+              className="h-6 w-16"
               src="/paypal.png"
             ></Image>
           </div>
         </div>
-        <div className="flex-row items-center justify-between hidden sm:flex ">
+        <div className="hidden flex-row items-center justify-between sm:flex">
           <p>102 main st., Giza, Egypt</p>
           <p className="text-textGrey">
-            @2024 copyright in reserved for Mustafa Ahmed
+            @2025 copyright is reserved for Mustafa Ahmed
           </p>
           <div className="flex gap-2">
-            <a className="no-underline cursor-pointer" href="">
+            <a className="cursor-pointer no-underline" href="">
               <InstagramIcon />
             </a>
             <div>{/* <FacebookRoundedIcon /> */}</div>
