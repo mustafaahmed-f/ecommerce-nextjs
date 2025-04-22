@@ -17,7 +17,18 @@ async function SecondMainSection({}) {
 
   return (
     <div className="flex flex-col gap-16 px-5 sm:px-16 sm:pt-16">
-      {/* ////First sub section : fresh sales */}
+      {/* ////First sub section : top 100 */}
+
+      <div>
+        <HomeHeadlines headline="top 100" />
+        <HorizontalScrollWrapper>
+          {top100.map((el: any) => {
+            return <MainProductsCard product={el} key={el._id} />;
+          })}
+        </HorizontalScrollWrapper>
+      </div>
+
+      {/* ////Second sub section : fresh sales */}
 
       <div>
         <HomeHeadlines headline="fresh sales" />
@@ -29,7 +40,7 @@ async function SecondMainSection({}) {
         </HorizontalScrollWrapper>
       </div>
 
-      {/* ////Second sub section : trending must have */}
+      {/* ////Third sub section : trending must have */}
 
       <div>
         <HomeHeadlines headline="trending must have" />
@@ -38,17 +49,6 @@ async function SecondMainSection({}) {
             return <TrendingMustHaveCard product={el} key={el._id} />;
           })}
         </div>
-      </div>
-
-      {/* ////Third sub section : top 100 */}
-
-      <div>
-        <HomeHeadlines headline="top 100" />
-        <HorizontalScrollWrapper>
-          {top100.map((el: any) => {
-            return <MainProductsCard product={el} key={el._id} />;
-          })}
-        </HorizontalScrollWrapper>
       </div>
     </div>
   );

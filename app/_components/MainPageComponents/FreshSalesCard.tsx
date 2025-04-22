@@ -10,11 +10,18 @@ function FreshSalesCard({ product }: { product: any }) {
     >
       <div className="flex flex-col items-center justify-center gap-2 py-2 text-center">
         <p className="mb-0 font-bold text-textGrey">Deal of the day</p>
-        <p className="w-full font-semibold">12 : 43 : 12</p>
-        <div className="flex w-full flex-row items-center justify-between text-sm text-neutral-400">
-          <p>hour</p>
-          <p>min</p>
-          <p>sec</p>
+        <div className="grid w-full grid-cols-5">
+          <p className="mb-0 font-semibold">12</p>
+          <p className="mb-0 font-semibold">:</p>
+          <p className="mb-0 font-semibold">43</p>
+          <p className="mb-0 font-semibold">:</p>
+          <p className="mb-0 font-semibold">12</p>
+
+          <p className="mb-0 font-semibold">hour</p>
+          <p className="mb-0 font-semibold"></p>
+          <p className="mb-0 font-semibold">min</p>
+          <p className="mb-0 font-semibold"></p>
+          <p className="mb-0 font-semibold">sec</p>
         </div>
       </div>
       <div className="py-2 text-center">
