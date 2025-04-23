@@ -5,10 +5,22 @@ import { authProviders } from "./authProviders";
 import { signToken, verifyToken } from "./tokenMethods";
 
 //// to see if the user is logged in using auth.js or using our DB or not logged in.
-export async function chooseMiddleware(request: NextRequest) {
+export async function chooseMiddleware(
+  request: NextRequest,
+  authorization?: boolean,
+) {
   const session = await auth();
 
   if (session?.user) {
+    //// No Admin has google account .. admin has special system account;
+    if (authorization)
+      return NextResponse.json(
+        {
+          success: false,
+          error: "You are not authorized !!",
+        },
+        { status: 401 },
+      );
     return null;
   }
   const cookie = request.cookies.get("next_ecommerce_token");
@@ -54,7 +66,8 @@ export async function chooseMiddleware(request: NextRequest) {
     });
 
     // Call the appropriate middleware based on the provider
-    if (provider === authProviders.system) return authMiddleware(verifiedToken);
+    if (provider === authProviders.system)
+      return authMiddleware(verifiedToken, authorization);
   } catch (error) {
     if ((error as Error).message === "JWT expired") {
       // Refresh the token

@@ -10,13 +10,15 @@ export async function applyMiddlewares({
   request,
   middlewares = [],
   applyAuth = false,
+  authorization = false,
 }: {
   request: NextRequest;
   middlewares?: Middleware[];
   applyAuth?: boolean;
+  authorization?: boolean;
 }) {
   if (applyAuth) {
-    const authMiddleware = await chooseMiddleware(request);
+    const authMiddleware = await chooseMiddleware(request, authorization);
     if (authMiddleware) {
       return authMiddleware;
     }
