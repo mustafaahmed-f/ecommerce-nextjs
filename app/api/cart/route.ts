@@ -25,11 +25,13 @@ export const GET = withMiddleWare({
           cart: newCart,
         });
       }
-      return NextResponse.json({
+      const response = NextResponse.json({
         success: true,
         message: "Cart fetched succesfully !!",
         cart,
       });
+
+      return response;
     } catch (error: any) {
       return NextResponse.json(
         { success: false, error: error?.message },

@@ -57,7 +57,7 @@ export async function mergeCarts(
   const params = new URLSearchParams();
   params.append("cartId", cartId);
   const response = await instance.patch(
-    `${mainURL + "/afterMerge"}`,
+    `${mainURL + "/afterMerge"}?${params.toString()}`,
     { mergedCart },
     {
       headers: cookieHeader,

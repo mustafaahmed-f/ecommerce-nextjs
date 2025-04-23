@@ -1,6 +1,6 @@
 import { CartProduct, ICart } from "../cart/_types/CartType";
 
-export function mergeCarts(userCart: ICart, offlineCart: ICart): ICart {
+export function mergeCartsFn(userCart: ICart, offlineCart: ICart): ICart {
   let productMap: Map<number, CartProduct> = new Map();
 
   for (let p of userCart.products) {

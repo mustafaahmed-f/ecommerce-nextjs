@@ -1,6 +1,8 @@
 import { getUserId } from "@/app/_lib/getUserId";
+import { redis } from "@/app/_lib/redisClient";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
 import cartModel from "@/app/_mongodb/models/cartModel";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const PATCH = withMiddleWare({
@@ -23,7 +25,6 @@ export const PATCH = withMiddleWare({
           },
           { status: 404 },
         );
-
       const { mergedCart } = await request.json();
 
       const newCart = await cartModel.findOneAndUpdate(
@@ -39,7 +40,12 @@ export const PATCH = withMiddleWare({
 
       if (!newCart) throw new Error("Error while updating cart !!");
 
-      return NextResponse.json(
+      let offlineCartId = cookies().get(
+        process.env.NEXT_PUBLIC_OFFLINE_CART_KEY!,
+      )?.value;
+
+      await redis.del(`cart:${offlineCartId}`);
+      const response = NextResponse.json(
         {
           success: true,
           message: "Carts have been merged successfully !!",
@@ -47,6 +53,8 @@ export const PATCH = withMiddleWare({
         },
         { status: 200 },
       );
+      // response.cookies.delete(process.env.NEXT_PUBLIC_OFFLINE_CART_KEY!);
+      return response;
     } catch (error: any) {
       return NextResponse.json(
         { success: false, error: error?.message },

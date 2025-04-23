@@ -3,6 +3,8 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ICart } from "../cart/_types/CartType";
 import { storeCart } from "../_lib/store/slices/cartSlice/cartSlice";
+import Swal from "sweetalert2";
+import { ErrorToast } from "../_lib/toasts";
 
 interface initialStateType {
   cart: ICart;
@@ -24,9 +26,14 @@ const cartContext = createContext<initialStateType>(initialState);
 interface CartProviderProps {
   cart: ICart;
   children: React.ReactNode;
+  isMerged: boolean;
 }
 
-function CartProvider({ cart: fetchedCart, children }: CartProviderProps) {
+function CartProvider({
+  cart: fetchedCart,
+  children,
+  isMerged,
+}: CartProviderProps) {
   const { 0: cart, 1: setCart } = useState<ICart>(initialState.cart);
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
@@ -46,6 +53,59 @@ function CartProvider({ cart: fetchedCart, children }: CartProviderProps) {
   useEffect(() => {
     dispatch(storeCart(cart));
   }, [cart, dispatch]);
+
+  useEffect(() => {
+    async function removeOfflineCartCookie() {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/cart/deleteCookie`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        Swal.fire({
+          title: "Your cart",
+          text: "Your cart has been merged successfully with the offline cart !!",
+          icon: "success",
+          showClass: {
+            popup: `
+              animate__animated
+              animate__fadeInUp
+              animate__faster
+            `,
+          },
+          hideClass: {
+            popup: `
+              animate__animated
+              animate__fadeOutDown
+              animate__faster
+            `,
+          },
+        });
+      } catch (error) {
+        console.error("Error removing offline cart cookie:", error);
+        Swal.fire({
+          title: "Error",
+          text: "Error removing offline cart cookie !!",
+          icon: "error",
+        });
+        // You might want to display an error message to the user here
+      }
+    }
+
+    if (isMerged) {
+      removeOfflineCartCookie();
+    }
+  }, []);
 
   return (
     <cartContext.Provider value={{ cart, setCart }}>
