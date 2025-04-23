@@ -93,18 +93,7 @@ function ProductInfo({ product }: ProductInfoProps) {
         />
         {/* Quantity */}
         <p className="my-auto">Quantity</p>
-        {/* <div className="flex w-fit items-center gap-4 rounded-md border-[1px] border-[#C4C4C4] px-3 py-2 text-center">
-          <button>
-            <IncreaseQuantity />
-          </button>
-          <span className="text-sm text-textGrey">1</span>
-          <button>
-            <DecreaseQuantity />
-          </button>
-        </div> */}
         <UpdateProductQuantity productId={productId} />
-        {/* out of stock indicator */}
-        {/* <p className="mt-2 font-semibold text-red-500">Out of stock !!</p> */}
       </div>
       <div className="mt-6 grid w-full grid-cols-2 gap-2 max-md:text-sm md:gap-3">
         <Link
