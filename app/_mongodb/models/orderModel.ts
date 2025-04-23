@@ -52,7 +52,7 @@ const orderSchema = new Schema(
     },
     isFromCart: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.models.User || mongoose.model("Order", orderSchema);
