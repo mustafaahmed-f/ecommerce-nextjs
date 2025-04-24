@@ -1,6 +1,7 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 interface ICoupon extends Document {
+  addedBy: Types.ObjectId;
   code: string; // Coupon code (unique identifier)
   discount: number; // Discount value (e.g., percentage or flat amount)
   expirationDate: Date; // Expiration date of the coupon
@@ -13,8 +14,14 @@ interface ICoupon extends Document {
 
 const CouponSchema: Schema = new Schema(
   {
+    addedBy: { type: Types.ObjectId, ref: "User", required: true },
     code: { type: String, required: true, unique: true },
     discount: { type: Number, required: true }, // E.g., 10 for 10% off or 5 for $5 off
+    discountType: {
+      type: String,
+      required: true,
+      enum: ["percentage", "amount"],
+    },
     expirationDate: { type: Date, required: true },
     usageLimit: { type: Number, required: true },
     usageCount: { type: Number, default: 0 },
@@ -25,6 +32,6 @@ const CouponSchema: Schema = new Schema(
   { timestamps: true },
 );
 
-const Coupon = mongoose.model<ICoupon>("Coupon", CouponSchema);
-
-export default mongoose.models.User || Coupon;
+const Coupon =
+  mongoose.models.Coupon || mongoose.model<ICoupon>("Coupon", CouponSchema);
+export default Coupon;
