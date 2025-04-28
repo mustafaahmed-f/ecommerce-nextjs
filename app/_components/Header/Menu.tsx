@@ -42,13 +42,20 @@ function Menu({ setShowMenu }: { setShowMenu: any }) {
 
         <div className="border-y-2 border-slate-400 border-b-white px-2 py-3">
           <ul className="flex list-none flex-col gap-4">
+            <Link href={`products}`} key={"All_caategories"}>
+              <p
+                className={`mb-1 cursor-pointer font-semibold hover:text-orange-300`}
+              >
+                All Categories
+              </p>
+            </Link>
             {categories?.categories?.categories?.map(
               (el: string, i: number) => (
                 <Link href={`products/${el}`} key={i}>
                   <p
                     className={`mb-1 cursor-pointer font-semibold hover:text-orange-300`}
                   >
-                    {el}
+                    {el.substring(0, 1).toUpperCase() + el.substring(1)}
                   </p>
                 </Link>
               ),
