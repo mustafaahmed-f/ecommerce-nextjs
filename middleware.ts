@@ -1,37 +1,52 @@
 import { NextRequest, NextResponse } from "next/server";
-import { applyMiddlewares } from "./app/_lib/middlewares";
-import { auth } from "./app/_lib/auth";
 import { cookies } from "next/headers";
 
+const allowedOrigins = ["http://localhost:3000"];
+
+const corsOptions = {
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+const AuthPaths: string[] = ["/updateprofile", "/cartcheckout", "/orders"];
+
 export default async function middleware(request: NextRequest) {
+  const origin = request.headers.get("origin") ?? "";
+  const response = NextResponse.next();
+
+  // Set CORS Headers for all responses
+  if (allowedOrigins.includes(origin)) {
+    response.headers.set("Access-Control-Allow-Origin", origin);
+  }
+  Object.entries(corsOptions).forEach(([key, value]) => {
+    response.headers.set(key, value);
+  });
+
   const nextAuthToken = cookies().get("authjs.session-token")?.value;
   const systemAuthToken = cookies().get("next_ecommerce_token")?.value;
 
-  const AuthPaths: string[] = [
-    "/updateprofile",
-    "/cartcheckout",
-    "/orders",
-    "/orders/*",
-  ];
+  const pathname = request.nextUrl.pathname;
 
-  if (request.nextUrl.pathname === "/updateprofile") {
+  // Check if the request is for a protected path
+  const needsAuth = AuthPaths.some(
+    (protectedPath) =>
+      pathname === protectedPath || pathname.startsWith(protectedPath + "/"),
+  );
+
+  if (needsAuth) {
     if (nextAuthToken || systemAuthToken) {
-      return NextResponse.next();
+      return response; // Authenticated, allow the request
     } else {
+      // Not authenticated, redirect to login
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
-  if (!nextAuthToken && !systemAuthToken) return NextResponse.next();
-
-  return NextResponse.redirect(new URL("/", request.url));
-
-  // console.log(cookie);
+  return response; // No authentication needed for other paths
 }
 
 export const config = {
-  api: {
-    bodyParser: false, // Disable the default body parser
-  },
-  matcher: ["/api/signup", "/api/login", "/login", "/signup", "/auth"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico).*)", // Match all routes except Next.js internals
+  ],
 };
