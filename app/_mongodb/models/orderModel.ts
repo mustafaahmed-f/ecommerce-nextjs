@@ -1,12 +1,47 @@
 import mongoose, { Schema, Types } from "mongoose";
 
-const orderSchema = new Schema(
+interface OrderModel extends Document {
+  orderNumber: number;
+  userID: Types.ObjectId;
+  products: {
+    productID: Types.ObjectId;
+    title: string;
+    unitPaymentPrice: number;
+    discount: number;
+    quantity: number;
+    color: string;
+    category: string;
+    brand: string;
+  }[];
+  couponId: Types.ObjectId;
+  subTotal: number;
+  userInfo: {
+    phoneNumbers: string[];
+    city: string;
+    country: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    address: string;
+  };
+  finalPaidAmount: number;
+  paymentMethod: "cash" | "card";
+  orderStatus: {
+    status: "pending" | "shipped" | "delivered" | "returned" | "cancelled";
+    updatedAt: Date;
+  };
+  isFromCart: boolean;
+}
+
+const orderSchema: Schema = new Schema(
   {
+    orderNumber: { type: Number, required: true },
     userID: {
       type: Types.ObjectId,
       ref: "User",
       required: true,
     },
+
     products: [
       {
         productID: {
@@ -22,37 +57,65 @@ const orderSchema = new Schema(
         brand: { type: String, default: null },
       },
     ],
-    // couponID: {
-    //   type: Types.ObjectId,
-    //   ref: "Coupon",
-    // },
+    couponId: {
+      type: Types.ObjectId,
+      ref: "Coupon",
+    },
+    subTotal: { type: Number, required: true, default: 0 },
 
-    // subTotal: { type: Number, required: true, default: 0 },
+    userInfo: {
+      phoneNumbers: [{ type: String, required: true }],
+      city: { type: String, required: true },
+      country: { type: String, required: true },
+      firstName: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      email: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true,
+      },
+      address: { type: String, required: true },
+    },
+
     finalPaidAmount: { type: Number, required: true, default: 0 },
-    phoneNumbers: [{ type: String, required: true }],
-    address: { type: Schema.Types.Mixed, required: true },
     paymentMethod: {
       type: String,
       required: true,
       enum: ["cash", "card"],
     },
+
     orderStatus: {
-      type: String,
-      required: true,
-      default: "pending",
-      enum: [
-        "pending",
-        "completed",
-        "cancelled",
-        "delivered",
-        "returned",
-        "failed",
-        "shipped",
-      ],
+      status: {
+        type: String,
+        required: true,
+        default: "pending",
+        enum: ["pending", "shipped", "delivered", "returned", "cancelled"],
+      },
+      updatedAt: { type: Date, required: true, default: Date.now },
     },
+
     isFromCart: { type: Boolean, default: false },
+
+    notes: { type: String, default: "" },
   },
   { timestamps: true },
 );
 
-export default mongoose.models.User || mongoose.model("Order", orderSchema);
+orderSchema.pre("save", function (next) {
+  if (this.isModified("orderStatus.status")) {
+    (this as any).orderStatus.updatedAt = new Date();
+  }
+  next();
+});
+
+export default mongoose.models.Order ||
+  mongoose.model<OrderModel>("Order", orderSchema);
