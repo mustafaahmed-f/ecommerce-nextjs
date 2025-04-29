@@ -1,36 +1,42 @@
 import * as yup from "yup";
+import {
+  invalidSchemaFormatMsg,
+  maxLengthMsg,
+  minLengthMsg,
+  requiredFieldMsg,
+} from "../validattionErrorMessages";
 
 const generalValidations = {
   userName: yup
     .string()
-    .required("Username is required")
+    .required(requiredFieldMsg("UserName"))
     .min(3, "Min. length 3")
     .max(20, "Max. length 20")
     .matches(
       /^[a-zA-Z0-9]{3,20}$/,
-      "userName should consist of letters and numbers only"
+      "userName should consist of letters and numbers only",
     ),
   firstName: yup
     .string()
-    .required("First name is required")
+    .required(requiredFieldMsg("First name"))
     .min(2, "Min. length 2")
     .max(50, "Max. length 50"),
   lastName: yup
     .string()
-    .required("Last name is required")
-    .min(2, "Min. length 2")
-    .max(50, "Max. length 50"),
+    .required(requiredFieldMsg("Last name"))
+    .min(2, minLengthMsg(2))
+    .max(50, maxLengthMsg(50)),
   email: yup
     .string()
-    .required("Email is required")
+    .required(requiredFieldMsg("Email"))
     .email("Invalid email format"),
   password: yup
     .string()
-    .required("Password is required")
-    .min(8, "Min. length of password is 8")
+    .required(requiredFieldMsg("Password"))
+    .min(8, minLengthMsg(8))
     .matches(
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-      "Password should contain at least one number and one uppercase letter"
+      "Password should contain at least one number and one uppercase letter",
     ),
   rePassword: yup
     .string()
@@ -45,8 +51,8 @@ const generalValidations = {
   cid: yup.string(),
   phoneNumber: yup
     .string()
-    .required("Phone number is required")
-    .matches(/^\d{11}$/, "Invalid phone number"),
+    .required(requiredFieldMsg("Phone number"))
+    .matches(/^\d{11}$/, invalidSchemaFormatMsg("Phone number", "11 digits")),
   //   customID: yup.string(),
   address: yup
     .object()
