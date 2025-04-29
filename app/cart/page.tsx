@@ -320,9 +320,12 @@ function Page({}: PageProps) {
             >
               Empty Cart
             </button>
-            <button className="rounded bg-black px-6 py-2 text-white transition hover:bg-gray-800">
+            <Link
+              href={"/cartcheckout"}
+              className="rounded bg-black px-6 py-2 text-white transition hover:bg-gray-800"
+            >
               Checkout
-            </button>
+            </Link>
           </div>
         </div>
       ) : (
