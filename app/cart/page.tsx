@@ -210,7 +210,13 @@ function Page({}: PageProps) {
 
   return (
     <div className="mx-auto max-w-4xl p-4 py-8">
-      <h1 className="mb-6 text-center text-2xl font-bold">Shopping Cart</h1>
+      <div className="mb-6">
+        <h1 className="text-center text-4xl font-bold">Shopping Cart</h1>
+        <p className="text- mt-3 text-center">
+          Your cart has{" "}
+          <span className="text-sky-600">{cart.products.length} items</span>
+        </p>
+      </div>
       <div
         className={`space-y-6 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
       >
