@@ -60,6 +60,7 @@ const orderSchema: Schema = new Schema(
     couponId: {
       type: Types.ObjectId,
       ref: "Coupon",
+      default: null,
     },
     subTotal: { type: Number, required: true, default: 0 },
 
@@ -115,6 +116,13 @@ orderSchema.pre("save", function (next) {
     (this as any).orderStatus.updatedAt = new Date();
   }
   next();
+});
+
+orderSchema.pre("save", async function () {
+  if (this.isNew && !this.orderNumber) {
+    const orderNumber = await this.model("Order").countDocuments();
+    this.orderNumber = orderNumber + 1;
+  }
 });
 
 export default mongoose.models.Order ||

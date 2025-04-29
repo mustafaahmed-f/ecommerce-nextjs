@@ -1,10 +1,27 @@
-export const fieldDefaultValues = {
-  email: "",
-  firstName: "",
-  lastName: "",
-  country: "",
-  city: "",
-  address: "",
-  phone1: "",
-  phone2: "",
+import { defaultValuesType } from "../_types/defaultValuesType";
+
+export const defaultValues: defaultValuesType = {
+  userID: "",
+
+  userInfo: {
+    phoneNumbers: [""],
+    city: "",
+    country: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    address: "",
+  },
+
+  products: [],
+
+  subTotal: 0,
+
+  couponId: null,
+
+  finalPaidAmount: 0,
+  paymentMethod: "cash",
+
+  isFromCart: false,
+  notes: "",
 };
