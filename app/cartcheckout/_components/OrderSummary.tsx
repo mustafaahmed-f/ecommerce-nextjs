@@ -3,7 +3,12 @@ import { couponType } from "@/app/_lib/couponTypes";
 import { GetType } from "@/app/_lib/GetType";
 import { ICart } from "@/app/cart/_types/CartType";
 import { useCallback, useEffect, useState } from "react";
-import { UseFormSetValue, UseFormWatch, useWatch } from "react-hook-form";
+import {
+  UseFormSetValue,
+  UseFormTrigger,
+  UseFormWatch,
+  useWatch,
+} from "react-hook-form";
 import { match } from "ts-pattern";
 import { getAdditionalCharges } from "../_utils/getAdditionalCharges";
 import { CheckOutFormValues } from "./CheckoutFormTemplate";
@@ -13,6 +18,7 @@ interface OrderSummaryProps {
   setValue: UseFormSetValue<CheckOutFormValues>;
   control: any;
   cart: ICart;
+  trigger: UseFormTrigger<CheckOutFormValues>;
 }
 
 type couponTypes = GetType<typeof couponType>;
@@ -25,7 +31,13 @@ const intialCouponDiscount: initialCouponDiscountType = {
   discountType: "",
 };
 
-function OrderSummary({ watch, cart, setValue, control }: OrderSummaryProps) {
+function OrderSummary({
+  watch,
+  cart,
+  setValue,
+  control,
+  trigger,
+}: OrderSummaryProps) {
   const { 0: couponDiscount, 1: setCouponDiscount } =
     useState<initialCouponDiscountType>(intialCouponDiscount);
   const { 0: couponCode, 1: setCouponCode } = useState<string>("");
@@ -62,7 +74,15 @@ function OrderSummary({ watch, cart, setValue, control }: OrderSummaryProps) {
         amountToDiscount() +
         getAdditionalCharges(shippingCost, CashOnDelivery),
     );
-  }, [couponDiscount, setValue, subTotal, amountToDiscount, CashOnDelivery]);
+    trigger("finalPaidAmount");
+  }, [
+    couponDiscount,
+    setValue,
+    subTotal,
+    amountToDiscount,
+    CashOnDelivery,
+    trigger,
+  ]);
 
   async function applyCoupon() {
     try {
@@ -75,6 +95,7 @@ function OrderSummary({ watch, cart, setValue, control }: OrderSummaryProps) {
       setIsValidCoupon(true);
       setCouponDiscount(response.data.discountData);
       setValue("couponId", response.data.couponId);
+      trigger("couponId");
       setIsLoading(false);
     } catch (error: any) {
       setIsLoading(false);
@@ -92,6 +113,7 @@ function OrderSummary({ watch, cart, setValue, control }: OrderSummaryProps) {
     setIsValidCoupon(false);
     setCouponDiscount(intialCouponDiscount);
     setValue("couponId", null);
+    trigger("couponId");
   }
 
   return (

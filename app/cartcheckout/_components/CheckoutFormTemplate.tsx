@@ -61,6 +61,7 @@ function CheckOutFormTemplate({
     criteriaMode: "firstError",
     defaultValues: finalDefaultValues,
   });
+  console.log("Form Values : ", getValues());
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -118,6 +119,7 @@ function CheckOutFormTemplate({
                 setValue={setValue}
                 watch={watch}
                 cart={cart}
+                trigger={trigger}
               />
             </section>
 
