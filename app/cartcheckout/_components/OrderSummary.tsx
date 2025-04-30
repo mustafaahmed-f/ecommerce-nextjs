@@ -91,6 +91,7 @@ function OrderSummary({ watch, cart, setValue, control }: OrderSummaryProps) {
     setCouponCode("");
     setIsValidCoupon(false);
     setCouponDiscount(intialCouponDiscount);
+    setValue("couponId", null);
   }
 
   return (
