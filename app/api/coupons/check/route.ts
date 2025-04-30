@@ -45,7 +45,7 @@ export const POST = withMiddleWare({
       }
 
       const coupon = await couponsModel.findOne({ code });
-      if (!coupon) throw new Error("Coupon not found in DB", { cause: 404 });
+      if (!coupon) throw new Error("Coupon was not found !!", { cause: 404 });
 
       //// Check if it is active;
       if (!coupon.isActive)
@@ -70,7 +70,7 @@ export const POST = withMiddleWare({
       await coupon.save();
 
       const discountData = {
-        discount: coupon.discount,
+        discountAmount: coupon.discount,
         discountType: coupon.discountType,
       };
 

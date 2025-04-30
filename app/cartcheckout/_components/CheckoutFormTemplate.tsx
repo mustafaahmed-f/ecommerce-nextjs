@@ -103,7 +103,7 @@ function CheckOutFormTemplate({
                 )}
                 {activeStep === 1 && <OrderConfirmation />}
               </form>
-              <OrderSummary watch={watch} cart={cart} />
+              <OrderSummary setValue={setValue} watch={watch} cart={cart} />
             </section>
 
             {/* //// Control buttons : */}
