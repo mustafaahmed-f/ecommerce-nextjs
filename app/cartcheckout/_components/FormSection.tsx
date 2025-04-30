@@ -2,10 +2,13 @@ import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { inputFieldType } from "../_types/inputFieldType";
 import { CheckOutFormValues } from "./CheckoutFormTemplate";
 
-interface FormRendererProps {}
-
-function FormRenderer({}: FormRendererProps) {
-  return <div>Form Renderer</div>;
+interface FormSectionProps {
+  fields: inputFieldType[];
+  title: string;
 }
 
-export default FormRenderer;
+function FormSection({ fields }: FormSectionProps) {
+  return <div></div>;
+}
+
+export default FormSection;

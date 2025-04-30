@@ -12,13 +12,10 @@ import {
 import { match } from "ts-pattern";
 import { getAdditionalCharges } from "../_utils/getAdditionalCharges";
 import { CheckOutFormValues } from "./CheckoutFormTemplate";
+import { useFormContext } from "@/app/_context/FormContext";
 
 interface OrderSummaryProps {
-  watch: UseFormWatch<CheckOutFormValues>;
-  setValue: UseFormSetValue<CheckOutFormValues>;
-  control: any;
   cart: ICart;
-  trigger: UseFormTrigger<CheckOutFormValues>;
 }
 
 type couponTypes = GetType<typeof couponType>;
@@ -31,13 +28,8 @@ const intialCouponDiscount: initialCouponDiscountType = {
   discountType: "",
 };
 
-function OrderSummary({
-  watch,
-  cart,
-  setValue,
-  control,
-  trigger,
-}: OrderSummaryProps) {
+function OrderSummary({ cart }: OrderSummaryProps) {
+  const { watch, setValue, trigger, control } = useFormContext();
   const { 0: couponDiscount, 1: setCouponDiscount } =
     useState<initialCouponDiscountType>(intialCouponDiscount);
   const { 0: couponCode, 1: setCouponCode } = useState<string>("");

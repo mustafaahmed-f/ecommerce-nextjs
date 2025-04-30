@@ -20,20 +20,17 @@ import { match } from "ts-pattern";
 import OrderSummary from "./OrderSummary";
 import FormRenderer from "./FormRenderer";
 import OrderConfirmation from "./OrderConfirmation";
+import { FormProvider } from "@/app/_context/FormContext";
 
 interface CheckOutFormTemplateProps {
   defaultValues: defaultValuesType;
-  formFields: inputFieldType[];
 }
 
 export type CheckOutFormValues = yup.InferType<typeof checkOutFormValidations>;
 
 const steps = ["Shipping Info", "Order Confirmation"];
 
-function CheckOutFormTemplate({
-  defaultValues,
-  formFields,
-}: CheckOutFormTemplateProps) {
+function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
   const { cart } = useCart();
   const [activeStep, setActiveStep] = useState<number>(0);
 
@@ -45,6 +42,13 @@ function CheckOutFormTemplate({
     finalPaidAmount: cart?.subTotal || 0,
   };
 
+  const methods = useForm<CheckOutFormValues>({
+    resolver: yupResolver(checkOutFormValidations),
+    mode: "onChange",
+    reValidateMode: "onChange",
+    criteriaMode: "firstError",
+    defaultValues: finalDefaultValues,
+  });
   const {
     register,
     handleSubmit,
@@ -54,14 +58,7 @@ function CheckOutFormTemplate({
     getValues,
     formState: { errors, isValid },
     control,
-  } = useForm<CheckOutFormValues>({
-    resolver: yupResolver(checkOutFormValidations),
-    mode: "onChange",
-    reValidateMode: "onChange",
-    criteriaMode: "firstError",
-    defaultValues: finalDefaultValues,
-  });
-  console.log("Form Values : ", getValues());
+  } = methods;
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -102,26 +99,15 @@ function CheckOutFormTemplate({
         ) : (
           <>
             {/* //// Main screens here : */}
-            <section className="grid w-full grid-cols-1 gap-4 px-4 py-10 sm:grid-cols-2 sm:px-8 md:grid-cols-[2fr_1fr]">
-              <form onSubmit={handleSubmit(handleSubmitForm)}>
-                {activeStep === 0 && (
-                  <FormRenderer
-                    fields={formFields}
-                    setValue={setValue}
-                    register={register}
-                    errors={errors}
-                  />
-                )}
-                {activeStep === 1 && <OrderConfirmation />}
-              </form>
-              <OrderSummary
-                control={control}
-                setValue={setValue}
-                watch={watch}
-                cart={cart}
-                trigger={trigger}
-              />
-            </section>
+            <FormProvider value={methods}>
+              <section className="grid w-full grid-cols-1 gap-4 px-4 py-10 sm:grid-cols-2 sm:px-8 md:grid-cols-[2fr_1fr]">
+                <form onSubmit={handleSubmit(handleSubmitForm)}>
+                  {activeStep === 0 && <FormRenderer />}
+                  {activeStep === 1 && <OrderConfirmation />}
+                </form>
+                <OrderSummary cart={cart} />
+              </section>
+            </FormProvider>
 
             {/* //// Control buttons : */}
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
