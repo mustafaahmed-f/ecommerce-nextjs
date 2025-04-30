@@ -105,6 +105,8 @@ function CheckOutFormTemplate({
               </form>
               <OrderSummary watch={watch} cart={cart} />
             </section>
+
+            {/* //// Control buttons : */}
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Button
                 color="inherit"

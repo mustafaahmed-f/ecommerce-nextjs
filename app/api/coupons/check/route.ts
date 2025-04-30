@@ -69,7 +69,15 @@ export const POST = withMiddleWare({
       coupon.usageCount += 1;
       await coupon.save();
 
-      return NextResponse.json({ success: true }, { status: 200 });
+      const discountData = {
+        discount: coupon.discount,
+        discountType: coupon.discountType,
+      };
+
+      return NextResponse.json(
+        { success: true, discountData },
+        { status: 200 },
+      );
     } catch (error: any) {
       return NextResponse.json(
         { success: false, error: error?.message },
