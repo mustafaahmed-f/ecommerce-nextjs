@@ -33,6 +33,10 @@ function OrderSummary({ watch, cart, setValue }: OrderSummaryProps) {
 
   const subTotal = watch("subTotal");
   const finalPaidAmount = watch("finalPaidAmount");
+  const totalCartDiscount = cart.products.reduce(
+    (acc, el) => el.discount! + acc,
+    0,
+  );
 
   const amountToDiscount: () => number = useCallback(() => {
     if (
@@ -117,6 +121,23 @@ function OrderSummary({ watch, cart, setValue }: OrderSummaryProps) {
           <span>✅</span> {couponCode} applied
         </p>
       ) : null}
+      <div className="mt-5 grid grid-cols-[2fr_1fr] gap-1">
+        <p>Price</p>
+        <p className="text-right">$ {subTotal}</p>
+        <p>Shipping</p>
+        <p className="text-right">
+          $ {watch("paymentMethod") === "card" ? "0.00" : "8.99"}
+        </p>
+        <p>Tax</p>
+        <p className="text-right">$ 0.00</p>
+        <p>Coupon Discount</p>
+        <p className="text-right">$ {amountToDiscount()}</p>
+        <p>Total Discount</p>
+        <p className="text-right">$ {totalCartDiscount + amountToDiscount()}</p>
+        <hr className="col-span-2 my-1 border-t-[1px] border-slate-950 sm:my-2" />
+        <p className="font-semibold">Total Paid Amount</p>
+        <p className="text-right font-semibold">$ {finalPaidAmount}</p>
+      </div>
     </div>
   );
 }
