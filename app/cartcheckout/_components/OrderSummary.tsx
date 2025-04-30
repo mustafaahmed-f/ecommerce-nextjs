@@ -3,13 +3,15 @@ import { couponType } from "@/app/_lib/couponTypes";
 import { GetType } from "@/app/_lib/GetType";
 import { ICart } from "@/app/cart/_types/CartType";
 import { useCallback, useEffect, useState } from "react";
-import { UseFormSetValue, UseFormWatch } from "react-hook-form";
+import { UseFormSetValue, UseFormWatch, useWatch } from "react-hook-form";
 import { match } from "ts-pattern";
+import { getAdditionalCharges } from "../_utils/getAdditionalCharges";
 import { CheckOutFormValues } from "./CheckoutFormTemplate";
 
 interface OrderSummaryProps {
   watch: UseFormWatch<CheckOutFormValues>;
   setValue: UseFormSetValue<CheckOutFormValues>;
+  control: any;
   cart: ICart;
 }
 
@@ -23,16 +25,20 @@ const intialCouponDiscount: initialCouponDiscountType = {
   discountType: "",
 };
 
-function OrderSummary({ watch, cart, setValue }: OrderSummaryProps) {
+function OrderSummary({ watch, cart, setValue, control }: OrderSummaryProps) {
   const { 0: couponDiscount, 1: setCouponDiscount } =
     useState<initialCouponDiscountType>(intialCouponDiscount);
   const { 0: couponCode, 1: setCouponCode } = useState<string>("");
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const { 0: isValidCoupon, 1: setIsValidCoupon } = useState<boolean>(false);
   const { 0: errorCoupon, 1: setErrorCoupon } = useState<string>("");
+  const shippingCost = 3.99;
 
   const subTotal = watch("subTotal");
-  const finalPaidAmount = watch("finalPaidAmount");
+  const finalPaidAmount = useWatch({ control, name: "finalPaidAmount" });
+  const paymentMethod = useWatch({ control, name: "paymentMethod" });
+  const CashOnDelivery: number = paymentMethod === "cash" ? 2.99 : 0;
+
   const totalCartDiscount = cart.products.reduce(
     (acc, el) => el.discount! + acc,
     0,
@@ -50,8 +56,13 @@ function OrderSummary({ watch, cart, setValue }: OrderSummaryProps) {
   }, [couponDiscount, finalPaidAmount]);
 
   useEffect(() => {
-    setValue("finalPaidAmount", subTotal - amountToDiscount());
-  }, [couponDiscount, setValue, subTotal, amountToDiscount]);
+    setValue(
+      "finalPaidAmount",
+      subTotal -
+        amountToDiscount() +
+        getAdditionalCharges(shippingCost, CashOnDelivery),
+    );
+  }, [couponDiscount, setValue, subTotal, amountToDiscount, CashOnDelivery]);
 
   async function applyCoupon() {
     try {
@@ -63,6 +74,7 @@ function OrderSummary({ watch, cart, setValue }: OrderSummaryProps) {
       setErrorCoupon("");
       setIsValidCoupon(true);
       setCouponDiscount(response.data.discountData);
+      setValue("couponId", response.data.couponId);
       setIsLoading(false);
     } catch (error: any) {
       setIsLoading(false);
@@ -125,18 +137,22 @@ function OrderSummary({ watch, cart, setValue }: OrderSummaryProps) {
         <p>Price</p>
         <p className="text-right">$ {subTotal}</p>
         <p>Shipping</p>
-        <p className="text-right">
-          $ {watch("paymentMethod") === "card" ? "0.00" : "8.99"}
-        </p>
+        <p className="text-right">$ {shippingCost}</p>
         <p>Tax</p>
         <p className="text-right">$ 0.00</p>
+        <p>Cash On Delivery</p>
+        <p className="text-right">$ {CashOnDelivery}</p>
         <p>Coupon Discount</p>
-        <p className="text-right">$ {amountToDiscount()}</p>
+        <p className="text-right">$ {amountToDiscount().toFixed(2)}</p>
         <p>Total Discount</p>
-        <p className="text-right">$ {totalCartDiscount + amountToDiscount()}</p>
+        <p className="text-right">
+          $ {(totalCartDiscount + amountToDiscount()).toFixed(2)}
+        </p>
         <hr className="col-span-2 my-1 border-t-[1px] border-slate-950 sm:my-2" />
         <p className="font-semibold">Total Paid Amount</p>
-        <p className="text-right font-semibold">$ {finalPaidAmount}</p>
+        <p className="text-right font-semibold">
+          $ {finalPaidAmount.toFixed(2)}
+        </p>
       </div>
     </div>
   );

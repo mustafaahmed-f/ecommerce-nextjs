@@ -9,6 +9,7 @@ import { store } from "./_lib/store/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProductsProvider from "./_context/ProductsProvider";
 import NextNavigationProvider from "./_context/NextNavigationProvider";
+import { FormProvider, useForm } from "react-hook-form";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -29,8 +30,10 @@ export function Providers({
             staleTime: 1000 * 60 * 60 * 24,
           },
         },
-      })
+      }),
   );
+
+  const methods = useForm();
 
   return (
     <Provider store={store}>
@@ -41,7 +44,9 @@ export function Providers({
             initialProducts={initialProducts}
           >
             <AlertContextProvider>
-              <NextNavigationProvider>{children}</NextNavigationProvider>
+              <FormProvider {...methods}>
+                <NextNavigationProvider>{children}</NextNavigationProvider>
+              </FormProvider>
             </AlertContextProvider>
           </ProductsProvider>
         </CategoriesProvider>

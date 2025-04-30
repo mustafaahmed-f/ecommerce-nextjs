@@ -37,19 +37,29 @@ function CheckOutFormTemplate({
   const { cart } = useCart();
   const [activeStep, setActiveStep] = useState<number>(0);
 
+  let finalDefaultValues: defaultValuesType = {
+    ...defaultValues,
+    userID: cart?.userID || "",
+    products: cart?.products || [],
+    subTotal: cart?.subTotal || 0,
+    finalPaidAmount: cart?.subTotal || 0,
+  };
+
   const {
     register,
     handleSubmit,
     setValue,
     trigger,
     watch,
+    getValues,
     formState: { errors, isValid },
+    control,
   } = useForm<CheckOutFormValues>({
     resolver: yupResolver(checkOutFormValidations),
     mode: "onChange",
     reValidateMode: "onChange",
     criteriaMode: "firstError",
-    defaultValues,
+    defaultValues: finalDefaultValues,
   });
 
   const handleNext = () => {
@@ -103,7 +113,12 @@ function CheckOutFormTemplate({
                 )}
                 {activeStep === 1 && <OrderConfirmation />}
               </form>
-              <OrderSummary setValue={setValue} watch={watch} cart={cart} />
+              <OrderSummary
+                control={control}
+                setValue={setValue}
+                watch={watch}
+                cart={cart}
+              />
             </section>
 
             {/* //// Control buttons : */}

@@ -75,7 +75,7 @@ export const POST = withMiddleWare({
       };
 
       return NextResponse.json(
-        { success: true, discountData },
+        { success: true, discountData, couponId: coupon._id },
         { status: 200 },
       );
     } catch (error: any) {
