@@ -38,7 +38,9 @@ export default async function middleware(request: NextRequest) {
       return response; // Authenticated, allow the request
     } else {
       // Not authenticated, redirect to login
-      return NextResponse.redirect(new URL("/login", request.url));
+      const redirectURL = new URL("/login", request.url);
+      redirectURL.searchParams.set("redirectto", pathname);
+      return NextResponse.redirect(redirectURL);
     }
   }
 

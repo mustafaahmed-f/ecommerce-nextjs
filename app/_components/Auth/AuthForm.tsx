@@ -1,6 +1,5 @@
 "use client";
 
-import { useNextNavigation } from "@/app/_context/NextNavigationProvider";
 import { instance } from "@/app/_lib/axiosInstance";
 import { signIn } from "@/app/_lib/store/slices/userSlice/userSlice";
 import { useAppDispatch } from "@/app/_lib/store/store";
@@ -9,6 +8,7 @@ import { signupValidations } from "@/app/_lib/validationSchemas/signUpValidation
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@mui/material";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -46,7 +46,8 @@ function AuthForm({
   fields,
   defaultValues,
 }: AuthFormProps) {
-  const { router } = useNextNavigation();
+  const searchParams = useSearchParams();
+  const redirectURL = searchParams.get("redirectto") || "/";
   const mySchema: Yup.ObjectSchema<any> =
     purpose === "Sign in" ? loginValidations : signupValidations;
 
@@ -97,7 +98,7 @@ function AuthForm({
         dispatch(signIn(routeResponse.data.user));
         setIsLoading(false);
         setTimeout(() => {
-          window.location.href = "/";
+          window.location.href = redirectURL;
         }, 2000);
       }
     } catch (error: any) {
