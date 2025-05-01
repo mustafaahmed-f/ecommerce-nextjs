@@ -25,10 +25,12 @@ export const checkOutFormValidations = yup.object({
       }),
     city: yup
       .string()
+      .min(1, requiredFieldMsg("City"))
       .max(50, "Max. length 50 for city")
       .required(requiredFieldMsg("City")),
     country: yup
       .string()
+      .min(1, requiredFieldMsg("Country"))
       .max(50, "Max. length 50 for country")
       .required(requiredFieldMsg("Country")),
     firstName: generalValidations.firstName,

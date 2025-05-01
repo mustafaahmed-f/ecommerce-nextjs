@@ -35,7 +35,7 @@ function TextInputField({
       size="small"
       helperText={errorObj?.message}
       error={!!errorObj}
-    ></TextField>
+    />
   ) : (
     <div className="col-span-2 grid w-full grid-cols-1 gap-1 max-md:mb-2 max-sm:grid-rows-2 md:grid-cols-[3fr_1fr]">
       <TextField
@@ -50,7 +50,7 @@ function TextInputField({
         size="small"
         helperText={errorObj?.message}
         error={!!errorObj}
-      ></TextField>
+      />
       <Button
         color="inherit"
         variant="contained"
@@ -59,7 +59,6 @@ function TextInputField({
           setValue(name, address);
           trigger(name);
         }}
-        className="text-xs max-sm:text-sm"
         sx={{ width: "100%", fontSize: "14px" }}
       >
         Get Address

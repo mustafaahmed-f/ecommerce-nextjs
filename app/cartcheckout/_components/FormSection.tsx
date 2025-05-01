@@ -9,7 +9,7 @@ interface FormSectionProps {
 function FormSection({ fields, title }: FormSectionProps) {
   return (
     <div>
-      <h3 className="mb-2 text-xl font-semibold">{title}</h3>
+      <h3 className="mb-2 text-xl font-semibold sm:mb-4">{title}</h3>
       <FormRenderer fields={fields} />
     </div>
   );

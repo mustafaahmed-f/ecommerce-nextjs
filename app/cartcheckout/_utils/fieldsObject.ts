@@ -1,3 +1,4 @@
+import { getCities, getCountries } from "@/app/_lib/APIs/CountriesAndCitiesAPI";
 import { inputFieldType } from "../_types/inputFieldType";
 export const fieldsObject: inputFieldType[] = [
   {
@@ -31,7 +32,7 @@ export const fieldsObject: inputFieldType[] = [
     fullWidth: false,
     required: true,
     placeholder: "",
-    options: [],
+    optionsMethod: getCountries,
   },
   {
     type: "dropdown",
@@ -40,7 +41,8 @@ export const fieldsObject: inputFieldType[] = [
     placeholder: "",
     fullWidth: false,
     required: true,
-    dependency: "country",
+    dependency: "userInfo.country",
+    optionsMethod: getCities,
   },
   {
     type: "text",

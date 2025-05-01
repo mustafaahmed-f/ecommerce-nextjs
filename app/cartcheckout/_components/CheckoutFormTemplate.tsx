@@ -20,6 +20,7 @@ import { checkOutFormValidations } from "../_utils/formValidation";
 import FormSections from "./FormSections";
 import OrderConfirmation from "./OrderConfirmation";
 import OrderSummary from "./OrderSummary";
+import { useAppSelector } from "@/app/_lib/store/store";
 
 interface CheckOutFormTemplateProps {
   defaultValues: defaultValuesType;
@@ -31,6 +32,7 @@ const steps = ["Shipping Info", "Order Confirmation"];
 
 function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
   const { cart } = useCart();
+  const user = useAppSelector((state) => state.user);
   const [activeStep, setActiveStep] = useState<number>(0);
 
   let finalDefaultValues: defaultValuesType = {
@@ -39,6 +41,16 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
     products: cart?.products || [],
     subTotal: cart?.subTotal || 0,
     finalPaidAmount: cart?.subTotal || 0,
+    userInfo: {
+      ...defaultValues.userInfo,
+      phoneNumber1: user?.phoneNumber || "",
+      city: user?.address?.city || "",
+      country: user?.address?.country || "",
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      address: user?.address?.address_line1 || "",
+    },
   };
 
   const methods = useForm<CheckOutFormValues>({
@@ -56,6 +68,7 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
   } = methods;
 
   console.log("Value : ", getValues());
+  // console.log("Default values : ", finalDefaultValues);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -67,7 +80,7 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
   function handleSubmitForm(data: CheckOutFormValues) {}
 
   return (
-    <div className="h-full min-h-screen w-full px-3 py-14 sm:px-10 sm:py-20">
+    <div className="h-full w-full px-3 py-14 sm:px-10 sm:py-20">
       <Box sx={{ width: "100%" }}>
         <Stepper activeStep={activeStep}>
           {steps.map((label) => {

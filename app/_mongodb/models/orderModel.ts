@@ -16,7 +16,8 @@ interface OrderModel extends Document {
   couponId: Types.ObjectId;
   subTotal: number;
   userInfo: {
-    phoneNumbers: string[];
+    phoneNumber1: string;
+    phoneNumber2: string;
     city: string;
     country: string;
     firstName: string;
@@ -65,7 +66,8 @@ const orderSchema: Schema = new Schema(
     subTotal: { type: Number, required: true, default: 0 },
 
     userInfo: {
-      phoneNumbers: [{ type: String, required: true }],
+      phoneNumber1: { type: String, required: true },
+      phoneNumber2: { type: String, default: null },
       city: { type: String, required: true },
       country: { type: String, required: true },
       firstName: {

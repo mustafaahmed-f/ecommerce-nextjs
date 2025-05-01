@@ -9,7 +9,7 @@ interface FormRendererProps {
 
 function FormRenderer({ fields }: FormRendererProps) {
   return (
-    <div className="grid w-full grid-cols-2 gap-2">
+    <div className="grid w-full grid-cols-2 gap-x-2 gap-y-5">
       {fields.map((field: inputFieldType) => {
         switch (field.type) {
           case "dropdown":

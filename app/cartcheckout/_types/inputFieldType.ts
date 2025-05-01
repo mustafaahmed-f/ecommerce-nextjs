@@ -8,6 +8,6 @@ export interface inputFieldType {
   fullWidth: boolean;
   required: boolean;
   placeholder: string;
-  options?: string[] | string; //// options provided or a link to fetch options
-  dependency?: string;
+  optionsMethod?: (dependency?: string) => Promise<string[]>;
+  dependency?: Path<CheckOutFormValues>;
 }
