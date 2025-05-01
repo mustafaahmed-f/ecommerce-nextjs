@@ -1,13 +1,8 @@
 "use client";
 
 import { useCart } from "@/app/_context/CartProvider";
-import { defaultValuesType } from "../_types/defaultValuesType";
-import { inputFieldType } from "../_types/inputFieldType";
-import { useForm } from "react-hook-form";
+import { FormProvider } from "@/app/_context/FormContext";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { checkOutFormValidations } from "../_utils/formValidation";
-import * as yup from "yup";
-import { useState } from "react";
 import {
   Box,
   Button,
@@ -16,11 +11,15 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { match } from "ts-pattern";
-import OrderSummary from "./OrderSummary";
-import FormRenderer from "./FormRenderer";
+import * as yup from "yup";
+import { defaultValuesType } from "../_types/defaultValuesType";
+import { checkOutFormValidations } from "../_utils/formValidation";
+import FormSections from "./FormSections";
 import OrderConfirmation from "./OrderConfirmation";
-import { FormProvider } from "@/app/_context/FormContext";
+import OrderSummary from "./OrderSummary";
 
 interface CheckOutFormTemplateProps {
   defaultValues: defaultValuesType;
@@ -50,14 +49,9 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
     defaultValues: finalDefaultValues,
   });
   const {
-    register,
     handleSubmit,
-    setValue,
-    trigger,
     watch,
-    getValues,
     formState: { errors, isValid },
-    control,
   } = methods;
 
   const handleNext = () => {
@@ -102,7 +96,7 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
             <FormProvider value={methods}>
               <section className="grid w-full grid-cols-1 gap-4 px-4 py-10 sm:grid-cols-2 sm:px-8 md:grid-cols-[2fr_1fr]">
                 <form onSubmit={handleSubmit(handleSubmitForm)}>
-                  {activeStep === 0 && <FormRenderer />}
+                  {activeStep === 0 && <FormSections />}
                   {activeStep === 1 && <OrderConfirmation />}
                 </form>
                 <OrderSummary cart={cart} />

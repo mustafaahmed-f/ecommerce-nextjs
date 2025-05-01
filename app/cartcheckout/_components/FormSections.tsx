@@ -1,8 +1,5 @@
-import { UseFormRegister, UseFormSetValue } from "react-hook-form";
-import { inputFieldType } from "../_types/inputFieldType";
-import { CheckOutFormValues } from "./CheckoutFormTemplate";
-import FormSection from "./FormSection";
 import { fieldsObject } from "../_utils/fieldsObject";
+import FormSection from "./FormSection";
 
 interface FormSectionsProps {}
 
