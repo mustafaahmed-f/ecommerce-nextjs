@@ -1,6 +1,14 @@
-interface PhoneInputFieldProps {}
+import { inputFieldType } from "../_types/inputFieldType";
 
-function PhoneInputField({}: PhoneInputFieldProps) {
+interface PhoneInputFieldProps extends inputFieldType {}
+
+function PhoneInputField({
+  name,
+  lable,
+  fullWidth,
+  required,
+  placeholder,
+}: PhoneInputFieldProps) {
   return <div></div>;
 }
 

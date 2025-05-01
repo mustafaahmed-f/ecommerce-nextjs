@@ -1,6 +1,14 @@
-interface EmailInputFieldProps {}
+import { inputFieldType } from "../_types/inputFieldType";
 
-function EmailInputField({}: EmailInputFieldProps) {
+interface EmailInputFieldProps extends inputFieldType {}
+
+function EmailInputField({
+  name,
+  lable,
+  fullWidth,
+  required,
+  placeholder,
+}: EmailInputFieldProps) {
   return <div></div>;
 }
 

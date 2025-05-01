@@ -1,6 +1,14 @@
-interface TextInputFieldProps {}
+import { inputFieldType } from "../_types/inputFieldType";
 
-function TextInputField({}: TextInputFieldProps) {
+interface TextInputFieldProps extends inputFieldType {}
+
+function TextInputField({
+  name,
+  lable,
+  fullWidth,
+  required,
+  placeholder,
+}: TextInputFieldProps) {
   return <div></div>;
 }
 
