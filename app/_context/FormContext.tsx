@@ -1,8 +1,9 @@
 // FormContext.tsx
 import { createContext, useContext } from "react";
 import { UseFormReturn } from "react-hook-form";
+import { CheckOutFormValues } from "../cartcheckout/_components/CheckoutFormTemplate";
 
-type FormContextType = UseFormReturn<any>;
+type FormContextType = UseFormReturn<CheckOutFormValues>;
 
 const FormContext = createContext<FormContextType | null>(null);
 

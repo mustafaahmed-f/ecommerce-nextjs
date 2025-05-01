@@ -1,9 +1,7 @@
 import CheckOutFormTemplate from "./_components/CheckoutFormTemplate";
 import { defaultValues } from "./_utils/defaultValues";
 
-interface PageProps {}
-
-function Page({}: PageProps) {
+function Page() {
   return <CheckOutFormTemplate defaultValues={defaultValues} />;
 }
 

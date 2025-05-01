@@ -1,18 +1,12 @@
+import { useFormContext } from "@/app/_context/FormContext";
 import { instance } from "@/app/_lib/axiosInstance";
 import { couponType } from "@/app/_lib/couponTypes";
 import { GetType } from "@/app/_lib/GetType";
 import { ICart } from "@/app/cart/_types/CartType";
 import { useCallback, useEffect, useState } from "react";
-import {
-  UseFormSetValue,
-  UseFormTrigger,
-  UseFormWatch,
-  useWatch,
-} from "react-hook-form";
+import { useWatch } from "react-hook-form";
 import { match } from "ts-pattern";
 import { getAdditionalCharges } from "../_utils/getAdditionalCharges";
-import { CheckOutFormValues } from "./CheckoutFormTemplate";
-import { useFormContext } from "@/app/_context/FormContext";
 
 interface OrderSummaryProps {
   cart: ICart;
