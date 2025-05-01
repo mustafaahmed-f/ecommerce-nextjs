@@ -17,7 +17,8 @@ export interface defaultValuesType {
 }
 
 export interface userInfoType {
-  phoneNumbers: string[];
+  phoneNumber1: string;
+  phoneNumber2: string;
   city: string;
   country: string;
   firstName: string;

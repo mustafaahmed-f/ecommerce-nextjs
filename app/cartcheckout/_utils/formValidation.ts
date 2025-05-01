@@ -9,11 +9,20 @@ export const checkOutFormValidations = yup.object({
   userID: yup.string().required("User ID is required"),
 
   userInfo: yup.object().shape({
-    phoneNumbers: yup
-      .array()
-      .of(generalValidations.phoneNumber)
-      .min(1, "At least one phone number is required")
-      .required(requiredFieldMsg("Phone numbers")),
+    phoneNumber1: yup
+      .string()
+      .required(requiredFieldMsg("Phone Number 1"))
+      .matches(/^\d{11}$/, invalidSchemaFormatMsg("Phone number", "11 digits")),
+    phoneNumber2: yup
+      .string()
+      .nullable()
+      .transform((value, originalValue) =>
+        originalValue === "" ? null : value,
+      )
+      .matches(/^\d{11}$/, {
+        excludeEmptyString: true,
+        message: invalidSchemaFormatMsg("Phone number", "11 digits"),
+      }),
     city: yup
       .string()
       .max(50, "Max. length 50 for city")

@@ -52,7 +52,7 @@ export const fieldsObject: inputFieldType[] = [
   },
   {
     type: "phone",
-    name: "userInfo.phoneNumbers.0",
+    name: "userInfo.phoneNumber1",
     lable: "Phone Number 1",
     fullWidth: false,
     required: true,
@@ -60,7 +60,7 @@ export const fieldsObject: inputFieldType[] = [
   },
   {
     type: "phone",
-    name: "userInfo.phoneNumbers.1",
+    name: "userInfo.phoneNumber2",
     lable: "Phone Number 2",
     fullWidth: false,
     required: false,

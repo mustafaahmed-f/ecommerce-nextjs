@@ -4,7 +4,8 @@ export const defaultValues: defaultValuesType = {
   userID: "",
 
   userInfo: {
-    phoneNumbers: [],
+    phoneNumber1: "",
+    phoneNumber2: "",
     city: "",
     country: "",
     firstName: "",

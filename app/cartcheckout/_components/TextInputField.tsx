@@ -37,7 +37,7 @@ function TextInputField({
       error={!!errorObj}
     ></TextField>
   ) : (
-    <div className="col-span-2 grid w-full grid-cols-1 gap-1 max-sm:grid-rows-2 md:grid-cols-[3fr_1fr]">
+    <div className="col-span-2 grid w-full grid-cols-1 gap-1 max-md:mb-2 max-sm:grid-rows-2 md:grid-cols-[3fr_1fr]">
       <TextField
         label={lable}
         variant="outlined"
