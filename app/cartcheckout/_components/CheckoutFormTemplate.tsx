@@ -51,7 +51,7 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
   const {
     handleSubmit,
     watch,
-    formState: { errors, isValid },
+    formState: { isValid },
     getValues,
   } = methods;
 
@@ -70,7 +70,7 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
     <div className="h-full min-h-screen w-full px-3 py-14 sm:px-10 sm:py-20">
       <Box sx={{ width: "100%" }}>
         <Stepper activeStep={activeStep}>
-          {steps.map((label, index) => {
+          {steps.map((label) => {
             const stepProps: { completed?: boolean } = {};
             const labelProps: {
               optional?: React.ReactNode;
