@@ -2,15 +2,7 @@ import { CartProduct } from "@/app/cart/_types/CartType";
 
 export interface defaultValuesType {
   userID: string;
-  userInfo: {
-    phoneNumbers: string[];
-    city: string;
-    country: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    address: string;
-  };
+  userInfo: userInfoType;
 
   products: CartProduct[];
   subTotal: number;
@@ -22,4 +14,14 @@ export interface defaultValuesType {
 
   isFromCart?: boolean;
   notes?: string;
+}
+
+export interface userInfoType {
+  phoneNumbers: string[];
+  city: string;
+  country: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  address: string;
 }

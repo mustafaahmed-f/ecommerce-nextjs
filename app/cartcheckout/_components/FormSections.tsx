@@ -9,7 +9,7 @@ function FormSections({}: FormSectionsProps) {
   const customerSection = fieldsObject.slice(0, 3);
   const shippingSection = fieldsObject.slice(3);
   return (
-    <div className="flex flex-col gap-3 sm:gap-4">
+    <div className="flex flex-col gap-5 sm:gap-8">
       <FormSection fields={customerSection} title={sections[0]} />
       <FormSection fields={shippingSection} title={sections[1]} />
     </div>

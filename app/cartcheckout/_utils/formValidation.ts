@@ -4,7 +4,6 @@ import {
   requiredFieldMsg,
 } from "@/app/_lib/validattionErrorMessages";
 import * as yup from "yup";
-import { defaultValuesType } from "../_types/defaultValuesType";
 
 export const checkOutFormValidations = yup.object({
   userID: yup.string().required("User ID is required"),

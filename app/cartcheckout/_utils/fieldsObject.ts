@@ -2,7 +2,7 @@ import { inputFieldType } from "../_types/inputFieldType";
 export const fieldsObject: inputFieldType[] = [
   {
     type: "email",
-    name: "email",
+    name: "userInfo.email",
     lable: "Email",
     fullWidth: true,
     required: true,
@@ -10,7 +10,7 @@ export const fieldsObject: inputFieldType[] = [
   },
   {
     type: "text",
-    name: "firstName",
+    name: "userInfo.firstName",
     lable: "First Name",
     fullWidth: false,
     required: true,
@@ -18,7 +18,7 @@ export const fieldsObject: inputFieldType[] = [
   },
   {
     type: "text",
-    name: "lastName",
+    name: "userInfo.lastName",
     lable: "Last Name",
     fullWidth: false,
     required: true,
@@ -26,7 +26,7 @@ export const fieldsObject: inputFieldType[] = [
   },
   {
     type: "dropdown",
-    name: "country",
+    name: "userInfo.country",
     lable: "Country",
     fullWidth: false,
     required: true,
@@ -35,7 +35,7 @@ export const fieldsObject: inputFieldType[] = [
   },
   {
     type: "dropdown",
-    name: "city",
+    name: "userInfo.city",
     lable: "City/State",
     placeholder: "",
     fullWidth: false,
@@ -44,7 +44,7 @@ export const fieldsObject: inputFieldType[] = [
   },
   {
     type: "text",
-    name: "address",
+    name: "userInfo.address",
     lable: "Address",
     placeholder: "123 main st.",
     required: true,
@@ -52,7 +52,7 @@ export const fieldsObject: inputFieldType[] = [
   },
   {
     type: "phone",
-    name: "phone1",
+    name: "userInfo.phoneNumbers.0",
     lable: "Phone Number 1",
     fullWidth: false,
     required: true,
@@ -60,7 +60,7 @@ export const fieldsObject: inputFieldType[] = [
   },
   {
     type: "phone",
-    name: "phone2",
+    name: "userInfo.phoneNumbers.1",
     lable: "Phone Number 2",
     fullWidth: false,
     required: false,

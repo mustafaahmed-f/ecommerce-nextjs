@@ -1,6 +1,9 @@
+import { Path } from "react-hook-form";
+import { CheckOutFormValues } from "../_components/CheckoutFormTemplate";
+
 export interface inputFieldType {
   type: "email" | "text" | "phone" | "dropdown";
-  name: string;
+  name: Path<CheckOutFormValues>;
   lable: string;
   fullWidth: boolean;
   required: boolean;

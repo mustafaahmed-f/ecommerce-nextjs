@@ -1,6 +1,5 @@
 import { inputFieldType } from "../_types/inputFieldType";
 import DropListField from "./DropListField";
-import EmailInputField from "./EmailInputField";
 import PhoneInputField from "./PhoneInputField";
 import TextInputField from "./TextInputField";
 
@@ -13,20 +12,14 @@ function FormRenderer({ fields }: FormRendererProps) {
     <div className="grid w-full grid-cols-2 gap-2">
       {fields.map((field: inputFieldType) => {
         switch (field.type) {
-          case "email":
-            return <EmailInputField {...field} />;
-
           case "dropdown":
-            return <DropListField {...field} />;
+            return <DropListField {...field} key={field.name} />;
 
           case "phone":
-            return <PhoneInputField {...field} />;
-
-          case "text":
-            return <TextInputField {...field} />;
+            return <PhoneInputField {...field} key={field.name} />;
 
           default:
-            return <p>Type not found</p>;
+            return <TextInputField {...field} key={field.name} />;
         }
       })}
     </div>

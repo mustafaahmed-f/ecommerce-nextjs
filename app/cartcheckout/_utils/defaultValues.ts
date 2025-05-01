@@ -4,7 +4,7 @@ export const defaultValues: defaultValuesType = {
   userID: "",
 
   userInfo: {
-    phoneNumbers: [""],
+    phoneNumbers: [],
     city: "",
     country: "",
     firstName: "",
@@ -24,4 +24,4 @@ export const defaultValues: defaultValuesType = {
 
   isFromCart: false,
   notes: "",
-};
+} as const;

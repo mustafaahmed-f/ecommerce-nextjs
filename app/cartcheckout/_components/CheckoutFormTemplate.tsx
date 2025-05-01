@@ -52,8 +52,10 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
     handleSubmit,
     watch,
     formState: { errors, isValid },
+    getValues,
   } = methods;
 
+  console.log("Value : ", getValues());
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -94,7 +96,7 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
           <>
             {/* //// Main screens here : */}
             <FormProvider value={methods}>
-              <section className="grid w-full grid-cols-1 gap-4 px-4 py-10 sm:grid-cols-2 sm:px-8 md:grid-cols-[2fr_1fr]">
+              <section className="grid w-full grid-cols-1 gap-y-4 px-4 py-10 sm:grid-cols-2 sm:gap-x-9 sm:px-4 md:grid-cols-[2fr_1fr] md:gap-x-40 md:px-8">
                 <form onSubmit={handleSubmit(handleSubmitForm)}>
                   {activeStep === 0 && <FormSections />}
                   {activeStep === 1 && <OrderConfirmation />}
