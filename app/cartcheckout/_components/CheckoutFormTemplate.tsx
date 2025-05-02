@@ -22,26 +22,51 @@ import OrderConfirmation from "./OrderConfirmation";
 import OrderSummary from "./OrderSummary";
 import { useAppSelector } from "@/app/_lib/store/store";
 import Link from "next/link";
+import { CartProduct } from "@/app/cart/_types/CartType";
 
 interface CheckOutFormTemplateProps {
   defaultValues: defaultValuesType;
+  product?: any;
 }
 
 export type CheckOutFormValues = yup.InferType<typeof checkOutFormValidations>;
 
 const steps = ["Shipping Info", "Order Confirmation"];
 
-function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
+function CheckOutFormTemplate({
+  defaultValues,
+  product,
+}: CheckOutFormTemplateProps) {
   const { cart } = useCart();
   const user = useAppSelector((state) => state.user);
   const [activeStep, setActiveStep] = useState<number>(0);
 
+  let finalProductsArr: CartProduct[] = match(product)
+    .with(undefined, () => cart?.products || [])
+    .otherwise(() => [
+      {
+        productID: product.productId,
+        title: product.title,
+        unitPaymentPrice: product.price,
+        discount: product.discount,
+        quantity: 1,
+        color: product.color,
+        category: product.category,
+        brand: product.brand,
+        image: product.image,
+      },
+    ]);
+
+  let finalSubTotalValue: number = match(product)
+    .with(undefined, () => cart?.subTotal || 0)
+    .otherwise(() => product.price - product.discount);
+
   let finalDefaultValues: defaultValuesType = {
     ...defaultValues,
-    userID: cart?.userID || "",
-    products: cart?.products || [],
-    subTotal: cart?.subTotal || 0,
-    finalPaidAmount: cart?.subTotal || 0,
+    userID: user.id || "",
+    products: finalProductsArr,
+    subTotal: finalSubTotalValue,
+    finalPaidAmount: finalSubTotalValue,
     userInfo: {
       ...defaultValues.userInfo,
       phoneNumber1: user?.phoneNumber || "",
