@@ -6,13 +6,15 @@ export function withMiddleWare({
   middleWares = [],
   applyAuth = false,
   authorization = false,
+  // apiProps,
 }: {
-  handler: (request: NextRequest) => Promise<NextResponse>;
+  apiProps?: any;
+  handler: (request: NextRequest, props?: any) => Promise<NextResponse>;
   middleWares?: any[];
   applyAuth?: boolean;
   authorization?: boolean;
 }) {
-  return async function (request: NextRequest) {
+  return async function (request: NextRequest, props?: any) {
     const middleWare = await applyMiddlewares({
       request,
       applyAuth: applyAuth ?? false,
@@ -21,6 +23,6 @@ export function withMiddleWare({
     });
     if (middleWare) return middleWare;
 
-    return handler(request);
+    return handler(request, props);
   };
 }

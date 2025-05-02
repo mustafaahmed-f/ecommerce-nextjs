@@ -45,7 +45,8 @@ export async function getAllProducts({
 export async function getSingleProduct(id: number) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/product/${String(id)}`,
-    { next: { revalidate: 3600 } },
+    { next: { revalidate: 0 } },
+    //TODO: make revalidate : 3600
   );
 
   const clonedResponse = await response.clone().json();
