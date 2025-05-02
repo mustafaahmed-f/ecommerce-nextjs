@@ -51,12 +51,14 @@ function QuantityControl({
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value === "" || e.target.value === "0") return;
     setValue("products.0.quantity", parseInt(e.target.value));
+    handlePaymentChange(parseInt(e.target.value));
     trigger("products.0.quantity");
   };
 
   return (
-    <div className="col-span-2 flex justify-start">
+    <div className="col-span-2 my-2 flex justify-start">
       <div className="w-fit">
         <Stack direction="row" alignItems="center" spacing={1}>
           <IconButton onClick={handleDecrement}>
@@ -76,8 +78,12 @@ function QuantityControl({
             sx={{
               input: {
                 textAlign: "center",
-                width: "fit-content",
-                paddingInline: "10px",
+                maxWidth: "fit-content",
+                width: "50px",
+              },
+              //// Remove control buttons:
+              ".MuiInputAdornment-root": {
+                display: "none",
               },
             }}
           />
