@@ -1,3 +1,4 @@
+import QuantityControl from "../[id]/_components/QuantityControl";
 import { inputFieldType } from "../_types/inputFieldType";
 import DropListField from "./DropListField";
 import PhoneInputField from "./PhoneInputField";
@@ -17,6 +18,9 @@ function FormRenderer({ fields }: FormRendererProps) {
 
           case "phone":
             return <PhoneInputField {...field} key={field.name} />;
+
+          case "quantity":
+            return <QuantityControl {...field} key={field.name} />;
 
           default:
             return <TextInputField {...field} key={field.name} />;

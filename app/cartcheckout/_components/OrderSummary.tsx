@@ -37,8 +37,10 @@ function OrderSummary({ cart }: OrderSummaryProps) {
   const paymentMethod = useWatch({ control, name: "paymentMethod" });
   const CashOnDelivery: number = paymentMethod === "cash" ? 2.99 : 0;
 
-  const totalCartDiscount = cart.products.reduce(
-    (acc, el) => el.discount! + acc,
+  const products = watch("products");
+
+  const totalCartDiscount = products.reduce(
+    (acc, el) => el.discount! * el.quantity + acc,
     0,
   );
 
@@ -144,8 +146,12 @@ function OrderSummary({ cart }: OrderSummaryProps) {
         </p>
       ) : null}
       <div className="mt-5 grid grid-cols-[2fr_1fr] gap-1">
-        <p>Price</p>
+        <p>Price After Discount</p>
         <p className="text-right">$ {subTotal}</p>
+        <p>Total Discount</p>
+        <p className="text-right">
+          $ {(totalCartDiscount + amountToDiscount()).toFixed(2)}
+        </p>
         <p>Shipping</p>
         <p className="text-right">$ {shippingCost}</p>
         <p>Tax</p>
@@ -154,10 +160,6 @@ function OrderSummary({ cart }: OrderSummaryProps) {
         <p className="text-right">$ {CashOnDelivery}</p>
         <p>Coupon Discount</p>
         <p className="text-right">$ {amountToDiscount().toFixed(2)}</p>
-        <p>Total Discount</p>
-        <p className="text-right">
-          $ {(totalCartDiscount + amountToDiscount()).toFixed(2)}
-        </p>
         <hr className="col-span-2 my-1 border-t-[1px] border-slate-950 sm:my-2" />
         <p className="font-semibold">Total Paid Amount</p>
         <p className="text-right font-semibold">

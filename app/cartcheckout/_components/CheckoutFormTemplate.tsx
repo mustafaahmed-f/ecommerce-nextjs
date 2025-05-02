@@ -90,10 +90,10 @@ function CheckOutFormTemplate({
     handleSubmit,
     watch,
     formState: { isValid },
-    // getValues,
+    getValues,
   } = methods;
 
-  // console.log("Value : ", getValues());
+  console.log("Value : ", getValues());
   // console.log("Default values : ", finalDefaultValues);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
