@@ -15,7 +15,7 @@ function OrderConfirmation({}: OrderConfirmationProps) {
         <h5 className="mb-3">Shopping items</h5>
         <div className="flex flex-col gap-4">
           {products.map((product: any) => {
-            return <ShoppingItem {...product} key={product.productId} />;
+            return <ShoppingItem {...product} key={product.productID} />;
           })}
         </div>
         <hr className="my-4 border border-slate-800" />
