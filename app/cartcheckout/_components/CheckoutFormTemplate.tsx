@@ -93,9 +93,6 @@ function CheckOutFormTemplate({
     getValues,
   } = methods;
 
-  // console.log("Value : ", getValues());
-  // console.log("Default values : ", finalDefaultValues);
-
   const handleNext = () => {
     //TODO : at last step we will decide which method to use ( order now or payment )
     if (activeStep === steps.length - 1) {
