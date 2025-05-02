@@ -23,6 +23,6 @@ export const defaultValues: defaultValuesType = {
   finalPaidAmount: 0,
   paymentMethod: "cash",
 
-  isFromCart: false,
+  isFromCart: true,
   notes: "",
 } as const;

@@ -117,6 +117,7 @@ function OrderSummary({ cart }: OrderSummaryProps) {
             setCouponCode(e.target.value);
           }}
           className="w-full bg-transparent px-2 outline-none"
+          placeholder="Coupon Code"
           disabled={isLoading || isValidCoupon}
         />
         <button

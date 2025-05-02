@@ -21,6 +21,7 @@ import FormSections from "./FormSections";
 import OrderConfirmation from "./OrderConfirmation";
 import OrderSummary from "./OrderSummary";
 import { useAppSelector } from "@/app/_lib/store/store";
+import Link from "next/link";
 
 interface CheckOutFormTemplateProps {
   defaultValues: defaultValuesType;
@@ -64,10 +65,10 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
     handleSubmit,
     watch,
     formState: { isValid },
-    getValues,
+    // getValues,
   } = methods;
 
-  console.log("Value : ", getValues());
+  // console.log("Value : ", getValues());
   // console.log("Default values : ", finalDefaultValues);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -78,6 +79,19 @@ function CheckOutFormTemplate({ defaultValues }: CheckOutFormTemplateProps) {
   };
 
   function handleSubmitForm(data: CheckOutFormValues) {}
+
+  if (defaultValues.isFromCart && !cart.products.length) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <h1>
+          Cart is empty. Please return back to{" "}
+          <Link href={"/products"} className="italic text-sky-600 underline">
+            products page
+          </Link>
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full w-full px-3 py-14 sm:px-10 sm:py-20">

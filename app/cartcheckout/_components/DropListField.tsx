@@ -83,7 +83,7 @@ function DropListField({
           className={fullWidth ? "col-span-2" : "col-span-1"}
           error={isError || !!errorObj}
           placeholder={placeholder}
-          MenuProps={{ disableAutoFocus: true }}
+          MenuProps={{ disableAutoFocusItem: true, disableAutoFocus: true }}
         >
           {dropListOptions.map((option) => (
             <MenuItem key={option} value={option}>
