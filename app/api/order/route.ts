@@ -1,7 +1,13 @@
 import { getUserId } from "@/app/_lib/getUserId";
+import { validateSchema } from "@/app/_lib/validateSchema";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import cartModel from "@/app/_mongodb/models/cartModel";
+import couponsModel from "@/app/_mongodb/models/couponsModel";
 import orderModel from "@/app/_mongodb/models/orderModel";
+import productsModel from "@/app/_mongodb/models/productsModel";
 import userModel from "@/app/_mongodb/models/userModel";
+import { createOrderSchema } from "@/app/_mongodb/validationSchemas/Orders/AddNewOrderSchema";
+import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 //// Get order info
@@ -34,8 +40,109 @@ export const GET = withMiddleWare({
 });
 
 //// add order
-export async function POST(request: NextRequest) {}
+export const POST = withMiddleWare({
+  applyAuth: true,
+  middleWares: [],
+  handler: async (request: NextRequest) => {
+    //TODO : Re-use session inside the save method when convert to mongoDB atlas
+    //// Start session of mongoose so if one of the updating processes ( product or cart ) failed, both of the processes stop:
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const userId = await getUserId();
+      const orderObj = await request.json();
 
+      //// validate data:
+      const validationResult = validateSchema(createOrderSchema, orderObj);
+      if (!validationResult.success) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Validation failed",
+            errors: validationResult.error,
+          },
+          { status: 400 },
+        );
+      }
+
+      if (userId !== orderObj.userID) {
+        throw new Error("Order doesn't belong to user !!");
+      }
+
+      const newOrderObj = {
+        ...orderObj,
+        orderStatus: { status: "pending", updatedAt: new Date() },
+      };
+
+      if (orderObj.couponId) {
+        const coupon = await couponsModel.findById(orderObj.couponId);
+        if (!coupon) {
+          throw new Error("Coupon not found !!");
+        }
+      }
+
+      //// Check if payment method is cash so order status is confirmed
+      if (orderObj.paymentMethod === "cash") {
+        newOrderObj.orderStatus.status = "confirmed";
+        //// if order is for single product , then update product stock
+        if (!orderObj.isFromCart) {
+          const product = await productsModel.findOneAndUpdate(
+            {
+              productId: orderObj.products[0].productID,
+              stock: { $gte: orderObj.products[0].quantity },
+            },
+            { $inc: { stock: -orderObj.products[0].quantity } },
+            { new: true },
+          );
+          if (!product) {
+            throw new Error(
+              "Product not found or error while updating product !!",
+            );
+          }
+        }
+      }
+
+      //// Empty user's cart:
+      if (orderObj.isFromCart) {
+        const cart = await cartModel.findOne({ userID: userId });
+        if (!cart) {
+          throw new Error("Cart not found !!");
+        }
+        cart.products = [];
+        cart.subTotal = 0;
+        await cart.save();
+      }
+
+      const order = await orderModel.create(newOrderObj);
+      if (!order) {
+        throw new Error("Error while creating order !!");
+      }
+
+      await session.commitTransaction();
+      session.endSession();
+
+      return NextResponse.json(
+        {
+          success: true,
+          message:
+            newOrderObj.orderStatus === "pending"
+              ? "Proceed to payment please !"
+              : "Order confirmed successfully !",
+          order,
+        },
+        { status: 200 },
+      );
+    } catch (error: any) {
+      await session.abortTransaction();
+      session.endSession();
+
+      return NextResponse.json(
+        { success: false, error: error?.message },
+        { status: 500 },
+      );
+    }
+  },
+});
 //// update order
 export async function PUT(request: NextRequest, params: any) {}
 

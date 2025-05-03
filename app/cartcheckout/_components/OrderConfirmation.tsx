@@ -12,7 +12,7 @@ function OrderConfirmation({}: OrderConfirmationProps) {
       <h3 className="mb-4 text-xl font-semibold sm:mb-4">Confirmation</h3>
       <div className="w-full bg-[#F5F5F5] p-6">
         {/* //// Shopping items section */}
-        <h5 className="mb-3">Shopping items</h5>
+        <h5 className="mb-3 font-bold underline">Shopping items</h5>
         <div className="flex flex-col gap-4">
           {products.map((product: any) => {
             return <ShoppingItem {...product} key={product.productID} />;
@@ -20,7 +20,7 @@ function OrderConfirmation({}: OrderConfirmationProps) {
         </div>
         <hr className="my-4 border border-slate-800" />
         {/* //// Shipping info section */}
-        <h5 className="mb-3">Shipping info</h5>
+        <h5 className="mb-3 font-bold underline">Shipping info</h5>
         <div className="flex flex-col gap-2">
           <p>
             <span className="font-semibold">Email:</span>{" "}
@@ -55,7 +55,7 @@ function OrderConfirmation({}: OrderConfirmationProps) {
         </div>
         <hr className="my-4 border border-slate-800" />
         {/* //// Payment method section */}
-        <h5 className="mb-3">Payment method</h5>
+        <h5 className="mb-3 font-bold underline">Payment method</h5>
         <PaymentMethodSelector />
       </div>
     </>

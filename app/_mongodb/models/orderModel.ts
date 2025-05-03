@@ -36,7 +36,7 @@ interface OrderModel extends Document {
 
 const orderSchema: Schema = new Schema(
   {
-    orderNumber: { type: Number, required: true },
+    orderNumber: { type: Number, required: false, unique: true },
     userID: {
       type: Types.ObjectId,
       ref: "User",
@@ -46,7 +46,7 @@ const orderSchema: Schema = new Schema(
     products: [
       {
         productID: {
-          type: Types.ObjectId,
+          type: Number,
           required: true,
         },
         title: { type: String },
@@ -56,6 +56,7 @@ const orderSchema: Schema = new Schema(
         color: { type: String, default: null },
         category: { type: String, default: null },
         brand: { type: String, default: null },
+        image: { type: String, default: null },
       },
     ],
     couponId: {
@@ -84,7 +85,6 @@ const orderSchema: Schema = new Schema(
         type: String,
         required: true,
         trim: true,
-        unique: true,
       },
       address: { type: String, required: true },
     },

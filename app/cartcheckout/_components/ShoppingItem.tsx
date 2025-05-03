@@ -38,9 +38,15 @@ function ShoppingItem({
         </div>
       </div>
       <div className="flex flex-col items-end justify-center">
-        <p>{unitPaymentPrice - (discount || 0)} $</p>
+        <p>
+          <span className="text-xs text-sky-500">{quantity}x</span>{" "}
+          {unitPaymentPrice - (discount || 0)} $
+        </p>
         {discount && discount !== 0 && (
-          <p className="text-red-500">{discount} $ off</p>
+          <p className="text-red-500">
+            <span className="text-xs text-sky-500">{quantity}x</span> {discount}{" "}
+            $ off
+          </p>
         )}
         <p>x{quantity}</p>
       </div>
