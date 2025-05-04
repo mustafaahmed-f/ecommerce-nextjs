@@ -65,7 +65,7 @@ export const POST = withMiddleWare({
         );
       }
 
-      if (userId !== orderObj.userID) {
+      if (String(userId) !== String(orderObj.userID)) {
         throw new Error("Order doesn't belong to user !!");
       }
 
@@ -144,7 +144,7 @@ export const POST = withMiddleWare({
   },
 });
 //// update order
-export async function PUT(request: NextRequest, params: any) {}
+// export async function PUT(request: NextRequest, params: any) {}
 
 //// delete order
-export async function DELETE(request: NextRequest) {}
+// export async function DELETE(request: NextRequest) {}

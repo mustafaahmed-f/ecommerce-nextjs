@@ -1,9 +1,7 @@
 import { getUserId } from "@/app/_lib/getUserId";
-import { validateSchema } from "@/app/_lib/validateSchema";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
 import orderModel from "@/app/_mongodb/models/orderModel";
 import productsModel from "@/app/_mongodb/models/productsModel";
-import { confirmOrderSchema } from "@/app/_mongodb/validationSchemas/Orders/ConfirmOrderSchema";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -25,7 +23,9 @@ export const PUT = withMiddleWare({
         throw new Error("Order not found !!");
       }
 
-      if (userId !== order.userID) {
+      console.log("UserID : ", userId);
+      console.log("Order userID : ", order.userID);
+      if (String(userId) !== String(order.userID)) {
         throw new Error("Order doesn't belong to user !!");
       }
 
