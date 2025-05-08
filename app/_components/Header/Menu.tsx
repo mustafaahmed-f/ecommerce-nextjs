@@ -74,13 +74,22 @@ function Menu({ setShowMenu }: { setShowMenu: any }) {
                 <span>{">"}</span>
               </Link>
             ) : (
-              <Link
-                href={`/updateprofile/${user.id}`}
-                className="flex w-full cursor-pointer items-center justify-between hover:text-sky-400"
-              >
-                <p>Update profile</p>
-                <span>{">"}</span>
-              </Link>
+              <>
+                <Link
+                  href={`/orders`}
+                  className="flex w-full cursor-pointer items-center justify-between hover:text-sky-400"
+                >
+                  <p>My Orders</p>
+                  <span>{">"}</span>
+                </Link>
+                <Link
+                  href={`/updateprofile/${user.id}`}
+                  className="flex w-full cursor-pointer items-center justify-between hover:text-sky-400"
+                >
+                  <p>Update profile</p>
+                  <span>{">"}</span>
+                </Link>
+              </>
             )}
 
             <li className="flex w-full cursor-pointer items-center justify-between hover:text-sky-400">

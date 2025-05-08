@@ -2,11 +2,11 @@
 
 import {
   FavoriteBorder,
-  KeyboardArrowDownOutlined,
   Person2Outlined,
   Segment,
   ShoppingBag,
 } from "@mui/icons-material";
+import ReceiptIcon from "@mui/icons-material/Receipt";
 // import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 
 import { logOutAction } from "@/app/_actions/authActions";
@@ -78,28 +78,24 @@ function DesktopHeader() {
       {/* ////Second section for secondary pages ,favourites and cart//// */}
 
       <div className="grid bg-black py-3 text-white sm:grid-cols-[1fr_1fr] md:grid-cols-[1fr_1fr_1fr]">
-        <div className="flex items-center sm:gap-10 sm:px-7 md:gap-12 md:px-20">
+        <div className="flex items-center sm:gap-14 sm:px-7 md:gap-24 md:px-20">
           <div className="flex cursor-pointer gap-2 hover:text-sky-600">
             <div className="-scale-x-100">
               <Segment />
             </div>
             <p className="font-semibold">Categories</p>
           </div>
-          <div className="flex items-center gap-2">
-            <p className="cursor-pointer hover:text-sky-600">
-              USD
-              <span>
-                <KeyboardArrowDownOutlined />
-              </span>
-            </p>
-            <p className="cursor-pointer hover:text-sky-600">
-              English
-              <span>
-                <KeyboardArrowDownOutlined />
-              </span>
-            </p>
-          </div>
+
+          {user.email || user.userName ? (
+            <div className="flex items-center gap-2">
+              <div className="-scale-x-100">
+                <ReceiptIcon />
+              </div>
+              <p className="whitespace-nowrap font-semibold">My Orders</p>
+            </div>
+          ) : null}
         </div>
+
         <div className="items-center justify-center border-s-[1px] border-s-neutral-400 sm:hidden md:flex">
           <Image
             alt="header photo"
