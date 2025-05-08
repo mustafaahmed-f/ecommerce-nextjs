@@ -87,12 +87,15 @@ function DesktopHeader() {
           </div>
 
           {user.email || user.userName ? (
-            <div className="flex items-center gap-2">
+            <Link
+              href="/orders"
+              className="flex items-center gap-2 hover:text-sky-600"
+            >
               <div className="-scale-x-100">
                 <ReceiptIcon />
               </div>
               <p className="whitespace-nowrap font-semibold">My Orders</p>
-            </div>
+            </Link>
           ) : null}
         </div>
 
