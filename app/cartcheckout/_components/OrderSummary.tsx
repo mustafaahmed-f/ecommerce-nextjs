@@ -52,8 +52,8 @@ function OrderSummary({ cart }: OrderSummaryProps) {
       return 0;
     return match(couponDiscount.discountType)
       .with("amount", () => couponDiscount.discountAmount)
-      .otherwise(() => (finalPaidAmount * couponDiscount.discountAmount) / 100);
-  }, [couponDiscount, finalPaidAmount]);
+      .otherwise(() => (subTotal * couponDiscount.discountAmount) / 100);
+  }, [couponDiscount, subTotal]);
 
   useEffect(() => {
     setValue(

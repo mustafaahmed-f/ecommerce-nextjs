@@ -21,6 +21,14 @@
   @apply flex w-full flex-col gap-4 p-4;
 }
 
+.outer-layout-stripe-redirect {
+  @apply flex w-full flex-col items-center justify-center py-10 sm:py-16 md:py-24;
+}
+
+.inner-layout-stripe-redirect {
+  @apply flex h-full w-full flex-col items-center justify-center gap-7 px-4 py-12;
+}
+
 .filter-sections:not(:last-child) {
   border-bottom: 1px solid #a5a4a4;
 }

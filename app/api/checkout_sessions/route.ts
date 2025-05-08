@@ -87,8 +87,21 @@ export const POST = withMiddleWare({
           },
         ],
         // allow_promotion_codes: true,
-        success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${origin}/?canceled=true`,
+        success_url: `${origin}/successpayment?orderNumber=${orderObj.orderNumber}`,
+        cancel_url: `${origin}/cancelpayment?orderNumber=${orderObj.orderNumber}`,
+        shipping_options: [
+          {
+            shipping_rate_data: {
+              type: "fixed_amount",
+
+              fixed_amount: {
+                amount: getSubCurrency(3.99),
+                currency: "usd",
+              },
+              display_name: "Shipping Fee",
+            },
+          },
+        ],
       });
 
       return NextResponse.json({

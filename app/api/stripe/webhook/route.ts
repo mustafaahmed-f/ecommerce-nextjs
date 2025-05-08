@@ -1,12 +1,7 @@
-// export const runtime = "nodejs";
 import { confirmOrder } from "@/app/_lib/confirmOrder";
 import { stripe } from "@/app/_lib/stripe";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-
-// Use Stripe secret key
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-// const stripe = new Stripe(process.env.STRIPE_LOCAL_SECRET_KEY!);
 
 export const config = {
   api: {

@@ -151,8 +151,6 @@ function CheckOutFormTemplate({
               </section>
             </FormProvider>
 
-            <p>asdf</p>
-
             {/* //// Control buttons : */}
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Button
