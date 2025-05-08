@@ -2,15 +2,11 @@
 
 import { useCart } from "@/app/_context/CartProvider";
 import { FormProvider } from "@/app/_context/FormContext";
+import { useAppSelector } from "@/app/_lib/store/store";
+import { CartProduct } from "@/app/cart/_types/CartType";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Box,
-  Button,
-  Step,
-  StepLabel,
-  Stepper,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Step, StepLabel, Stepper } from "@mui/material";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { match } from "ts-pattern";
@@ -20,9 +16,6 @@ import { checkOutFormValidations } from "../_utils/formValidation";
 import FormSections from "./FormSections";
 import OrderConfirmation from "./OrderConfirmation";
 import OrderSummary from "./OrderSummary";
-import { useAppSelector } from "@/app/_lib/store/store";
-import Link from "next/link";
-import { CartProduct } from "@/app/cart/_types/CartType";
 
 interface CheckOutFormTemplateProps {
   defaultValues: defaultValuesType;
@@ -95,19 +88,25 @@ function CheckOutFormTemplate({
 
   const handleNext = () => {
     //TODO : at last step we will decide which method to use ( order now or payment )
-    if (activeStep === steps.length - 1) {
-      console.log("Submitted : ", getValues());
-    } else {
+    if (activeStep !== steps.length) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    if (activeStep === steps.length) {
+      setActiveStep(0);
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
   };
 
-  function handleSubmitForm(data: CheckOutFormValues) {
-    console.log("Data : ", data);
+  async function handleSubmitForm(data: CheckOutFormValues) {
+    if (watch("paymentMethod") === "cash") {
+      //todo: Call order backend API to create the order manually
+      console.log("Cash payment confirmed. Order data:", data);
+      return;
+    }
   }
 
   if (defaultValues.isFromCart && !cart.products.length) {
@@ -140,27 +139,19 @@ function CheckOutFormTemplate({
           })}
         </Stepper>
         {/* //TODO : write here logic after finishing the form: */}
-        {activeStep === steps.length ? (
-          <>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Box sx={{ flex: "1 1 auto" }} />
-            </Box>
-          </>
-        ) : (
-          <>
+
+        <>
+          <form onSubmit={methods.handleSubmit(handleSubmitForm)}>
             {/* //// Main screens here : */}
             <FormProvider value={methods}>
               <section className="grid w-full grid-cols-1 gap-y-4 px-4 py-10 sm:grid-cols-2 sm:gap-x-9 sm:px-4 md:grid-cols-[2fr_1fr] md:gap-x-40 md:px-8">
-                <form>
-                  {activeStep === 0 && <FormSections />}
-                  {activeStep === 1 && <OrderConfirmation />}
-                </form>
+                {activeStep === 0 && <FormSections />}
+                {activeStep !== 0 && <OrderConfirmation />}
                 <OrderSummary cart={cart} />
               </section>
             </FormProvider>
+
+            <p>asdf</p>
 
             {/* //// Control buttons : */}
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
@@ -173,18 +164,18 @@ function CheckOutFormTemplate({
                 Back
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={handleNext} disabled={!isValid}>
+              <Button
+                onClick={handleNext}
+                type={activeStep === steps.length ? "submit" : "button"}
+                disabled={!isValid}
+              >
                 {match(activeStep)
-                  .with(steps.length - 1, () =>
-                    match(watch("paymentMethod"))
-                      .with("cash", () => "Confirm Order")
-                      .otherwise(() => "Proceed To Payment"),
-                  )
-                  .otherwise(() => "Next")}
+                  .with(0, () => "Next")
+                  .otherwise(() => "Confirm Order")}
               </Button>
             </Box>
-          </>
-        )}
+          </form>
+        </>
       </Box>
     </div>
   );

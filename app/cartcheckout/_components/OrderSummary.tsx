@@ -157,7 +157,7 @@ function OrderSummary({ cart }: OrderSummaryProps) {
         <p>Tax</p>
         <p className="text-right">$ 0.00</p>
         <p>Cash On Delivery</p>
-        <p className="text-right">$ {CashOnDelivery}</p>
+        <p className="text-right">$ {CashOnDelivery.toFixed(2)}</p>
         <p>Coupon Discount</p>
         <p className="text-right">$ {amountToDiscount().toFixed(2)}</p>
         <hr className="col-span-2 my-1 border-t-[1px] border-slate-950 sm:my-2" />

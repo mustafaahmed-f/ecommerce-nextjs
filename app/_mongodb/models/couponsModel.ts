@@ -28,10 +28,11 @@ const CouponSchema: Schema = new Schema(
     applicableProducts: { type: [String], default: [] }, // Optional
     applicableCategories: { type: [String], default: [] }, // Optional
     isActive: { type: Boolean, default: true },
+    stripeCouponId: { type: String, unique: true },
+    stipePromotionCodeId: { type: String, unique: true },
   },
   { timestamps: true },
 );
 
-const Coupon =
-  mongoose.models.Coupon || mongoose.model<ICoupon>("Coupon", CouponSchema);
-export default Coupon;
+export default mongoose.models.Coupon ||
+  mongoose.model<ICoupon>("Coupon", CouponSchema);

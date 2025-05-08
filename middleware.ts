@@ -9,6 +9,7 @@ const corsOptions = {
 };
 
 const AuthPaths: string[] = ["/updateprofile", "/cartcheckout", "/orders"];
+const nonAuthPaths: string[] = ["/login", "/signup"];
 
 export default async function middleware(request: NextRequest) {
   const origin = request.headers.get("origin") ?? "";
@@ -40,6 +41,18 @@ export default async function middleware(request: NextRequest) {
       // Not authenticated, redirect to login
       const redirectURL = new URL("/login", request.url);
       redirectURL.searchParams.set("redirectto", pathname);
+      return NextResponse.redirect(redirectURL);
+    }
+  }
+
+  const needsNonAuth = nonAuthPaths.some(
+    (protectedPath) =>
+      pathname === protectedPath || pathname.startsWith(protectedPath + "/"),
+  );
+
+  if (needsNonAuth) {
+    if (nextAuthToken || systemAuthToken) {
+      const redirectURL = new URL("/", request.url);
       return NextResponse.redirect(redirectURL);
     }
   }

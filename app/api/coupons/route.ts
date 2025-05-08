@@ -1,4 +1,5 @@
 import { getUserId } from "@/app/_lib/getUserId";
+import { stripe } from "@/app/_lib/stripe";
 import { validateSchema } from "@/app/_lib/validateSchema";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
 import couponsModel from "@/app/_mongodb/models/couponsModel";
@@ -41,6 +42,23 @@ export const POST = withMiddleWare({
       if (checkCouponExistence)
         throw new Error("Coupon already exists", { cause: 400 });
 
+      //// Add coupon to stripe :
+      const expirationDateForCoupon = new Date(expirationDate);
+      const redeemBy = Math.floor(expirationDateForCoupon.getTime() / 1000);
+
+      const sripeCoupon = await stripe.coupons.create({
+        duration: "once",
+        percent_off: discountType === "percentage" ? discount : undefined,
+        amount_off: discountType === "amount" ? discount : undefined,
+      });
+
+      const stripePromotionCode = await stripe.promotionCodes.create({
+        coupon: sripeCoupon.id,
+        code,
+        expires_at: redeemBy,
+        max_redemptions: usageLimit,
+      });
+
       //// create new coupon
       const newCoupon = await couponsModel.create({
         addedBy: userId,
@@ -49,9 +67,12 @@ export const POST = withMiddleWare({
         discountType,
         expirationDate,
         usageLimit,
+        stripeCouponId: sripeCoupon.id,
+        stipePromotionCodeId: stripePromotionCode.id,
       });
 
       if (!newCoupon) throw new Error("Coupon not created", { cause: 400 });
+
       return NextResponse.json(
         {
           success: true,

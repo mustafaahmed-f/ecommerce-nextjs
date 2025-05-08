@@ -1,14 +1,13 @@
 import { useFormContext } from "@/app/_context/FormContext";
-import ShoppingItem from "./ShoppingItem";
 import PaymentMethodSelector from "./PaymentMethodSelector";
+import ShoppingItem from "./ShoppingItem";
 
-interface OrderConfirmationProps {}
-
-function OrderConfirmation({}: OrderConfirmationProps) {
+function OrderConfirmation() {
   const { watch } = useFormContext();
   const products = watch("products");
+
   return (
-    <>
+    <div>
       <h3 className="mb-4 text-xl font-semibold sm:mb-4">Confirmation</h3>
       <div className="w-full bg-[#F5F5F5] p-6">
         {/* //// Shopping items section */}
@@ -58,7 +57,7 @@ function OrderConfirmation({}: OrderConfirmationProps) {
         <h5 className="mb-3 font-bold underline">Payment method</h5>
         <PaymentMethodSelector />
       </div>
-    </>
+    </div>
   );
 }
 

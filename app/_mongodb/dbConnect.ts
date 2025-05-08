@@ -1,13 +1,4 @@
 import mongoose from "mongoose";
-import {
-  addDifferentPropertiesToProducts,
-  addRatingToProducts,
-  // addReviewsToProducts,
-  addSizeToProducts,
-  fetchCategoriesFromAPI,
-  fetchProductsFromAPI,
-} from "../_lib/AddProductsToDB";
-import { addBrandsAndModelsToDB } from "../_lib/AddModels&BrandsToDB";
 //TODO : Change the uri to Atlas uri
 //TODO : add same data on local to the atlas
 // const uri = process.env.MONGODB_URI_ATLAS as string;

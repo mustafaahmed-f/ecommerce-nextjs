@@ -1,3 +1,4 @@
+import { stripe } from "@/app/_lib/stripe";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
 import couponsModel from "@/app/_mongodb/models/couponsModel";
 import { addNewCouponSchema } from "@/app/_mongodb/validationSchemas/Coupons/AddNewCouponSchema";
@@ -48,8 +49,9 @@ export const POST = withMiddleWare({
       if (!coupon) throw new Error("Coupon was not found !!", { cause: 404 });
 
       //// Check if it is active;
-      if (!coupon.isActive)
+      if (!coupon.isActive) {
         throw new Error("Coupon is not active", { cause: 400 });
+      }
 
       //// Check if it is expired and if so we make it unactive;
       if (coupon.expirationDate < new Date()) {
@@ -60,14 +62,13 @@ export const POST = withMiddleWare({
 
       //// check if coupon reach its limit;
       if (coupon.usageCount >= coupon.usageLimit) {
+        await stripe.promotionCodes.update(coupon.stipePromotionCodeId, {
+          active: false,
+        });
         coupon.isActive = false;
         await coupon.save();
         throw new Error("Coupon usage limit reached", { cause: 400 });
       }
-
-      //// Increase usage count;
-      coupon.usageCount += 1;
-      await coupon.save();
 
       const discountData = {
         discountAmount: coupon.discount,

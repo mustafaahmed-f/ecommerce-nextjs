@@ -17,6 +17,14 @@ async function Page({ params }: PageProps) {
         <h1>Product not found</h1>;
       </div>
     );
+
+  if (!product.product.stock)
+    return (
+      <div className="flex h-full w-full items-center justify-center text-center">
+        <h1>Product out of stock</h1>;
+      </div>
+    );
+
   return (
     <CheckOutFormTemplate
       defaultValues={defaultValues}

@@ -118,6 +118,20 @@ export const POST = withMiddleWare({
         throw new Error("Error while creating order !!");
       }
 
+      if (orderObj.paymentMethod === "cash" && orderObj.couponId) {
+        const updatedCoupon = await couponsModel.findByIdAndUpdate(
+          orderObj.couponId,
+          {
+            $inc: { usageCount: 1 },
+          },
+          { new: true },
+        );
+
+        if (!updatedCoupon) {
+          throw new Error("Error while updating coupon !!");
+        }
+      }
+
       await session.commitTransaction();
       session.endSession();
 
