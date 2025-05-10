@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Cart, Product } from "./cartSlice.types";
 import { ICart } from "@/app/cart/_types/CartType";
 
-const initialState: ICart = {
+export const cartInitialState: ICart = {
   _id: "",
   userID: "",
   products: [],
@@ -11,7 +11,7 @@ const initialState: ICart = {
 
 const cartSlice = createSlice({
   name: "cart",
-  initialState,
+  initialState: cartInitialState,
   reducers: {
     storeCart: (state: ICart, action: PayloadAction<ICart>) => {
       state._id = action.payload._id;

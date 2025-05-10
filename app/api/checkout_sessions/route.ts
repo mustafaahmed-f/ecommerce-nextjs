@@ -72,7 +72,6 @@ export const POST = withMiddleWare({
           throw new Error("Coupon is not active !!", { cause: 400 });
         promotionCode = couponFromDB.stipePromotionCodeId;
       }
-
       // Create Checkout Sessions from body params.
       const session = await stripe.checkout.sessions.create({
         line_items: itemsArr,
@@ -80,13 +79,15 @@ export const POST = withMiddleWare({
         metadata: {
           orderId: orderObj._id,
         },
-        discounts: [
-          {
-            promotion_code:
-              orderObj.couponId && promotionCode ? promotionCode : null,
-          },
-        ],
-        // allow_promotion_codes: true,
+        ...(promotionCode
+          ? {
+              discounts: [
+                {
+                  promotion_code: promotionCode,
+                },
+              ],
+            }
+          : {}),
         success_url: `${origin}/successpayment?orderNumber=${orderObj.orderNumber}`,
         cancel_url: `${origin}/cancelpayment?orderNumber=${orderObj.orderNumber}`,
         shipping_options: [

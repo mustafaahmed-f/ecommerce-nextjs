@@ -20,7 +20,6 @@ async function InitialDataProvider({
 }: InitialDataProviderProps) {
   const isAuth: boolean = user ? true : false;
   const cookieStore = cookies();
-
   const offLineCartId = cookieStore.get(
     process.env.NEXT_PUBLIC_OFFLINE_CART_KEY!,
   )?.value;

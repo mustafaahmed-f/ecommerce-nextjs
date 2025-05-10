@@ -105,7 +105,7 @@ function OrderSummary({ cart }: OrderSummaryProps) {
   }
 
   return (
-    <div className="bg-[#E9E9E9] px-10 py-5 max-sm:-mx-7 sm:w-full">
+    <div className="h-fit bg-[#E9E9E9] px-10 py-5 max-md:mt-10 max-sm:-mx-7 sm:w-full">
       <h3 className="mb-4 text-lg font-semibold">Order Summary</h3>
       <div
         className={`grid grid-cols-[2fr_1fr] ${isLoading ? "pointer-events-none opacity-60" : ""} gap-1 rounded-md bg-white py-1 pe-1 ps-2 md:grid-cols-[3fr_1fr] ${errorCoupon.length ? "border-[1px] border-red-500" : "border-0"}`}
@@ -123,6 +123,7 @@ function OrderSummary({ cart }: OrderSummaryProps) {
           disabled={isLoading || isValidCoupon}
         />
         <button
+          type="button"
           onClick={isValidCoupon ? removeCoupon : applyCoupon}
           className={`rounded-md bg-slate-950 px-4 py-2 text-white hover:bg-slate-800 ${isLoading ? "animate-pulse" : ""}`}
         >

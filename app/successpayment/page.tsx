@@ -1,15 +1,19 @@
 import Link from "next/link";
 import orderModel from "../_mongodb/models/orderModel";
-import SuccessUI from "./_components/SuccessUI";
+import dynamic from "next/dynamic";
+const SuccessUI = dynamic(() => import("./_components/SuccessUI"), {
+  ssr: false,
+});
 
 type searchParams = Record<"orderNumber", string>;
 
 interface PageProps {
-  searchParams: Promise<searchParams>;
+  searchParams: searchParams;
 }
 
 async function Page({ searchParams }: PageProps) {
-  const SearchParams = await searchParams;
+  console.log("Payment success page rendered !!");
+  const SearchParams = searchParams;
   const orderNumber = SearchParams.orderNumber || "";
   let order = await orderModel.findOne({ orderNumber });
   if (!order)

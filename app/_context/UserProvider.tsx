@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useLayoutEffect, useRef } from "react";
-import { useAppDispatch, useAppSelector } from "../_lib/store/store";
+import { useEffect, useRef } from "react";
 import { logOut, signIn } from "../_lib/store/slices/userSlice/userSlice";
+import { useAppDispatch } from "../_lib/store/store";
 
 interface UserProviderProps {
   children: React.ReactNode;
@@ -20,6 +20,14 @@ function UserProvider({ children, user }: UserProviderProps) {
       dispatch(logOut());
     }
   }
+
+  useEffect(() => {
+    if (user) {
+      dispatch(signIn(user));
+    } else {
+      dispatch(logOut());
+    }
+  }, [user, dispatch, isFirstRender]);
 
   return <>{children}</>;
 }

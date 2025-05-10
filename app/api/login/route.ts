@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     response.cookies.set("next_ecommerce_token", token, {
       httpOnly: true,
       path: "/",
-      sameSite: "strict", // Necessary for cross-origin cookies
+      sameSite: "lax",
       maxAge: 86400,
       secure: process.env.NODE_ENV === "production", // True in production for HTTPS
     });
