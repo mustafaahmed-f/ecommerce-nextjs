@@ -161,7 +161,20 @@ export const POST = withMiddleWare({
   },
 });
 //// update order
-// export async function PUT(request: NextRequest, params: any) {}
+export const PUT = withMiddleWare({
+  applyAuth: true,
+  middleWares: [],
+  handler: async (request: NextRequest) => {
+    try {
+      return NextResponse.json({ success: true }, { status: 200 });
+    } catch (error: any) {
+      return NextResponse.json(
+        { success: false, error: error?.message },
+        { status: 500 },
+      );
+    }
+  },
+});
 
 //// delete order
 // export async function DELETE(request: NextRequest) {}

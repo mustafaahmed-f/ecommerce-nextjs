@@ -7,6 +7,7 @@ import OrderSummary from "./OrderSummary";
 import dayjs from "dayjs";
 import { useState } from "react";
 import OrderItemsAccordion from "./OrderItemsAccordion";
+import CouponApplied from "./CouponApplied";
 
 interface SingleOrderPageProps {
   order: any;
@@ -111,6 +112,7 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
               }}
             />
           </div>
+          {order.couponId && <CouponApplied coupon={order.couponId} />}
           <div className="mt-3 text-sm text-slate-500">
             <p>
               Created: {dayjs(order.createdAt).format("MMM D, YYYY - h:mm A")}
