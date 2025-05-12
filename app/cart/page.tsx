@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import Swal from "sweetalert2";
@@ -18,7 +19,6 @@ import {
 import { useAppSelector } from "../_lib/store/store";
 import { ErrorToast } from "../_lib/toasts";
 import { CartProduct } from "./_types/CartType";
-import Link from "next/link";
 
 interface PageProps {}
 
@@ -220,7 +220,7 @@ function Page({}: PageProps) {
       <div
         className={`space-y-6 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
       >
-        {cartItems.map((item, index) => {
+        {cartItems.map((item) => {
           const discountedPrice = item.unitPaymentPrice - item.discount!;
           const hasDiscount = (item.discount ?? 0) > 0;
 

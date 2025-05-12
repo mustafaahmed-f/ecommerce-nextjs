@@ -92,7 +92,7 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
   // console.log("Order : ", order);
 
   return (
-    <div className="mx-auto px-4 py-8 sm:px-8">
+    <div className={`mx-auto px-4 py-8 sm:px-8`}>
       {/* Header */}
       <div className="mb-14 flex flex-col justify-between gap-4 border-b pb-4 md:flex-row md:items-center">
         {/* Left Side: ID, Status Chip, and Dates */}
