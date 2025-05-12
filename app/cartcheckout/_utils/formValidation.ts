@@ -56,6 +56,7 @@ export const checkOutFormValidations = yup.object({
         color: yup.string().nullable(),
         category: yup.string().nullable(),
         brand: yup.string().nullable(),
+        image: yup.string().nullable(),
       }),
     )
     .min(1, "At least one product is required")

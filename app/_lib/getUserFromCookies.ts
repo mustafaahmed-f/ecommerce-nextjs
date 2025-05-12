@@ -26,7 +26,6 @@ export async function getUserFromCookies(): Promise<User | null> {
   } else {
     const token = cookies().get("next_ecommerce_token")?.value;
     if (token) {
-      console.log("Token : ", token);
       try {
         // Verify token and decode user info
         const decoded: any = verifyToken({ token });
@@ -40,7 +39,6 @@ export async function getUserFromCookies(): Promise<User | null> {
         if (response.status === 200) {
           user = response.data;
         }
-        console.log("Get User response : ", response.data);
         // Assuming the token contains user info; if not, fetch it from the DB/API
       } catch (error) {
         console.error("Invalid token", error);

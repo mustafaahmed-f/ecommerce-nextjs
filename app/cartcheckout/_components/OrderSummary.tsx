@@ -8,10 +8,6 @@ import { useWatch } from "react-hook-form";
 import { match } from "ts-pattern";
 import { getAdditionalCharges } from "../_utils/getAdditionalCharges";
 
-interface OrderSummaryProps {
-  cart: ICart;
-}
-
 type couponTypes = GetType<typeof couponType>;
 type initialCouponDiscountType = {
   discountAmount: number;
@@ -22,7 +18,7 @@ const intialCouponDiscount: initialCouponDiscountType = {
   discountType: "",
 };
 
-function OrderSummary({ cart }: OrderSummaryProps) {
+function OrderSummary() {
   const { watch, setValue, trigger, control } = useFormContext();
   const { 0: couponDiscount, 1: setCouponDiscount } =
     useState<initialCouponDiscountType>(intialCouponDiscount);
@@ -30,11 +26,10 @@ function OrderSummary({ cart }: OrderSummaryProps) {
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const { 0: isValidCoupon, 1: setIsValidCoupon } = useState<boolean>(false);
   const { 0: errorCoupon, 1: setErrorCoupon } = useState<string>("");
-  const shippingCost = 3.99;
-
-  const subTotal = watch("subTotal");
   const finalPaidAmount = useWatch({ control, name: "finalPaidAmount" });
   const paymentMethod = useWatch({ control, name: "paymentMethod" });
+  const subTotal = watch("subTotal");
+  const shippingCost = 3.99;
   const CashOnDelivery: number = paymentMethod === "cash" ? 2.99 : 0;
 
   const products = watch("products");
@@ -52,7 +47,7 @@ function OrderSummary({ cart }: OrderSummaryProps) {
       return 0;
     return match(couponDiscount.discountType)
       .with("amount", () => couponDiscount.discountAmount)
-      .otherwise(() => (subTotal * couponDiscount.discountAmount) / 100);
+      .otherwise(() => subTotal * (couponDiscount.discountAmount / 100));
   }, [couponDiscount, subTotal]);
 
   useEffect(() => {

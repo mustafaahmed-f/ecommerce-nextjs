@@ -89,7 +89,7 @@ function CheckOutFormTemplate({
     // handleSubmit,
     watch,
     formState: { isValid },
-    getValues,
+    // getValues,
   } = methods;
 
   const handleNext = () => {
@@ -210,7 +210,7 @@ function CheckOutFormTemplate({
               <section className="grid w-full grid-cols-1 gap-y-4 px-4 py-10 sm:gap-x-9 sm:px-4 md:grid-cols-[2fr_1fr] md:gap-x-40 md:px-8">
                 {activeStep === 0 && <FormSections />}
                 {activeStep !== 0 && <OrderConfirmation />}
-                <OrderSummary cart={cart} />
+                <OrderSummary />
               </section>
             </FormProvider>
 

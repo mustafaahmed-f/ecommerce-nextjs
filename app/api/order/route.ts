@@ -20,7 +20,10 @@ export const GET = withMiddleWare({
       const searchParams = request.nextUrl.searchParams;
       const orderId = searchParams.get("orderId");
       const userId = await getUserId();
-      const order = await orderModel.findById(orderId);
+      const order = await orderModel.findById(orderId).populate({
+        path: "couponId",
+        select: "discountType discount code",
+      });
       const user = await userModel.findById(userId);
       if (!order) {
         throw new Error("Order not found !!");

@@ -1,7 +1,7 @@
-import { Controller } from "react-hook-form";
-import { inputFieldType } from "../_types/inputFieldType";
 import { useFormContext } from "@/app/_context/FormContext";
 import { TextField } from "@mui/material";
+import { Controller } from "react-hook-form";
+import { inputFieldType } from "../_types/inputFieldType";
 
 interface PhoneInputFieldProps extends inputFieldType {}
 
@@ -21,6 +21,7 @@ function PhoneInputField({
       render={({ field, fieldState: { error } }) => (
         <TextField
           {...field}
+          value={field.value || ""}
           error={!!error}
           helperText={error?.message}
           label={lable}

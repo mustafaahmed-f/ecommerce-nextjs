@@ -60,7 +60,9 @@ function DropListField({
   };
 
   return (
-    <div className="flex flex-col gap-1">
+    <div
+      className={`flex flex-col gap-1 ${fullWidth ? "col-span-2" : "col-span-1"}`}
+    >
       <FormControl
         fullWidth={true}
         error={isError || !!errorObj}
