@@ -9,6 +9,10 @@ import { useState } from "react";
 import OrderItemsAccordion from "./OrderItemsAccordion";
 import CouponApplied from "./CouponApplied";
 import OrderUserInfoAccordion from "./OrderUserInfoAccordion";
+import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
+import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
+import { instance } from "@/app/_lib/axiosInstance";
+import { useRouter } from "next/navigation";
 
 interface SingleOrderPageProps {
   order: any;
@@ -25,14 +29,13 @@ type statusColors = {
 
 function SingleOrderPage({ order }: SingleOrderPageProps) {
   const [editOpen, setEditOpen] = useState(false);
-
+  const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const handleEditOpen = () => setEditOpen(true);
   const handleEditClose = () => setEditOpen(false);
   const orderStatus = order.orderStatus.status;
-
+  const router = useRouter();
   const canEdit = ["pending", "confirmed"].includes(orderStatus);
-  const showProceed =
-    orderStatus === "pending" && order.paymentMethod.toLowerCase() === "card";
+  const showCompleteOrder = orderStatus === "pending";
 
   const canCancel = ["pending", "confirmed", "shipped"].includes(orderStatus);
 
@@ -80,19 +83,57 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
     notes: order.notes,
   };
 
-  function proceedHandler() {
-    console.log("proceed");
+  async function proceedHandler() {
+    setIsLoading(true);
+    const paymentResponse = await instance.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/checkout_sessions`,
+      order,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    setIsLoading(false);
+
+    window.location.href = paymentResponse.data.url;
+  }
+
+  async function handleConfirmOrder() {
+    setIsLoading(true);
+    try {
+      const response = await instance.put(
+        `/api/order/confirmOrder?orderId=${order._id}`,
+      );
+      if (response.data.success) {
+        SuccessToast.fire({
+          title: "Order confirmed successfully",
+        });
+      }
+      setIsLoading(false);
+      router.refresh();
+    } catch (error: any) {
+      setIsLoading(false);
+      const errMsg = getAxiosErrMsg(error);
+      ErrorToast.fire({
+        title: errMsg,
+      });
+    }
   }
 
   function handleCancleOrder() {
     console.log("handleCancleOrder");
   }
 
+  //todo : see how return order occurs in real world ecommerces
   function handleReturnOrder() {
     console.log("handleReturnOrder");
   }
+
   return (
-    <div className={`mx-auto px-4 py-8 sm:px-8`}>
+    <div
+      className={`mx-auto px-4 py-8 sm:px-8 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
+    >
       {/* Header */}
       <div className="mb-14 flex flex-col justify-between gap-4 border-b pb-4 md:flex-row md:items-center">
         {/* Left Side: ID, Status Chip, and Dates */}
@@ -124,26 +165,32 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
         </div>
 
         {/* Right Side: Buttons */}
-        <div className="flex flex-row items-start gap-2 md:flex-col md:items-end">
+        <div className="flex flex-row items-start gap-2 max-md:flex-wrap md:flex-col md:items-end">
+          {showCompleteOrder && (
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={
+                order.paymentMethod.toLowerCase() === "card"
+                  ? proceedHandler
+                  : handleConfirmOrder
+              }
+            >
+              {order.paymentMethod.toLowerCase() === "card"
+                ? "Pay Now"
+                : "Confirm order"}
+            </Button>
+          )}
           <Button
             variant="outlined"
             size="small"
             disabled={!canEdit}
             onClick={handleEditOpen}
           >
-            Edit Order
+            Edit User Info
           </Button>
-          {showProceed && (
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={proceedHandler}
-            >
-              Proceed to Payment
-            </Button>
-          )}
-          {canCancel && (
+          {canCancel && order.orderStatus.status !== "cancelled" && (
             <Button
               onClick={handleCancleOrder}
               variant="outlined"

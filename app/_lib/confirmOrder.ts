@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import orderModel from "../_mongodb/models/orderModel";
 import productsModel from "../_mongodb/models/productsModel";
 import couponsModel from "../_mongodb/models/couponsModel";
+import { revalidateTag } from "next/cache";
 
 export async function confirmOrder(orderId: string, userId?: string) {
   //TODO : Re-use session inside the save method when convert to mongoDB atlas
@@ -14,10 +15,6 @@ export async function confirmOrder(orderId: string, userId?: string) {
 
     if (userId && String(userId) !== String(order.userID)) {
       throw new Error("Order doesn't belong to user !!");
-    }
-
-    if (order.paymentMethod !== "card") {
-      throw new Error("Confirmation is used with only card payment method !!");
     }
 
     if (order.orderStatus.status !== "pending") {
@@ -60,6 +57,8 @@ export async function confirmOrder(orderId: string, userId?: string) {
         throw new Error("Error while updating coupon !!");
       }
     }
+
+    revalidateTag(`order-${orderId}`);
 
     await session.commitTransaction();
     session.endSession();

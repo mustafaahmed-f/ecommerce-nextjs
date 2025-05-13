@@ -10,7 +10,7 @@ async function Page({ params }: PageProps) {
   const { id } = await params;
   const token = cookies().get("next_ecommerce_token")?.value;
   const order = await getOrder(id, token);
-  if (order.success && !order.success)
+  if (!order.success)
     return (
       <div className="flex h-full w-full items-center justify-center py-24 text-xl text-red-500">
         <p>{order?.error ?? "Something went wrong"}</p>
