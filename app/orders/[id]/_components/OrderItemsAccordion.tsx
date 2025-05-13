@@ -21,7 +21,12 @@ function OrderItemsAccordion({ order }: OrderItemsAccordionProps) {
         <div className="space-y-4">
           {order.products.map((item: CartProduct, index: number) => (
             <>
-              <ShoppingItem key={item.productID} {...item} isOrdered />
+              <ShoppingItem
+                key={item.productID}
+                {...item}
+                isOrdered
+                orderStatus={order.orderStatus.status}
+              />
               {index === order.products.length - 1 ? null : <hr />}
             </>
           ))}

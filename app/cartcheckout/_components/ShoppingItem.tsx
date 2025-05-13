@@ -1,5 +1,6 @@
 import DeleteProductIcon from "@/app/_icons/DeleteProductIcon";
 import { colorMap } from "@/app/_lib/colorsArray";
+import { orderStatus } from "@/app/_lib/OrderStatus";
 import { CartProduct } from "@/app/cart/_types/CartType";
 import ColorIndicator from "@/app/products/_components/ColorIndicator";
 import Image from "next/image";
@@ -9,6 +10,7 @@ import Swal from "sweetalert2";
 
 interface ShoppingItemProps extends CartProduct {
   isOrdered?: boolean;
+  orderStatus?: keyof typeof orderStatus;
 }
 
 function ShoppingItem({
@@ -20,6 +22,7 @@ function ShoppingItem({
   discount,
   productID,
   isOrdered,
+  orderStatus,
 }: ShoppingItemProps) {
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const router = useRouter();
@@ -85,11 +88,12 @@ function ShoppingItem({
           </p>
         )}
         <p>x{quantity}</p>
-        {isOrdered && (
-          <button onClick={RemoveProduct} className="mt-3 cursor-pointer">
-            <DeleteProductIcon />
-          </button>
-        )}
+        {isOrdered &&
+          (orderStatus === "pending" || orderStatus === "confirmed") && (
+            <button onClick={RemoveProduct} className="mt-3 cursor-pointer">
+              <DeleteProductIcon />
+            </button>
+          )}
       </div>
     </div>
   );
