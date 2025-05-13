@@ -6,7 +6,10 @@ import couponsModel from "@/app/_mongodb/models/couponsModel";
 import orderModel from "@/app/_mongodb/models/orderModel";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import userModel from "@/app/_mongodb/models/userModel";
-import { createOrderSchema } from "@/app/_mongodb/validationSchemas/Orders/AddNewOrderSchema";
+import {
+  createOrderSchema,
+  userInfoSchema,
+} from "@/app/_mongodb/validationSchemas/Orders/AddNewOrderSchema";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -166,7 +169,36 @@ export const PUT = withMiddleWare({
   middleWares: [],
   handler: async (request: NextRequest) => {
     try {
-      return NextResponse.json({ success: true }, { status: 200 });
+      const searchParams = request.nextUrl.searchParams;
+      const orderId = searchParams.get("orderId");
+      const userInfo = await request.json();
+      const userId = await getUserId();
+
+      //// validate data:
+      const validationResult = validateSchema(userInfoSchema, userInfo);
+      if (!validationResult.success) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Validation failed",
+            errors: validationResult.error,
+          },
+          { status: 400 },
+        );
+      }
+
+      const order = await orderModel.findOneAndUpdate(
+        { _id: orderId, userID: userId },
+        { $set: { userInfo } },
+        { new: true },
+      );
+
+      if (!order) {
+        throw new Error("Order not found or failed to update order !!", {
+          cause: 400,
+        });
+      }
+      return NextResponse.json({ success: true, order }, { status: 200 });
     } catch (error: any) {
       return NextResponse.json(
         { success: false, error: error?.message },

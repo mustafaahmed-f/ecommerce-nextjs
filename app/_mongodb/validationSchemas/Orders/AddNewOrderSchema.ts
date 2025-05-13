@@ -14,6 +14,42 @@ const objectIdSchema = z
     message: invalidSchemaFormatMsg("ObjectId", "MongoDB ObjectId format"),
   });
 
+export const userInfoSchema = z.object({
+  phoneNumber1: z
+    .string({ required_error: requiredFieldMsg("Phone Number 1") })
+    .min(5, minLengthMsg(5))
+    .regex(/^\d{11}$/, invalidSchemaFormatMsg("Phone number", "11 digits")),
+  phoneNumber2: z
+    .string()
+    .transform((val) => (val.trim() === "" ? null : val))
+
+    .optional()
+    .nullable()
+    .refine((val) => val === null || /^\d{11}$/.test(val!), {
+      message: invalidSchemaFormatMsg("Phone number", "11 digits"),
+    }),
+  city: z
+    .string({ required_error: requiredFieldMsg("City") })
+    .min(1, minLengthMsg(1)),
+  country: z
+    .string({ required_error: requiredFieldMsg("Country") })
+    .min(1, minLengthMsg(1)),
+  firstName: z
+    .string({ required_error: requiredFieldMsg("First Name") })
+    .min(1, minLengthMsg(1))
+    .trim(),
+  lastName: z
+    .string({ required_error: requiredFieldMsg("Last Name") })
+    .min(1, minLengthMsg(1))
+    .trim(),
+  email: z
+    .string({ required_error: requiredFieldMsg("Email") })
+    .email(invalidSchemaFormatMsg("Email", "Valid email format")),
+  address: z
+    .string({ required_error: requiredFieldMsg("Address") })
+    .min(1, minLengthMsg(1)),
+});
+
 // Main order schema
 export const createOrderSchema = z.object({
   userID: objectIdSchema,
@@ -56,32 +92,7 @@ export const createOrderSchema = z.object({
     .min(1, requiredFieldMsg("Final Paid Amount"))
     .min(0, invalidNumberMsg()),
 
-  userInfo: z.object({
-    phoneNumber1: z
-      .string({ required_error: requiredFieldMsg("Phone Number 1") })
-      .min(5, minLengthMsg(5)),
-    phoneNumber2: z.string().optional().nullable(),
-    city: z
-      .string({ required_error: requiredFieldMsg("City") })
-      .min(1, minLengthMsg(1)),
-    country: z
-      .string({ required_error: requiredFieldMsg("Country") })
-      .min(1, minLengthMsg(1)),
-    firstName: z
-      .string({ required_error: requiredFieldMsg("First Name") })
-      .min(1, minLengthMsg(1))
-      .trim(),
-    lastName: z
-      .string({ required_error: requiredFieldMsg("Last Name") })
-      .min(1, minLengthMsg(1))
-      .trim(),
-    email: z
-      .string({ required_error: requiredFieldMsg("Email") })
-      .email(invalidSchemaFormatMsg("Email", "Valid email format")),
-    address: z
-      .string({ required_error: requiredFieldMsg("Address") })
-      .min(1, minLengthMsg(1)),
-  }),
+  userInfo: userInfoSchema,
 
   paymentMethod: z.enum(["cash", "card"], {
     required_error: requiredFieldMsg("Payment Method"),

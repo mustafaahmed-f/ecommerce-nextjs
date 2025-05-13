@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import OrderItemsAccordion from "./OrderItemsAccordion";
 import CouponApplied from "./CouponApplied";
+import OrderUserInfoAccordion from "./OrderUserInfoAccordion";
 
 interface SingleOrderPageProps {
   order: any;
@@ -24,6 +25,7 @@ type statusColors = {
 
 function SingleOrderPage({ order }: SingleOrderPageProps) {
   const [editOpen, setEditOpen] = useState(false);
+
   const handleEditOpen = () => setEditOpen(true);
   const handleEditClose = () => setEditOpen(false);
   const orderStatus = order.orderStatus.status;
@@ -47,18 +49,6 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
     };
     return colorMap[status];
   };
-
-  function proceedHandler() {
-    console.log("proceed");
-  }
-
-  function handleCancleOrder() {
-    console.log("handleCancleOrder");
-  }
-
-  function handleReturnOrder() {
-    console.log("handleReturnOrder");
-  }
 
   let editFormDefaultValues = {
     userID: order.userID,
@@ -89,8 +79,18 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
     isFromCart: order.isFromCart,
     notes: order.notes,
   };
-  // console.log("Order : ", order);
 
+  function proceedHandler() {
+    console.log("proceed");
+  }
+
+  function handleCancleOrder() {
+    console.log("handleCancleOrder");
+  }
+
+  function handleReturnOrder() {
+    console.log("handleReturnOrder");
+  }
   return (
     <div className={`mx-auto px-4 py-8 sm:px-8`}>
       {/* Header */}
@@ -172,13 +172,18 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
 
         {/* Order Summary Accordion */}
         <OrderSummary order={order} />
+
+        <OrderUserInfoAccordion order={order} />
       </div>
 
       {/* Edit Info Dialog */}
       <Dialog open={editOpen} onClose={handleEditClose} maxWidth="md">
         <div className="px-6 py-6">
           <h2 className="mb-4 text-2xl font-semibold">Edit Shipping Info</h2>
-          <EditOrderForm defaultValues={editFormDefaultValues} />
+          <EditOrderForm
+            defaultValues={editFormDefaultValues}
+            orderId={order._id}
+          />
         </div>
       </Dialog>
     </div>

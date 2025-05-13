@@ -1,13 +1,12 @@
 import { CartProduct } from "@/app/cart/_types/CartType";
+import ShoppingItem from "@/app/cartcheckout/_components/ShoppingItem";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Typography,
 } from "@mui/material";
-import Image from "next/image";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ShoppingItem from "@/app/cartcheckout/_components/ShoppingItem";
 interface OrderItemsAccordionProps {
   order: any;
 }

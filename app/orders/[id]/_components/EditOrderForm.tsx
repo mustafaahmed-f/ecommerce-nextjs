@@ -7,9 +7,15 @@ import { Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { ediFormFieldsObject } from "../_utils/editFormFieldsObject";
+import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
+import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
+import { instance } from "@/app/_lib/axiosInstance";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface EditOrderFormProps {
   defaultValues: defaultValuesType;
+  orderId: string;
 }
 
 //// In this form, we will use the chekcoutFormValidations type because they have common fields
@@ -18,7 +24,9 @@ interface EditOrderFormProps {
 
 export type CheckOutFormValues = yup.InferType<typeof checkOutFormValidations>;
 
-function EditOrderForm({ defaultValues }: EditOrderFormProps) {
+function EditOrderForm({ defaultValues, orderId }: EditOrderFormProps) {
+  const router = useRouter();
+  const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const methods = useForm<CheckOutFormValues>({
     resolver: yupResolver(checkOutFormValidations),
     mode: "onChange",
@@ -34,11 +42,34 @@ function EditOrderForm({ defaultValues }: EditOrderFormProps) {
 
   async function onSubmit(data: CheckOutFormValues) {
     const dataObj = data.userInfo;
+    setIsLoading(true);
+    try {
+      const response = await instance.put(
+        `/api/order?orderId=${orderId}`,
+        dataObj,
+      );
+      if (response.data.success) {
+        SuccessToast.fire({
+          title: "Order edited successfully",
+        });
+      }
+      setIsLoading(false);
+      router.refresh();
+    } catch (error: any) {
+      setIsLoading(false);
+      const errMsg = getAxiosErrMsg(error);
+      ErrorToast.fire({
+        title: errMsg,
+      });
+    }
     console.log(dataObj);
   }
 
   return (
-    <form onSubmit={methods.handleSubmit(onSubmit)}>
+    <form
+      onSubmit={methods.handleSubmit(onSubmit)}
+      className={`${isLoading ? "pointer-events-none opacity-40" : ""}`}
+    >
       <FormProvider value={methods}>
         <section className="w-full px-1 py-5 sm:px-4 md:px-8">
           <FormRenderer fields={ediFormFieldsObject} />
