@@ -19,6 +19,9 @@ function OrderItemsAccordion({ order }: OrderItemsAccordionProps) {
       </AccordionSummary>
       <AccordionDetails>
         <div className="space-y-4">
+          {order.products.length === 0 && (
+            <p className="text-center text-red-600">Order has no products</p>
+          )}
           {order.products.map((item: CartProduct, index: number) => (
             <div key={item.productID}>
               <ShoppingItem

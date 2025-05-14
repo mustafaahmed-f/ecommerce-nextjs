@@ -47,7 +47,7 @@ function ShoppingItem({
           await instance.put(
             `/api/order/removeProduct?orderId=${orderId}&productId=${productID}`,
           );
-          //// Logic here
+
           Swal.fire({
             title: "Removed !",
             text: "Product has been removed successfully !!",

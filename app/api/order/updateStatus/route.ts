@@ -3,6 +3,8 @@ import { validateSchema } from "@/app/_lib/validateSchema";
 import { requiredFieldMsg } from "@/app/_lib/validattionErrorMessages";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
 import orderModel from "@/app/_mongodb/models/orderModel";
+import productsModel from "@/app/_mongodb/models/productsModel";
+import { CartProduct } from "@/app/cart/_types/CartType";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -46,11 +48,11 @@ export const PUT = withMiddleWare({
 
       if (!order) throw new Error("Order not found !!", { cause: 404 });
 
-      //// Cases of change status:
+      //// Cases of change status errors:
       if (
         status === "cancelled" &&
-        (order.orderStatus.status !== "pending" ||
-          order.orderStatus.status !== "confirmed")
+        order.orderStatus.status !== "pending" &&
+        order.orderStatus.status !== "confirmed"
       ) {
         throw new Error("Order can't be cancelled !!", { cause: 400 });
       } else if (
@@ -77,6 +79,23 @@ export const PUT = withMiddleWare({
         });
       } else if (status === "confirmed") {
         throw new Error("Use confirm order api !!", { cause: 400 });
+      }
+
+      //// update products stock:
+      if (status === "cancelled" || status === "returned") {
+        const promiseArr = order.products.map(async (p: CartProduct) => {
+          const product = await productsModel.findOne({
+            productId: p.productID,
+          });
+          if (!product) throw new Error("Product not found !!", { cause: 404 });
+          product.stock += p.quantity;
+          return product.save();
+        });
+
+        await Promise.all(promiseArr);
+        order.products = [];
+        order.subTotal = 0;
+        order.finalPaidAmount = 0;
       }
 
       order.orderStatus.status = status;

@@ -13,6 +13,7 @@ import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
 import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
 import { instance } from "@/app/_lib/axiosInstance";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 interface SingleOrderPageProps {
   order: any;
@@ -121,8 +122,40 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
     }
   }
 
-  function handleCancleOrder() {
-    console.log("handleCancleOrder");
+  async function handleCancleOrder() {
+    Swal.fire({
+      title: "Are you sure you want to cancel order ?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          setIsLoading(true);
+          await instance.put(`/api/order/updateStatus?orderId=${order._id}`, {
+            status: "cancelled",
+          });
+
+          //// Logic here
+          Swal.fire({
+            title: "Removed !",
+            text: "Order has been cancelled !!",
+            icon: "success",
+          });
+          router.refresh();
+          setIsLoading(false);
+        } catch (error: any) {
+          setIsLoading(false);
+          const errMsg = getAxiosErrMsg(error);
+          ErrorToast.fire({
+            title: errMsg,
+          });
+        }
+      }
+    });
   }
 
   //todo : see how return order occurs in real world ecommerces
