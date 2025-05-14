@@ -1,6 +1,7 @@
 import { confirmOrder } from "@/app/_lib/confirmOrder";
 import { getUserId } from "@/app/_lib/getUserId";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export const PUT = withMiddleWare({
@@ -18,7 +19,7 @@ export const PUT = withMiddleWare({
           { status: 500 },
         );
       }
-
+      revalidateTag(`orders-${userId}`);
       return NextResponse.json({
         success: true,
         message: "Order confirmed successfully !",

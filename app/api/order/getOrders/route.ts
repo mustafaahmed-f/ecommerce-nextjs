@@ -13,7 +13,8 @@ export const GET = withMiddleWare({
       const status = searchParams.get("status") || "";
       const userId = await getUserId();
       const filterObj: any = {};
-      if (status) filterObj["orderStatus.status"] = { $eq: status };
+      if (status && status !== "null")
+        filterObj["orderStatus.status"] = { $eq: status };
 
       const orders = await orderModel
         .find({ userID: userId, ...filterObj })

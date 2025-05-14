@@ -4,6 +4,7 @@ import orderModel from "@/app/_mongodb/models/orderModel";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { CartProduct } from "@/app/cart/_types/CartType";
 import mongoose from "mongoose";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export const PUT = withMiddleWare({
@@ -55,6 +56,8 @@ export const PUT = withMiddleWare({
 
       await session.commitTransaction();
       session.endSession();
+
+      revalidateTag(`orders-${userId}`);
       return NextResponse.json(
         { success: true, message: "Product removed from order !!", order },
         { status: 200 },

@@ -1,3 +1,4 @@
+import { getUserId } from "@/app/_lib/getUserId";
 import { orderStatus } from "@/app/_lib/OrderStatus";
 import { validateSchema } from "@/app/_lib/validateSchema";
 import { requiredFieldMsg } from "@/app/_lib/validattionErrorMessages";
@@ -5,6 +6,7 @@ import { withMiddleWare } from "@/app/_lib/withMiddleWare";
 import orderModel from "@/app/_mongodb/models/orderModel";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { CartProduct } from "@/app/cart/_types/CartType";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -15,6 +17,7 @@ export const PUT = withMiddleWare({
     try {
       const searchParams = request.nextUrl.searchParams;
       const orderId = searchParams.get("orderId");
+      const userId = await getUserId();
       const { status }: { status: keyof typeof orderStatus } =
         await request.json();
 
@@ -44,7 +47,7 @@ export const PUT = withMiddleWare({
         );
       }
 
-      const order = await orderModel.findById(orderId);
+      const order = await orderModel.findOne({ _id: orderId, userID: userId });
 
       if (!order) throw new Error("Order not found !!", { cause: 404 });
 
@@ -101,6 +104,8 @@ export const PUT = withMiddleWare({
       order.orderStatus.status = status;
       order.orderStatus.updatedAt = new Date();
       await order.save();
+
+      revalidateTag(`orders-${userId}`);
 
       return NextResponse.json(
         { success: true, message: "Order status updated", order },

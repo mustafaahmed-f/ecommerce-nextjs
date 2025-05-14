@@ -11,6 +11,7 @@ import {
   userInfoSchema,
 } from "@/app/_mongodb/validationSchemas/Orders/AddNewOrderSchema";
 import mongoose from "mongoose";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 //// Get order info
@@ -141,6 +142,8 @@ export const POST = withMiddleWare({
       await session.commitTransaction();
       session.endSession();
 
+      revalidateTag(`orders-${userId}`);
+
       return NextResponse.json(
         {
           success: true,
@@ -163,6 +166,7 @@ export const POST = withMiddleWare({
     }
   },
 });
+
 //// update order
 export const PUT = withMiddleWare({
   applyAuth: true,
@@ -198,6 +202,9 @@ export const PUT = withMiddleWare({
           cause: 400,
         });
       }
+
+      revalidateTag(`orders-${userId}`);
+
       return NextResponse.json({ success: true, order }, { status: 200 });
     } catch (error: any) {
       return NextResponse.json(

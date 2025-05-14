@@ -1,13 +1,26 @@
+import jwt, { JwtPayload } from "jsonwebtoken";
+
 export async function getOrders({
-  page = 1,
+  page = "1",
   status = null,
+  token,
 }: {
-  page: number;
+  page: string;
   status: string | null;
+  token: string;
 }) {
   try {
+    const decoded = jwt.decode(token);
+    const userId = (decoded as JwtPayload)?.id;
+    console.log("userId : ", userId);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/order/getOrders?page=${page}&status=${status}`,
+      {
+        next: { tags: [`orders-${userId}`] },
+        headers: {
+          Cookie: `next_ecommerce_token=${token}`,
+        },
+      },
     );
 
     const finalResponse = await response.json();
