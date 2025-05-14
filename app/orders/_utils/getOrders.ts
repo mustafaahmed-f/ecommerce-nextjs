@@ -26,7 +26,7 @@ export async function getOrders({
     const finalResponse = await response.json();
 
     if (finalResponse.success) {
-      return finalResponse.orders;
+      return finalResponse;
     } else {
       return { success: false, error: finalResponse.error };
     }

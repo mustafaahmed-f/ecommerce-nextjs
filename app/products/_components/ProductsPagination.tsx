@@ -5,18 +5,19 @@ import { Pagination } from "@mui/material";
 
 interface ProductsPaginationProps {
   productsCount: number;
+  size?: number;
 }
 
-function ProductsPagination({ productsCount }: ProductsPaginationProps) {
+function ProductsPagination({ productsCount, size }: ProductsPaginationProps) {
   const { searchParams, pathName, router } = useNextNavigation();
-  let count = Math.ceil(productsCount / 15);
+  let count = Math.ceil(productsCount / (size ?? 15));
   function handlePageChange(e: React.ChangeEvent<unknown>, value: number) {
     let params = new URLSearchParams(searchParams);
     params.set("page", value.toString());
     router.replace(`${pathName}?${params.toString()}`);
   }
   return (
-    <div className="mt-5 mb-3 justify-end flex">
+    <div className="mb-3 mt-5 flex justify-end">
       <Pagination
         count={count}
         defaultPage={parseInt(searchParams.get("page") ?? "1")}

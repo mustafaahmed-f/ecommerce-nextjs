@@ -19,7 +19,7 @@ async function Page(props: PageProps) {
   console.log("status : ", status);
   const token = cookies().get("next_ecommerce_token")?.value;
   const orders = await getOrders({ page, status, token: token! });
-  // console.log("Orders : ", orders);
+
   return <OrdersUI orders={orders} />;
 }
 
