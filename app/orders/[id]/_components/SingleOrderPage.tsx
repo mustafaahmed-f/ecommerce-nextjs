@@ -213,14 +213,11 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
         </div>
       </div>
 
+      {/* Accordions */}
       <div className="space-y-5">
-        {/* Order Items Accordion */}
         <OrderItemsAccordion order={order} />
-
-        {/* Order Summary Accordion */}
-        <OrderSummary order={order} />
-
         <OrderUserInfoAccordion order={order} />
+        <OrderSummary order={order} />
       </div>
 
       {/* Edit Info Dialog */}

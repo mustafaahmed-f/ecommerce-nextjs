@@ -1,6 +1,9 @@
 import DeleteProductIcon from "@/app/_icons/DeleteProductIcon";
+import { instance } from "@/app/_lib/axiosInstance";
 import { colorMap } from "@/app/_lib/colorsArray";
+import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
 import { orderStatus } from "@/app/_lib/OrderStatus";
+import { ErrorToast } from "@/app/_lib/toasts";
 import { CartProduct } from "@/app/cart/_types/CartType";
 import ColorIndicator from "@/app/products/_components/ColorIndicator";
 import Image from "next/image";
@@ -11,6 +14,7 @@ import Swal from "sweetalert2";
 interface ShoppingItemProps extends CartProduct {
   isOrdered?: boolean;
   orderStatus?: keyof typeof orderStatus;
+  orderId?: string;
 }
 
 function ShoppingItem({
@@ -23,6 +27,7 @@ function ShoppingItem({
   productID,
   isOrdered,
   orderStatus,
+  orderId,
 }: ShoppingItemProps) {
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const router = useRouter();
@@ -37,15 +42,28 @@ function ShoppingItem({
       confirmButtonText: "Yes, remove it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        setIsLoading(true);
-        //// Logic here
-        router.refresh();
-        setIsLoading(false);
-        Swal.fire({
-          title: "Removed !",
-          text: "Product has been removed successfully !!",
-          icon: "success",
-        });
+        try {
+          setIsLoading(true);
+          await instance.put(
+            `/api/order/removeProduct?orderId=${orderId}&productId=${productID}`,
+          );
+          //// Logic here
+          Swal.fire({
+            title: "Removed !",
+            text: "Product has been removed successfully !!",
+            icon: "success",
+          });
+          router.refresh();
+          setIsLoading(false);
+        } catch (error) {
+          console.log("Error removing product: ", error);
+          const errMsg = getAxiosErrMsg(error);
+          console.log("Err msg : ", errMsg);
+          ErrorToast.fire({
+            title: errMsg,
+          });
+          setIsLoading(false);
+        }
       }
     });
   }
