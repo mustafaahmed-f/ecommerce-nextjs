@@ -4,7 +4,7 @@ import FormRenderer from "./FormRenderer";
 import { CheckOutFormValues } from "./CheckoutFormTemplate";
 
 interface FormSectionProps {
-  fields: inputFieldType[];
+  fields: inputFieldType<CheckOutFormValues>[];
   title: string;
 }
 
@@ -15,6 +15,7 @@ function FormSection({ fields, title }: FormSectionProps) {
     trigger,
     register,
     formState: { errors },
+    control,
   } = useFormContext();
   return (
     <div>
@@ -26,6 +27,7 @@ function FormSection({ fields, title }: FormSectionProps) {
         trigger={trigger}
         register={register}
         errors={errors}
+        control={control}
       />
     </div>
   );

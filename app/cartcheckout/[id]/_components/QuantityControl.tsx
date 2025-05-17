@@ -1,17 +1,19 @@
-import { useFormContext } from "@/app/_context/FormContext";
 import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 import { IconButton, Stack, TextField } from "@mui/material";
 import { get } from "lodash";
-import { inputFieldType } from "../../_types/inputFieldType";
 import {
   FieldValues,
+  Path,
+  PathValue,
   UseFormRegister,
   UseFormSetValue,
   UseFormTrigger,
   UseFormWatch,
 } from "react-hook-form";
+import { inputFieldType } from "../../_types/inputFieldType";
 
-interface QuantityControlProps<T extends FieldValues> extends inputFieldType {
+interface QuantityControlProps<T extends FieldValues>
+  extends inputFieldType<T> {
   register: UseFormRegister<T>;
   errors: any;
   watch: UseFormWatch<T>;
@@ -22,52 +24,64 @@ interface QuantityControlProps<T extends FieldValues> extends inputFieldType {
 function QuantityControl<T extends FieldValues>({
   name,
   lable,
-  fullWidth,
   required,
   placeholder,
+  register,
+  errors,
+  watch,
+  setValue,
+  trigger,
 }: QuantityControlProps<T>) {
-  const {
-    watch,
-    setValue,
-    trigger,
-    register,
-    formState: { errors },
-  } = useFormContext();
   const errObj = get(errors, name);
   //TODO : check stock before increment or decrement;
+  function set<P extends Path<T>>(path: P, value: PathValue<T, P>) {
+    setValue(path, value);
+  }
 
-  const quantityValue = watch("products.0.quantity");
+  const quantityValue = watch("products.0.quantity" as Path<T>);
 
   function handlePaymentChange(quantity: number) {
     let finalSubTotal =
       quantity *
-      (watch("products.0.unitPaymentPrice") - watch("products.0.discount"));
+      (watch("products.0.unitPaymentPrice" as Path<T>) -
+        watch("products.0.discount" as Path<T>));
     let finalPayment =
-      watch("finalPaidAmount") - watch("subTotal") + finalSubTotal;
-    setValue("subTotal", finalSubTotal);
-    setValue("finalPaidAmount", finalPayment);
-    trigger("subTotal");
-    trigger("finalPaidAmount");
+      watch("finalPaidAmount" as Path<T>) -
+      watch("subTotal" as Path<T>) +
+      finalSubTotal;
+    set("subTotal" as Path<T>, finalSubTotal as PathValue<T, Path<T>>);
+    set("finalPaidAmount" as Path<T>, finalPayment as PathValue<T, Path<T>>);
+    trigger("subTotal" as Path<T>);
+    trigger("finalPaidAmount" as Path<T>);
   }
 
   const handleIncrement = () => {
-    setValue("products.0.quantity", quantityValue + 1);
+    set(
+      "products.0.quantity" as Path<T>,
+      (quantityValue + 1) as PathValue<T, Path<T>>,
+    );
     handlePaymentChange(quantityValue + 1);
-    trigger("products.0.quantity");
+    trigger("products.0.quantity" as Path<T>);
   };
 
   const handleDecrement = () => {
     if (quantityValue === 1) return;
-    setValue("products.0.quantity", quantityValue - 1);
+    set(
+      "products.0.quantity" as Path<T>,
+      (quantityValue - 1) as PathValue<T, Path<T>>,
+    );
     handlePaymentChange(quantityValue - 1);
-    trigger("products.0.quantity");
+    trigger("products.0.quantity" as Path<T>);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === "" || e.target.value === "0") return;
-    setValue("products.0.quantity", parseInt(e.target.value));
+    set(
+      "products.0.quantity" as Path<T>,
+      parseInt(e.target.value) as PathValue<T, Path<T>>,
+    );
     handlePaymentChange(parseInt(e.target.value));
-    trigger("products.0.quantity");
+    trigger("products.0.quantity" as Path<T>);
   };
 
   return (

@@ -12,13 +12,15 @@ import { useQuery } from "@tanstack/react-query";
 import { get } from "lodash";
 import {
   FieldValues,
+  Path,
+  PathValue,
   UseFormRegister,
   UseFormSetValue,
   UseFormTrigger,
   UseFormWatch,
 } from "react-hook-form";
 
-interface DropListFieldProps<T extends FieldValues> extends inputFieldType {
+interface DropListFieldProps<T extends FieldValues> extends inputFieldType<T> {
   register: UseFormRegister<T>;
   errors: any;
   watch: UseFormWatch<T>;
@@ -34,13 +36,11 @@ function DropListField<T extends FieldValues>({
   placeholder,
   dependency,
   optionsMethod,
+  errors,
+  watch,
+  setValue,
+  trigger,
 }: DropListFieldProps<T>) {
-  const {
-    setValue,
-    watch,
-    trigger,
-    formState: { errors },
-  } = useFormContext();
   const { 0: dropListOptions, 1: setDropListOptions } = useState<string[]>([]);
   const dependencyValue = dependency ? watch(dependency) : "";
   const fieldValue = watch(name);
@@ -61,14 +61,14 @@ function DropListField<T extends FieldValues>({
     if (data) {
       setDropListOptions(data);
       if (!data.includes(fieldValue as string)) {
-        setValue(name, ""); // reset to empty if the current value is invalid
+        setValue(name, "" as PathValue<T, typeof name>); // reset to empty if the current value is invalid
         trigger(name);
       }
     }
   }, [data, setDropListOptions, fieldValue, setValue, name, trigger]);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setValue(name, event.target.value as string);
+    setValue(name, event.target.value as PathValue<T, typeof name>);
     trigger(name);
   };
 

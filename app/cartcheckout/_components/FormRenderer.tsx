@@ -1,5 +1,7 @@
 import {
+  Control,
   FieldValues,
+  Path,
   UseFormRegister,
   UseFormSetValue,
   UseFormTrigger,
@@ -12,12 +14,13 @@ import PhoneInputField from "./PhoneInputField";
 import TextInputField from "./TextInputField";
 
 interface FormRendererProps<T extends FieldValues> {
-  fields: inputFieldType[];
+  fields: inputFieldType<T>[];
   register: UseFormRegister<T>;
   errors: any;
   watch: UseFormWatch<T>;
   setValue: UseFormSetValue<T>;
   trigger: UseFormTrigger<T>;
+  control: Control<T>;
 }
 
 function FormRenderer<T extends FieldValues>({
@@ -27,10 +30,11 @@ function FormRenderer<T extends FieldValues>({
   errors,
   setValue,
   register,
+  control,
 }: FormRendererProps<T>) {
   return (
     <div className="grid w-full grid-cols-2 gap-x-2 gap-y-5">
-      {fields.map((field: inputFieldType) => {
+      {fields.map((field: inputFieldType<T>) => {
         switch (field.type) {
           case "dropdown":
             return (
@@ -55,6 +59,7 @@ function FormRenderer<T extends FieldValues>({
                 trigger={trigger}
                 register={register}
                 errors={errors}
+                control={control}
               />
             );
 

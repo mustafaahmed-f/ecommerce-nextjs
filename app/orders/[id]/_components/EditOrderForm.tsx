@@ -1,17 +1,16 @@
-import { FormProvider } from "@/app/_context/FormContext";
+import { instance } from "@/app/_lib/axiosInstance";
+import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
+import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
 import FormRenderer from "@/app/cartcheckout/_components/FormRenderer";
 import { defaultValuesType } from "@/app/cartcheckout/_types/defaultValuesType";
 import { checkOutFormValidations } from "@/app/cartcheckout/_utils/formValidation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { ediFormFieldsObject } from "../_utils/editFormFieldsObject";
-import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
-import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
-import { instance } from "@/app/_lib/axiosInstance";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface EditOrderFormProps {
   defaultValues: defaultValuesType;
@@ -35,9 +34,11 @@ function EditOrderForm({ defaultValues, orderId }: EditOrderFormProps) {
     defaultValues,
   });
   const {
+    setValue,
     watch,
-    formState: { isValid, errors },
-    // getValues,
+    trigger,
+    register,
+    formState: { errors, isValid },
   } = methods;
 
   async function onSubmit(data: CheckOutFormValues) {
@@ -70,16 +71,22 @@ function EditOrderForm({ defaultValues, orderId }: EditOrderFormProps) {
       onSubmit={methods.handleSubmit(onSubmit)}
       className={`${isLoading ? "pointer-events-none opacity-40" : ""}`}
     >
-      <FormProvider value={methods}>
-        <section className="w-full px-1 py-5 sm:px-4 md:px-8">
-          <FormRenderer fields={ediFormFieldsObject} />
-        </section>
-        <div className="mt-5 flex items-center justify-end">
-          <Button variant="outlined" type="submit" disabled={!isValid}>
-            Edit
-          </Button>
-        </div>
-      </FormProvider>
+      <section className="w-full px-1 py-5 sm:px-4 md:px-8">
+        <FormRenderer<CheckOutFormValues>
+          fields={ediFormFieldsObject}
+          watch={watch}
+          setValue={setValue}
+          trigger={trigger}
+          register={register}
+          errors={errors}
+          control={methods.control}
+        />
+      </section>
+      <div className="mt-5 flex items-center justify-end">
+        <Button variant="outlined" type="submit" disabled={!isValid}>
+          Edit
+        </Button>
+      </div>
     </form>
   );
 }

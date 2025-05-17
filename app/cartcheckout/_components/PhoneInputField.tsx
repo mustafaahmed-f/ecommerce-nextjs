@@ -1,6 +1,7 @@
 import { useFormContext } from "@/app/_context/FormContext";
 import { TextField } from "@mui/material";
 import {
+  Control,
   Controller,
   FieldValues,
   UseFormRegister,
@@ -10,12 +11,14 @@ import {
 } from "react-hook-form";
 import { inputFieldType } from "../_types/inputFieldType";
 
-interface PhoneInputFieldProps<T extends FieldValues> extends inputFieldType {
+interface PhoneInputFieldProps<T extends FieldValues>
+  extends inputFieldType<T> {
   register: UseFormRegister<T>;
   errors: any;
   watch: UseFormWatch<T>;
   setValue: UseFormSetValue<T>;
   trigger: UseFormTrigger<T>;
+  control: Control<T>;
 }
 
 function PhoneInputField<T extends FieldValues>({
@@ -24,8 +27,8 @@ function PhoneInputField<T extends FieldValues>({
   fullWidth,
   required,
   placeholder,
+  control,
 }: PhoneInputFieldProps<T>) {
-  const { control } = useFormContext();
   return (
     <Controller
       name={name}

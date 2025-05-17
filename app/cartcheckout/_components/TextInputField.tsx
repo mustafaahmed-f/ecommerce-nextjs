@@ -5,13 +5,14 @@ import { get } from "lodash";
 import { inputFieldType } from "../_types/inputFieldType";
 import {
   FieldValues,
+  PathValue,
   UseFormRegister,
   UseFormSetValue,
   UseFormTrigger,
   UseFormWatch,
 } from "react-hook-form";
 
-interface TextInputFieldProps<T extends FieldValues> extends inputFieldType {
+interface TextInputFieldProps<T extends FieldValues> extends inputFieldType<T> {
   register: UseFormRegister<T>;
   errors: any;
   watch: UseFormWatch<T>;
@@ -25,15 +26,12 @@ function TextInputField<T extends FieldValues>({
   fullWidth,
   required,
   placeholder,
+  register,
+  trigger,
+  setValue,
+  watch,
+  errors,
 }: TextInputFieldProps<T>) {
-  const {
-    formState: { errors },
-    register,
-    trigger,
-    setValue,
-    watch,
-  } = useFormContext();
-
   const errorObj = get(errors, name);
 
   return name !== "userInfo.address" ? (
@@ -69,7 +67,7 @@ function TextInputField<T extends FieldValues>({
         variant="contained"
         onClick={async () => {
           const { address } = await getFullAddress();
-          setValue(name, address);
+          setValue(name, address as PathValue<T, typeof name>);
           trigger(name);
         }}
         sx={{ width: "100%", fontSize: "14px" }}
