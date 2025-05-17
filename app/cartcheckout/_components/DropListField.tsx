@@ -10,10 +10,23 @@ import { useFormContext } from "@/app/_context/FormContext";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { get } from "lodash";
+import {
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormTrigger,
+  UseFormWatch,
+} from "react-hook-form";
 
-interface DropListFieldProps extends inputFieldType {}
+interface DropListFieldProps<T extends FieldValues> extends inputFieldType {
+  register: UseFormRegister<T>;
+  errors: any;
+  watch: UseFormWatch<T>;
+  setValue: UseFormSetValue<T>;
+  trigger: UseFormTrigger<T>;
+}
 
-function DropListField({
+function DropListField<T extends FieldValues>({
   name,
   lable,
   fullWidth,
@@ -21,7 +34,7 @@ function DropListField({
   placeholder,
   dependency,
   optionsMethod,
-}: DropListFieldProps) {
+}: DropListFieldProps<T>) {
   const {
     setValue,
     watch,

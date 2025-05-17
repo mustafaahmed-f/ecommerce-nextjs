@@ -1,29 +1,88 @@
+import {
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormTrigger,
+  UseFormWatch,
+} from "react-hook-form";
 import QuantityControl from "../[id]/_components/QuantityControl";
 import { inputFieldType } from "../_types/inputFieldType";
 import DropListField from "./DropListField";
 import PhoneInputField from "./PhoneInputField";
 import TextInputField from "./TextInputField";
 
-interface FormRendererProps {
+interface FormRendererProps<T extends FieldValues> {
   fields: inputFieldType[];
+  register: UseFormRegister<T>;
+  errors: any;
+  watch: UseFormWatch<T>;
+  setValue: UseFormSetValue<T>;
+  trigger: UseFormTrigger<T>;
 }
 
-function FormRenderer({ fields }: FormRendererProps) {
+function FormRenderer<T extends FieldValues>({
+  fields,
+  watch,
+  trigger,
+  errors,
+  setValue,
+  register,
+}: FormRendererProps<T>) {
   return (
     <div className="grid w-full grid-cols-2 gap-x-2 gap-y-5">
       {fields.map((field: inputFieldType) => {
         switch (field.type) {
           case "dropdown":
-            return <DropListField {...field} key={field.name} />;
+            return (
+              <DropListField<T>
+                {...field}
+                key={field.name}
+                watch={watch}
+                setValue={setValue}
+                trigger={trigger}
+                register={register}
+                errors={errors}
+              />
+            );
 
           case "phone":
-            return <PhoneInputField {...field} key={field.name} />;
+            return (
+              <PhoneInputField<T>
+                {...field}
+                key={field.name}
+                watch={watch}
+                setValue={setValue}
+                trigger={trigger}
+                register={register}
+                errors={errors}
+              />
+            );
 
           case "quantity":
-            return <QuantityControl {...field} key={field.name} />;
+            return (
+              <QuantityControl<T>
+                {...field}
+                key={field.name}
+                watch={watch}
+                setValue={setValue}
+                trigger={trigger}
+                register={register}
+                errors={errors}
+              />
+            );
 
           default:
-            return <TextInputField {...field} key={field.name} />;
+            return (
+              <TextInputField<T>
+                {...field}
+                key={field.name}
+                watch={watch}
+                setValue={setValue}
+                trigger={trigger}
+                register={register}
+                errors={errors}
+              />
+            );
         }
       })}
     </div>

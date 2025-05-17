@@ -3,16 +3,29 @@ import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 import { IconButton, Stack, TextField } from "@mui/material";
 import { get } from "lodash";
 import { inputFieldType } from "../../_types/inputFieldType";
+import {
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormTrigger,
+  UseFormWatch,
+} from "react-hook-form";
 
-interface QuantityControlProps extends inputFieldType {}
+interface QuantityControlProps<T extends FieldValues> extends inputFieldType {
+  register: UseFormRegister<T>;
+  errors: any;
+  watch: UseFormWatch<T>;
+  setValue: UseFormSetValue<T>;
+  trigger: UseFormTrigger<T>;
+}
 
-function QuantityControl({
+function QuantityControl<T extends FieldValues>({
   name,
   lable,
   fullWidth,
   required,
   placeholder,
-}: QuantityControlProps) {
+}: QuantityControlProps<T>) {
   const {
     watch,
     setValue,

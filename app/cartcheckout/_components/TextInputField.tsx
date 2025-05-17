@@ -3,16 +3,29 @@ import { getFullAddress } from "@/app/_lib/getAddress";
 import { Button, TextField } from "@mui/material";
 import { get } from "lodash";
 import { inputFieldType } from "../_types/inputFieldType";
+import {
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormTrigger,
+  UseFormWatch,
+} from "react-hook-form";
 
-interface TextInputFieldProps extends inputFieldType {}
+interface TextInputFieldProps<T extends FieldValues> extends inputFieldType {
+  register: UseFormRegister<T>;
+  errors: any;
+  watch: UseFormWatch<T>;
+  setValue: UseFormSetValue<T>;
+  trigger: UseFormTrigger<T>;
+}
 
-function TextInputField({
+function TextInputField<T extends FieldValues>({
   name,
   lable,
   fullWidth,
   required,
   placeholder,
-}: TextInputFieldProps) {
+}: TextInputFieldProps<T>) {
   const {
     formState: { errors },
     register,

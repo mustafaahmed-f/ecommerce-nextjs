@@ -1,17 +1,30 @@
 import { useFormContext } from "@/app/_context/FormContext";
 import { TextField } from "@mui/material";
-import { Controller } from "react-hook-form";
+import {
+  Controller,
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormTrigger,
+  UseFormWatch,
+} from "react-hook-form";
 import { inputFieldType } from "../_types/inputFieldType";
 
-interface PhoneInputFieldProps extends inputFieldType {}
+interface PhoneInputFieldProps<T extends FieldValues> extends inputFieldType {
+  register: UseFormRegister<T>;
+  errors: any;
+  watch: UseFormWatch<T>;
+  setValue: UseFormSetValue<T>;
+  trigger: UseFormTrigger<T>;
+}
 
-function PhoneInputField({
+function PhoneInputField<T extends FieldValues>({
   name,
   lable,
   fullWidth,
   required,
   placeholder,
-}: PhoneInputFieldProps) {
+}: PhoneInputFieldProps<T>) {
   const { control } = useFormContext();
   return (
     <Controller
