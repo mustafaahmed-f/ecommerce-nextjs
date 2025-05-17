@@ -98,7 +98,7 @@ function ProductInfo({ product }: ProductInfoProps) {
       <div className="mt-6 grid w-full grid-cols-2 gap-2 max-md:text-sm md:gap-3">
         <Link
           href={`/cartcheckout/${product.productId}`}
-          className="flex-1 rounded-lg bg-[#4172DC] py-2 text-center uppercase text-white hover:bg-[#466fc8]"
+          className={`flex-1 rounded-lg bg-[#4172DC] py-2 text-center uppercase text-white hover:bg-[#466fc8] ${stock === 0 ? "pointer-events-none cursor-not-allowed opacity-40" : ""}`}
         >
           Checkout now
         </Link>
