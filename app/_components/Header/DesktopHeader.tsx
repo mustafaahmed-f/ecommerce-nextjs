@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "@/app/_lib/store/store";
 import {
   Avatar,
   Box,
+  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -27,16 +28,29 @@ import { useState } from "react";
 import LogoAndSearch from "./LogoAndSearch";
 import PagesLinks from "./PagesLinks";
 import SocialLinks from "./SocialLinks";
+import { useCategories } from "@/app/_context/CategoriesProvider";
 
 const settings = ["Update Profile", "Logout"];
 
 function DesktopHeader() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl2);
   const { 0: loading, 1: setLoading } = useState<boolean>(false);
   const user = useAppSelector((state) => state.user);
   const cart = useAppSelector((state) => state.cart);
-
+  const { categories } = useCategories();
   const dispatch = useAppDispatch();
+
+  const handleClickCategories = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setAnchorEl2(event.currentTarget);
+  };
+  const handleCloseCategories = () => {
+    setAnchorEl2(null);
+  };
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -79,11 +93,48 @@ function DesktopHeader() {
 
       <div className="grid bg-black py-3 text-white sm:grid-cols-[1fr_1fr] md:grid-cols-[1fr_1fr_1fr]">
         <div className="flex items-center sm:gap-14 sm:px-7 md:gap-24 md:px-20">
-          <div className="flex cursor-pointer gap-2 hover:text-sky-600">
-            <div className="-scale-x-100">
-              <Segment />
-            </div>
-            <p className="font-semibold">Categories</p>
+          <div>
+            <Button
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClickCategories}
+              color="inherit"
+              className="flex cursor-pointer gap-2 text-white hover:text-sky-600"
+            >
+              <div className="-scale-x-100">
+                <Segment />
+              </div>
+              <p className="font-semibold">Categories</p>
+            </Button>
+
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl2}
+              open={open}
+              onClose={handleCloseCategories}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <Link href={`/products`}>
+                <MenuItem
+                  style={{ fontWeight: "bold" }}
+                  className="cursor-pointer text-center font-bold hover:text-sky-600"
+                >
+                  All Categories
+                </MenuItem>
+              </Link>
+              {categories.categories.map((category: string, i: number) => (
+                <Link key={i} href={`/products/${category}`}>
+                  <MenuItem className="cursor-pointer text-center hover:text-sky-600">
+                    {category.substring(0, 1).toUpperCase() +
+                      category.substring(1)}
+                  </MenuItem>
+                </Link>
+              ))}
+            </Menu>
           </div>
 
           {user.email || user.userName ? (
