@@ -29,6 +29,10 @@
   @apply flex h-full w-full flex-col items-center justify-center gap-7 px-4 py-12;
 }
 
+.orders-table-cols {
+  @apply grid grid-cols-6 gap-1 md:gap-2;
+}
+
 .filter-sections:not(:last-child) {
   border-bottom: 1px solid #a5a4a4;
 }

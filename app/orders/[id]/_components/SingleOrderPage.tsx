@@ -14,19 +14,12 @@ import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
 import { instance } from "@/app/_lib/axiosInstance";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import { getChipColors } from "../../_utils/getChipColors";
+import Link from "next/link";
 
 interface SingleOrderPageProps {
   order: any;
 }
-
-type statusColors = {
-  pending: string;
-  confirmed: string;
-  shipped: string;
-  delivered: string;
-  returned: string;
-  cancelled: string;
-};
 
 function SingleOrderPage({ order }: SingleOrderPageProps) {
   const [editOpen, setEditOpen] = useState(false);
@@ -41,18 +34,6 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
   const canCancel = ["pending", "confirmed", "shipped"].includes(orderStatus);
 
   const canReturn = orderStatus === "delivered";
-
-  const getChipColors = (status: keyof statusColors) => {
-    const colorMap = {
-      pending: { bg: "#FEF3C7", border: "#FCD34D", text: "#92400E" }, // yellow
-      confirmed: { bg: "#DBEAFE", border: "#3B82F6", text: "#1E3A8A" }, // blue
-      shipped: { bg: "#EDE9FE", border: "#8B5CF6", text: "#4C1D95" }, // purple
-      delivered: { bg: "#D1FAE5", border: "#10B981", text: "#065F46" }, // green
-      returned: { bg: "#FFEDD5", border: "#FB923C", text: "#7C2D12" }, // orange
-      cancelled: { bg: "#FEE2E2", border: "#EF4444", text: "#7F1D1D" }, // red
-    };
-    return colorMap[status];
-  };
 
   let editFormDefaultValues = {
     userID: order.userID,
@@ -167,8 +148,12 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
     <div
       className={`mx-auto px-4 py-8 sm:px-8 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
     >
+      <Link href="/orders" className="underline">
+        {"← "}
+        back
+      </Link>
       {/* Header */}
-      <div className="mb-14 flex flex-col justify-between gap-4 border-b pb-4 md:flex-row md:items-center">
+      <div className="mb-14 mt-5 flex flex-col justify-between gap-4 border-b pb-4 md:flex-row md:items-center">
         {/* Left Side: ID, Status Chip, and Dates */}
         <div>
           <div className="flex items-center gap-2">
