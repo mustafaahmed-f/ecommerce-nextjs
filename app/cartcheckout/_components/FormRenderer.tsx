@@ -86,6 +86,7 @@ function FormRenderer<T extends FieldValues>({
                 trigger={trigger}
                 register={register}
                 errors={errors}
+                isPassword={field.type === "password"}
               />
             );
         }

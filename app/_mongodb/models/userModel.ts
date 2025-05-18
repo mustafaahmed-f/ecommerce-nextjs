@@ -55,20 +55,20 @@ const userSchema = new Schema(
       required: false,
     },
     address: {
-      unit_number: { type: String, default: "0" },
-      street_number: { type: String, default: "0" },
-      address_line1: { type: String, default: "" },
-      address_line2: { type: String, default: "" }, //For more address details like (dep. num. , building num , PO box num , etc...)
-      city: { type: String, default: "" },
-      country: { type: String, default: "" },
+      unit_number: { type: Number, default: null },
+      street_number: { type: Number, default: null },
+      address_line1: { type: String, default: null },
+      address_line2: { type: String, default: null }, //For more address details like (dep. num. , building num , PO box num , etc...)
+      city: { type: String, default: null },
+      country: { type: String, default: null },
       geolocation: {
         lat: {
-          type: String,
-          default: "0",
+          type: Number,
+          default: null,
         },
         long: {
-          type: String,
-          default: "0",
+          type: Number,
+          default: null,
         },
       },
     },
@@ -77,14 +77,14 @@ const userSchema = new Schema(
     timestamps: true,
     toJSON: { virtuals: true }, //This causes an additional id field to appear in the response body.
     toObject: { virtuals: true },
-  }
+  },
 );
 
 userSchema.pre("save", function () {
   if (this.password !== "")
     this.password = bcrypt.hashSync(
       this.password!,
-      parseInt(process.env.SALT_ROUND as string)
+      parseInt(process.env.SALT_ROUND as string),
     );
 });
 

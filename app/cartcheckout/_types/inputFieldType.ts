@@ -1,8 +1,7 @@
 import { FieldValues, Path } from "react-hook-form";
-import { CheckOutFormValues } from "../_components/CheckoutFormTemplate";
 
 export interface inputFieldType<T extends FieldValues> {
-  type: "email" | "text" | "phone" | "dropdown" | "quantity";
+  type: "email" | "text" | "phone" | "dropdown" | "quantity" | "password";
   name: Path<T>;
   lable: string;
   fullWidth: boolean;

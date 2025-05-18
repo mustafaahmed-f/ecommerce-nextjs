@@ -1,13 +1,17 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
-import { UseFormSetValue } from "react-hook-form";
+import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { match } from "ts-pattern";
+import { SignUpFormValues } from "./SignUpStepper";
 interface props {
   setValue: UseFormSetValue<any>;
   onUploadComplete: (uploaded: boolean) => void;
   file: any;
   setFile: (file: any) => void;
   trigger: (s: string) => Promise<boolean>;
+  watch: UseFormWatch<SignUpFormValues>;
+  url: string;
+  setUrl: (url: string) => void;
 }
 
 const ImageUploader = ({
@@ -16,10 +20,12 @@ const ImageUploader = ({
   file,
   setFile,
   trigger,
+  watch,
+  url,
+  setUrl,
 }: props) => {
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
-  const [url, setUrl] = useState("");
 
   const handleFileChange = (event: any) => {
     setFile(event.target.files[0]);
@@ -51,7 +57,7 @@ const ImageUploader = ({
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_PINATA_JWT}`,
           },
           body: formData,
-        }
+        },
       );
       const response = await request.json();
       const url = `https://gateway.pinata.cloud/ipfs/${response.IpfsHash}`;
@@ -93,7 +99,9 @@ const ImageUploader = ({
           .with(true, () => "Uploading...")
           .otherwise(() => "Upload Image")}
       </Button>
-      {message && <p className="text-green-400">{message}</p>}
+      {message && watch("profileImage") && (
+        <p className="text-green-400">{message}</p>
+      )}
     </div>
   );
 };

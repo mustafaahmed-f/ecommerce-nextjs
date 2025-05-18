@@ -57,21 +57,31 @@ const generalValidations = {
   address: yup
     .object()
     .shape({
-      unit_number: yup.number().optional(),
-      street_number: yup.number().optional(),
+      unit_number: yup.number().optional().nullable(),
+      street_number: yup.number().optional().nullable(),
       address_line1: yup
         .string()
         .max(100, "Max. length 100 for address line 1")
-        .optional(),
+        .optional()
+        .nullable(),
       address_line2: yup
         .string()
         .max(100, "Max. length 100 for address line 2")
-        .optional(),
-      city: yup.string().max(50, "Max. length 50 for city").optional(),
-      country: yup.string().max(50, "Max. length 50 for country").optional(),
+        .optional()
+        .nullable(),
+      city: yup
+        .string()
+        .max(50, "Max. length 50 for city")
+        .optional()
+        .nullable(),
+      country: yup
+        .string()
+        .max(50, "Max. length 50 for country")
+        .optional()
+        .nullable(),
       geolocation: yup.object().shape({
-        lat: yup.number().optional(),
-        long: yup.number().optional(),
+        lat: yup.number().optional().nullable(),
+        long: yup.number().optional().nullable(),
       }),
     })
     .optional(),

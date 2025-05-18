@@ -1,53 +1,43 @@
 "use client";
-import * as React from "react";
+import { signUpSystemAction } from "@/app/_actions/authActions";
+import SnackBar from "@/app/_components/SnackBar";
+import { signupValidations } from "@/app/_lib/validationSchemas/signUpValidations";
+import FormRenderer from "@/app/cartcheckout/_components/FormRenderer";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Alert } from "@mui/material";
 import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
+import Button from "@mui/material/Button";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
+import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import { signupValidations } from "@/app/_lib/validationSchemas/signUpValidations";
-import * as Yup from "yup";
 import Link from "next/link";
-import { Alert } from "@mui/material";
-import { signUpSystemAction } from "@/app/_actions/authActions";
-import StepFields from "./StepFields";
-import SnackBar from "@/app/_components/SnackBar";
+import * as React from "react";
+import { useForm } from "react-hook-form";
 import { match } from "ts-pattern";
+import * as Yup from "yup";
+import { signupDefaultValues } from "../_utils/signUpDefaultValues";
+import {
+  signupStep1Fields,
+  signupStep2Fields,
+} from "../_utils/signUpFieldsObjects";
 import ImageUploader from "./ImageUploader";
+import { getFullAddress } from "@/app/_lib/getAddress";
 
 const steps = ["Basic info", "Add address", "Upload profile image"];
-const firstStep = [
-  { field: "userName", label: "Username" },
-  { field: "firstName", label: "First Name" },
-  { field: "lastName", label: "Last Name" },
-  { field: "email", label: "Email" },
-  { field: "password", label: "Password" },
-  { field: "rePassword", label: "Re-Password" },
-  { field: "phoneNumber", label: "Phone Number" },
-];
-const secondStep = [
-  { field: "address.unit_number", label: "Unit Number" },
-  { field: "address.street_number", label: "Street Number" },
-  { field: "address.address_line1", label: "Address Line 1" },
-  { field: "address.address_line2", label: "Address Line 2" },
-  { field: "address.city", label: "City" },
-  { field: "address.country", label: "Country" },
-  { field: "address.geolocation.lat", label: "Latitude" },
-  { field: "address.geolocation.long", label: "Longitude" },
-];
 
-const stepFields = {
-  0: firstStep.map((field) => field.field),
-  1: secondStep.map((field) => field.field),
+const stepFields: Record<number, string[]> = {
+  0: signupStep1Fields.map((f) => f.name),
+  1: signupStep2Fields.map((f) => f.name),
 };
+
+const mySchema: Yup.ObjectSchema<any> = signupValidations;
+export type SignUpFormValues = Yup.InferType<typeof mySchema>;
 
 export default function SignUpStepper() {
   const { 0: file, 1: setFile } = React.useState<null | File>(null);
   const { 0: alertMessage, 1: setAlertMessage } = React.useState<string | null>(
-    null
+    null,
   );
   const { 0: isError, 1: setIsError } = React.useState<boolean>(false);
   const { 0: isLoading, 1: setIsLoading } = React.useState<boolean>(false);
@@ -55,20 +45,23 @@ export default function SignUpStepper() {
   const { 0: skipped, 1: setSkipped } = React.useState(new Set<number>());
   const { 0: onUploadComplete, 1: setOnUploadComplete } = React.useState(false);
 
-  const mySchema: Yup.ObjectSchema<any> = signupValidations;
-
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
+    control,
     trigger,
     formState: { errors, isValid },
-  } = useForm<{ [key: string]: any }>({
+  } = useForm<SignUpFormValues>({
     resolver: yupResolver(mySchema),
     mode: "onChange",
     reValidateMode: "onChange",
     criteriaMode: "firstError",
+    defaultValues: signupDefaultValues,
   });
+
+  const [url, setUrl] = React.useState(watch("profileImage"));
 
   const isStepOptional = (step: number) => {
     return step === 1;
@@ -80,7 +73,7 @@ export default function SignUpStepper() {
 
   const handleNext = async () => {
     const isValid = await trigger(
-      (stepFields as { [key: number]: any })[activeStep]
+      (stepFields as { [key: number]: any })[activeStep],
     );
     if (!isValid) return;
     let newSkipped = skipped;
@@ -145,6 +138,19 @@ export default function SignUpStepper() {
     }
   }
 
+  async function handleGetAddress() {
+    const { city, countryName, latitude, longitude, address } =
+      await getFullAddress();
+
+    if (setValue) {
+      setValue("address.address_line1", address);
+      setValue("address.city", city);
+      setValue("address.country", countryName);
+      setValue("address.geolocation.lat", latitude);
+      setValue("address.geolocation.long", longitude);
+    }
+  }
+
   return (
     <Box sx={{ width: "100%" }}>
       {!isLoading && alertMessage && isError && (
@@ -179,7 +185,7 @@ export default function SignUpStepper() {
             variant="filled"
             className="my-6"
           >
-            Signed up and uploaded profile image successfully
+            Signed up successfully !!
           </Alert>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
@@ -190,32 +196,52 @@ export default function SignUpStepper() {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <form onSubmit={handleSubmit(handleSubmitFn)}>
+          <form onSubmit={handleSubmit(handleSubmitFn)} className="my-5">
             {activeStep === 0 && (
-              <StepFields
-                fields={firstStep}
+              <FormRenderer<SignUpFormValues>
+                fields={signupStep1Fields}
+                watch={watch}
+                setValue={setValue}
+                trigger={trigger}
                 register={register}
                 errors={errors}
-                isRequired={true}
+                control={control}
               />
             )}
             {activeStep === 1 && (
-              <StepFields
-                setAddress
-                setValue={setValue}
-                fields={secondStep}
-                register={register}
-                errors={errors}
-              />
+              <>
+                <div className="mb-5 mt-2 w-full text-center">
+                  <Button
+                    color="inherit"
+                    variant="outlined"
+                    onClick={handleGetAddress}
+                    className="mt-5"
+                  >
+                    Get your address
+                  </Button>
+                </div>
+                <FormRenderer<SignUpFormValues>
+                  fields={signupStep2Fields}
+                  watch={watch}
+                  setValue={setValue}
+                  trigger={trigger}
+                  register={register}
+                  errors={errors}
+                  control={control}
+                />
+              </>
             )}
             {activeStep === 2 && (
               <div className="my-3">
                 <ImageUploader
+                  watch={watch}
                   trigger={trigger}
                   setValue={setValue}
                   onUploadComplete={setOnUploadComplete}
                   file={file}
                   setFile={setFile}
+                  url={url}
+                  setUrl={setUrl}
                 />
               </div>
             )}
@@ -260,7 +286,7 @@ export default function SignUpStepper() {
               )}
             </Box>
           </form>
-          <div className="w-full my-6 text-center">
+          <div className="my-6 w-full text-center">
             <Button variant="contained" color="inherit">
               <Link href={"/login"}>Already have account ?</Link>
             </Button>
