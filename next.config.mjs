@@ -6,16 +6,13 @@ const nextConfig = {
         protocol: "https",
         hostname: "storage.googleapis.com",
       },
+      {
+        protocol: "https",
+        hostname: "gateway.pinata.cloud",
+      },
     ],
+    // domains: ["gateway.pinata.cloud"],
   },
-  // async headers() {
-  //   return [
-  //     {
-  //       source: "/api/:path*",
-  //       headers: [{ key: "Content-Encoding", value: "gzip" }],
-  //     },
-  //   ];
-  // },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.optimization.minimize = true;

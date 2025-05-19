@@ -3,11 +3,12 @@ import { useState } from "react";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { match } from "ts-pattern";
 import { SignUpFormValues } from "./SignUpStepper";
+import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
+import Image from "next/image";
+import DeleteProductIcon from "@/app/_icons/DeleteProductIcon";
 interface props {
   setValue: UseFormSetValue<any>;
   onUploadComplete: (uploaded: boolean) => void;
-  file: any;
-  setFile: (file: any) => void;
   trigger: (s: string) => Promise<boolean>;
   watch: UseFormWatch<SignUpFormValues>;
   url: string;
@@ -17,15 +18,15 @@ interface props {
 const ImageUploader = ({
   setValue,
   onUploadComplete,
-  file,
-  setFile,
   trigger,
   watch,
   url,
   setUrl,
 }: props) => {
+  const { 0: file, 1: setFile } = useState<null | File>(null);
   const [uploading, setUploading] = useState(false);
-  const [message, setMessage] = useState("");
+
+  const isFileUploaded = watch("profileImage");
 
   const handleFileChange = (event: any) => {
     setFile(event.target.files[0]);
@@ -37,10 +38,12 @@ const ImageUploader = ({
       const formData = new FormData();
 
       // const file = new File(["hello"], "Testing.txt", { type: "text/plain" });
-      formData.append("file", file);
+      if (file) {
+        formData.append("file", file);
+      }
 
       const pinataMetadata = JSON.stringify({
-        name: file.name,
+        name: `${file?.name}_${Date.now()}_${watch("userName")}`,
       });
       formData.append("pinataMetadata", pinataMetadata);
 
@@ -63,17 +66,22 @@ const ImageUploader = ({
       const url = `https://gateway.pinata.cloud/ipfs/${response.IpfsHash}`;
       console.log(url);
       setUrl(url);
-      setMessage("File uploaded successfully");
+      SuccessToast.fire({
+        title: "Image uploaded successfully",
+      });
       setUploading(false);
       onUploadComplete(true);
       setValue("profileImage", url);
       setValue("cid", response.IpfsHash);
       await trigger("profileImage");
+      await trigger("cid");
       // console.log(response);
     } catch (error) {
       console.log(error);
       setUploading(false);
-      setMessage("Trouble uploading file");
+      ErrorToast.fire({
+        title: "Error uploading image",
+      });
     }
   }
 
@@ -85,7 +93,42 @@ const ImageUploader = ({
     await pinFileToIPFS();
   };
 
-  return (
+  async function handleRemoveImage() {
+    try {
+      const response = await fetch(
+        `https://api.pinata.cloud/pinning/unpin/${watch("cid")}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_PINATA_JWT}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to unpin file");
+      }
+
+      SuccessToast.fire({
+        title: "Image removed successfully",
+      });
+
+      setUrl("");
+      onUploadComplete(false);
+      setValue("profileImage", "");
+      setValue("cid", "");
+      setFile(null);
+      await trigger("profileImage");
+      await trigger("cid");
+    } catch (error) {
+      console.error("Error unpinning file:", error);
+      ErrorToast.fire({
+        title: "Error removing image",
+      });
+    }
+  }
+
+  return !isFileUploaded ? (
     <div className="flex flex-col gap-2">
       <input type="file" onChange={(e) => handleFileChange(e)} />
       <Button
@@ -99,9 +142,16 @@ const ImageUploader = ({
           .with(true, () => "Uploading...")
           .otherwise(() => "Upload Image")}
       </Button>
-      {message && watch("profileImage") && (
-        <p className="text-green-400">{message}</p>
-      )}
+    </div>
+  ) : (
+    <div className="flex flex-row gap-7 max-sm:flex-col max-sm:gap-4">
+      <div className="flex items-center gap-2">
+        <Image width={50} height={50} src={url} alt="profile image" />
+        <p>✅ Image uploaded successfully</p>
+      </div>
+      <button onClick={handleRemoveImage} type="button" title="Remove img">
+        <DeleteProductIcon />
+      </button>
     </div>
   );
 };

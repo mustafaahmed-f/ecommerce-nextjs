@@ -35,7 +35,6 @@ const mySchema: Yup.ObjectSchema<any> = signupValidations;
 export type SignUpFormValues = Yup.InferType<typeof mySchema>;
 
 export default function SignUpStepper() {
-  const { 0: file, 1: setFile } = React.useState<null | File>(null);
   const { 0: alertMessage, 1: setAlertMessage } = React.useState<string | null>(
     null,
   );
@@ -131,7 +130,6 @@ export default function SignUpStepper() {
       setIsLoading(false);
       setAlertMessage("An unexpected error occurred. Please try again.");
       setIsError(true);
-      setFile(null);
       console.log(error);
     } finally {
       setIsLoading(false);
@@ -238,8 +236,6 @@ export default function SignUpStepper() {
                   trigger={trigger}
                   setValue={setValue}
                   onUploadComplete={setOnUploadComplete}
-                  file={file}
-                  setFile={setFile}
                   url={url}
                   setUrl={setUrl}
                 />
