@@ -78,8 +78,8 @@ function AuthForm({
   async function handleSubmitFn(data: any) {
     try {
       setIsLoading(true);
-      setAlertMessage("");
-      setIsError(false);
+      // setAlertMessage("");
+      // setIsError(false);
 
       const routeResponse = await instance.post("api/login", data, {
         headers: {

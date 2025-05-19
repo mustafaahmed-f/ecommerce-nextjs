@@ -1,9 +1,23 @@
+"use client";
+
+import { yupResolver } from "@hookform/resolvers/yup";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import AuthForm from "../_components/Auth/AuthForm";
-
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { loginValidations } from "../_lib/validationSchemas/logInValidations";
+import FormRenderer from "../cartcheckout/_components/FormRenderer";
+import { logInDefaultValues } from "./_utils/logInDefaultValues";
+import { logInFieldsObject } from "./_utils/logInFieldsObject";
+import GoogleLogInBtn from "../_components/GoogleLogInBtn";
+import Link from "next/link";
+import { useState } from "react";
+import { getAxiosErrMsg } from "../_lib/getAxiosErrMsg";
+import { ErrorToast, SuccessToast } from "../_lib/toasts";
+import { useSearchParams } from "next/navigation";
+import { instance } from "../_lib/axiosInstance";
 interface PageProps {}
 
 const mainPragraphs = [
@@ -13,14 +27,66 @@ const mainPragraphs = [
   "Your satisfaction is our priority. We offer a hassle-free return policy and dedicated support to make your shopping experience stress-free and enjoyable.",
 ];
 
+export type logInFormValues = yup.InferType<typeof loginValidations>;
+
 function Page({}: PageProps) {
-  const fieldsArr = [
-    { field: "email", label: "Email" },
-    { field: "password", label: "Password" },
-  ];
+  const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
+  const searchParams = useSearchParams();
+  const redirectURL = searchParams.get("redirectto") || "/";
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    control,
+    trigger,
+    formState: { errors, isValid },
+  } = useForm<logInFormValues>({
+    resolver: yupResolver(loginValidations),
+    mode: "onChange",
+    reValidateMode: "onChange",
+    criteriaMode: "firstError",
+    defaultValues: logInDefaultValues,
+  });
+
+  async function handleSubmitFn(data: any) {
+    try {
+      setIsLoading(true);
+      // setAlertMessage("");
+      // setIsError(false);
+
+      const routeResponse = await instance.post("api/login", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      if (routeResponse.status !== 200) {
+        ErrorToast.fire({
+          title: routeResponse.data.error || "Server error",
+        });
+        setIsLoading(false);
+      } else {
+        SuccessToast.fire({
+          title: "Logged in successfully!",
+        });
+        setIsLoading(false);
+        setTimeout(() => {
+          window.location.href = redirectURL;
+        }, 2000);
+      }
+    } catch (error: any) {
+      const errMsg = getAxiosErrMsg(error);
+      ErrorToast.fire({
+        title: errMsg,
+      });
+      setIsLoading(false);
+    }
+  }
 
   return (
-    <div className="mt-10 flex items-center justify-center gap-3 px-12">
+    <div className="mt-10 flex w-full items-center justify-center gap-3 px-6 max-sm:mb-10 sm:px-12">
       <div className="hidden w-1/2 p-4 sm:flex-col sm:items-center md:flex">
         <h2 className="mb-3 text-center text-3xl font-bold">
           Log in and get started with the best shopping experience
@@ -38,20 +104,36 @@ function Page({}: PageProps) {
           </div>
         ))}
       </div>
-      <div className="flex w-full flex-col justify-center bg-primary-200 px-2 py-5 sm:px-3 md:w-1/2">
-        <div className="my-auto rounded-md bg-white bg-opacity-90 px-9 py-9 opacity-80 backdrop-blur-xl lg:py-10">
+      <div
+        className={`${isLoading ? "pointer-events-none opacity-40" : ""} mx-auto flex max-w-96 flex-col justify-center rounded-md bg-primary-200 px-2 py-3 sm:px-3 md:w-1/2 md:px-4 md:py-5`}
+      >
+        <div className="my-auto rounded-md bg-white bg-opacity-90 px-4 py-7 opacity-80 backdrop-blur-xl md:px-7 md:py-10">
           <h2 className="mb-10 text-3xl font-semibold lg:text-4xl">Sign in</h2>
 
-          <AuthForm
-            fields={fieldsArr}
-            purpose={"Sign in"}
-            extraField={"Dont' have acccount ?"}
-            extraLink="/signup"
-            defaultValues={{
-              email: "mustafafikry97@gmail.com",
-              password: "Aaaa@123",
-            }}
-          />
+          <form onSubmit={handleSubmit(handleSubmitFn)} className="mb-3 mt-5">
+            <FormRenderer<logInFormValues>
+              fields={logInFieldsObject}
+              control={control}
+              errors={errors}
+              watch={watch}
+              setValue={setValue}
+              trigger={trigger}
+              register={register}
+            />
+            <button
+              disabled={!isValid}
+              type="submit"
+              className="mt-3 w-full rounded-md bg-primary-400 py-3 text-lg font-semibold text-white hover:bg-primary-500"
+            >
+              {isLoading ? "Logging in..." : "Log in"}
+            </button>
+          </form>
+          <GoogleLogInBtn />
+          <Link href="/signup">
+            <p className="mt-3 text-center text-sm hover:text-sky-600">
+              Don&apos;t have an account ? Sign up
+            </p>
+          </Link>
         </div>
       </div>
     </div>

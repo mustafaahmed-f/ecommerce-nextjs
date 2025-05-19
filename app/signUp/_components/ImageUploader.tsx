@@ -1,11 +1,11 @@
+import DeleteProductIcon from "@/app/_icons/DeleteProductIcon";
+import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
 import { Button } from "@mui/material";
+import Image from "next/image";
 import { useState } from "react";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { match } from "ts-pattern";
 import { SignUpFormValues } from "./SignUpStepper";
-import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
-import Image from "next/image";
-import DeleteProductIcon from "@/app/_icons/DeleteProductIcon";
 interface props {
   setValue: UseFormSetValue<any>;
   onUploadComplete: (uploaded: boolean) => void;

@@ -171,7 +171,7 @@ function DesktopHeader() {
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
-                    alt="Remy Sharp"
+                    alt={user.firstName}
                     src={user.profileImage || "icons8-male-user-40.png"}
                     sx={{ width: 23, height: 23 }}
                   />
