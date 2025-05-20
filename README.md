@@ -17,7 +17,6 @@ A modern e-commerce platform built with Next.js, TypeScript, MongoDB, Redis, and
 - [Project Structure](#project-structure)
 - [API Routes](#api-routes)
 - [Database Schema](#database-schema)
-- [API Documentation](#api-documentation)
 - [Deployment](#deployment)
 
 ## Overview
@@ -207,9 +206,7 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
     └── [id]/         # CRUD operations for user profiles
 ```
 
-## API Documentation
-
-API documentation is available at `/api/docs`.
+## Database Schema
 
 ## Deployment
 
