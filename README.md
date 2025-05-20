@@ -208,6 +208,11 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
 
 ## Database Schema
 
+<img
+        src="https://res.cloudinary.com/dvvmu40wx/image/upload/v1747771322/Public%20images/Next.js_Ecommerce_DB_diagram_ujcimn.png"
+        alt="E-commerce DB Design"
+/>
+
 ## Deployment
 
 Live demo: [Luminae Store](https://luminae-store.vercel.app)
