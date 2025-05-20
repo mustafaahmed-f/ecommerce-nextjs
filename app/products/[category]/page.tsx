@@ -1,4 +1,4 @@
-import { getCategories } from "@/app/_lib/APIs/categoriesAPIs";
+import { getCategoriesFromDB } from "@/app/_lib/APIs/categoriesAPIs";
 import { getAllProducts } from "@/app/_lib/APIs/productsAPIs";
 import ProductsPage from "../_components/ProductsPage";
 
@@ -18,19 +18,12 @@ interface pageProps {
 export const revalidate = 3600 * 24;
 
 export async function generateStaticParams() {
-  const categories = await getCategories();
+  const categories = await getCategoriesFromDB();
   // console.log("Categories : ", categories);
-  return categories.categories.map((category: string) => ({
+  return categories.map((category: string) => ({
     params: category,
   }));
 }
-
-// export async function generateStaticParams() {
-//   const categories = await getCategories();
-//   return categories.categories.map((category: any) => ({
-//     category: category.title, // ✅ No extra "params" key
-//   }));
-// }
 
 async function page(props: pageProps) {
   const searchParams = await props.searchParams;

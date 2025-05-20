@@ -31,6 +31,7 @@ const productSchema = new Schema(
     category: { type: String, required: true },
     discount: { type: Number, default: 0 },
     stock: { type: Number, default: 10 }, // Default stock value
+    sold: { type: Number, default: 0 },
     rating: { type: Number, default: 0 },
     reviews: { type: [reviewSchema], default: [] },
   },

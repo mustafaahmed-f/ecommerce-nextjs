@@ -7,13 +7,6 @@ const uri = process.env.MONGODB_URI as string;
 const connectDB = async () => {
   if (mongoose.connections[0].readyState) {
     console.log("MongoDB Already connected");
-    // await fetchProductsFromAPI();
-    // await fetchCategoriesFromAPI();
-    // await addSizeToProducts();
-    // await addBrandsAndModelsToDB();
-    // await addRatingToProducts();
-    // await addReviewsToProducts();
-    // await addDifferentPropertiesToProducts();
     return true;
   }
 

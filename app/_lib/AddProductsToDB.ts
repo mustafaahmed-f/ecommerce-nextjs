@@ -1,5 +1,6 @@
 //// These are methods to get categories and products from fake store API and add them to our DB:
 
+import connectDB from "../_mongodb/dbConnect";
 import categoriesModel from "../_mongodb/models/categoriesModel";
 import productsModel from "../_mongodb/models/productsModel";
 import { getCategories } from "./APIs/categoriesAPIs";
@@ -96,6 +97,7 @@ export async function fetchCategoriesFromAPI() {
 
 export async function addDifferentPropertiesToProducts() {
   try {
+    await connectDB();
     const categories = await categoriesModel.find();
     const updatedPromises = categories.map(async (category) => {
       const products = await productsModel.find({ category: category.title });
@@ -173,3 +175,26 @@ export async function addDifferentPropertiesToProducts() {
 //     console.log("Error adding reviews to products: ", error);
 //   }
 // }
+
+export async function addSoldPropertyToProducts() {
+  try {
+    const products = await productsModel.find();
+    if (!products || !products.length) throw new Error("No products found");
+    // for (let product of products) {
+    //   const soldCount = Math.floor(Math.random() * 100);
+    //   product.sold = soldCount;
+    //   await product.save();
+    // }
+
+    const updatedProductsArr = products.map((product) => {
+      const soldCount = Math.floor(Math.random() * 100);
+      product.sold = soldCount;
+      return product.save();
+    });
+
+    await Promise.all(updatedProductsArr);
+    console.log("✅ Sold property successfully added to MongoDB");
+  } catch (error) {
+    console.log("Error adding sold property to products: ", error);
+  }
+}

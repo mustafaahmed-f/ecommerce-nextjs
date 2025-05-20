@@ -1,7 +1,8 @@
 import { getCities, getCountries } from "@/app/_lib/APIs/CountriesAndCitiesAPI";
+import { CheckOutFormValues } from "@/app/cartcheckout/_components/CheckoutFormTemplate";
 import { inputFieldType } from "@/app/cartcheckout/_types/inputFieldType";
 
-export const ediFormFieldsObject: inputFieldType[] = [
+export const ediFormFieldsObject: inputFieldType<CheckOutFormValues>[] = [
   {
     type: "email",
     name: "userInfo.email",

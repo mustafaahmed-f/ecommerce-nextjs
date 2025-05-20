@@ -1,3 +1,6 @@
+import connectDB from "@/app/_mongodb/dbConnect";
+import categoriesModel from "@/app/_mongodb/models/categoriesModel";
+
 export async function getCategories() {
   // const response = await instance.get("/api/categories");
   const response = await fetch(`${process.env.NEXTAUTH_URL}/api/categories`, {
@@ -9,13 +12,8 @@ export async function getCategories() {
   return response.json();
 }
 
-// export async function getProductsByCategories(category: string) {
-//   const response = await fetch(
-//     `https://fakestoreapi.in/api/products/category?type=${category}`
-//   );
-
-//   if (!response.ok)
-//     throw new Error(`Couldn't get products of category ${category} !!`);
-
-//   return response.json();
-// }
+export async function getCategoriesFromDB() {
+  await connectDB();
+  const categories = await categoriesModel.find({}, "title"); // fetch only titles
+  return categories.map((category) => category.title);
+}

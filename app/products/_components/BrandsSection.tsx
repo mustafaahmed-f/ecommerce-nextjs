@@ -6,7 +6,6 @@ interface BrandsSectionProps {
 }
 
 function BrandsSection({ brands }: BrandsSectionProps) {
-  // const brands: { success: boolean; brands: string[] } = await getBrands();
   return <BrandsSectionClients brands={brands} />;
 }
 
