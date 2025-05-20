@@ -1,10 +1,9 @@
 "use client";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ICart } from "../cart/_types/CartType";
-import { storeCart } from "../_lib/store/slices/cartSlice/cartSlice";
 import Swal from "sweetalert2";
-import { ErrorToast } from "../_lib/toasts";
+import { storeCart } from "../_lib/store/slices/cartSlice/cartSlice";
+import { ICart } from "../cart/_types/CartType";
 
 interface initialStateType {
   cart: ICart;

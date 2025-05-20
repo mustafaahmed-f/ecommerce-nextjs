@@ -28,11 +28,11 @@ async function InitialDataProvider({
     Cookie: cookieStore.toString(), // this includes next_ecommerce_token
   };
   const getAuthCartMethod = isAuth
-    ? async () => await getUserCart(cookieHeader)
-    : async () => await Promise.resolve();
+    ? () => getUserCart(cookieHeader)
+    : () => Promise.resolve();
   const getOfflineCartMethod = offLineCartId
-    ? async () => await getOfflineCart(offLineCartId)
-    : async () => await Promise.resolve();
+    ? () => getOfflineCart(offLineCartId)
+    : () => Promise.resolve();
 
   const initalCart: ICart = {
     _id: "",
@@ -57,6 +57,7 @@ async function InitialDataProvider({
   let finalCart: ICart = initalCart;
 
   try {
+    console.time("MergeCart");
     if (isAuth && offLineCartId) {
       let mergedCart: ICart = mergeCartsFn(AuthCart.cart, OfflineCart.cart);
       let response = await mergeCarts(
@@ -75,6 +76,7 @@ async function InitialDataProvider({
     } else {
       finalCart = initalCart;
     }
+    console.timeEnd("MergeCart");
   } catch (error: any) {
     console.log(`Error during merging carts : ${error.message}`);
     finalCart = initalCart;

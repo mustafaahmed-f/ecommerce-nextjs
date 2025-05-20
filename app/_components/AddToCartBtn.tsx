@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "../_context/CartProvider";
 import CartCheckIcon from "../_icons/CartCheckIcon";
@@ -19,6 +18,7 @@ import { ErrorToast, SuccessToast } from "../_lib/toasts";
 import { CartProduct } from "../cart/_types/CartType";
 import AddToBasketIcon from "../_icons/AddToBasketIcon";
 import InCartBasketIcon from "../_icons/InCartBasketIcon";
+import { useRouter } from "next/navigation";
 
 interface AddToCartBtnProps {
   productId: number;

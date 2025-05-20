@@ -1,6 +1,5 @@
 "use client";
 import { useCategories } from "@/app/_context/CategoriesProvider";
-import { getCategories } from "@/app/_lib/APIs/categoriesAPIs";
 import Link from "next/link";
 
 function CategoriesOptions() {

@@ -1,5 +1,4 @@
 import { NearMeOutlined } from "@mui/icons-material";
-// import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import Image from "next/image";
 

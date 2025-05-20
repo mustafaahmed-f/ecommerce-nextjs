@@ -1,5 +1,3 @@
-import { useCategories } from "@/app/_context/CategoriesProvider";
-import React from "react";
 import ProductSearchResult from "./ProductSearchResult";
 
 interface AutoCompleteDialogProps {
@@ -9,11 +7,11 @@ interface AutoCompleteDialogProps {
 function AutoCompleteDialog({ productsArr }: AutoCompleteDialogProps) {
   return (
     <div
-      className="autoCompleteDialog bg-bgGrey overflow-x-hidden overflow-y-scroll rounded-bl-md rounded-br-md z-50 flex flex-col absolute translate-y-[104%] -bottom-0 left-0 w-full max-h-48 sm:max-h-60"
+      className="autoCompleteDialog absolute -bottom-0 left-0 z-50 flex max-h-48 w-full translate-y-[104%] flex-col overflow-x-hidden overflow-y-scroll rounded-bl-md rounded-br-md bg-bgGrey sm:max-h-60"
       suppressHydrationWarning
     >
       {!productsArr.length && (
-        <p className="py-3 px-4">No results were found.</p>
+        <p className="px-4 py-3">No results were found.</p>
       )}
       {productsArr.map((el, i) => (
         <ProductSearchResult

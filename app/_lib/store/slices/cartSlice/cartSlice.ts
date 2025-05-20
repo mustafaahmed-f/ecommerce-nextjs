@@ -1,6 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Cart, Product } from "./cartSlice.types";
 import { ICart } from "@/app/cart/_types/CartType";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const cartInitialState: ICart = {
   _id: "",

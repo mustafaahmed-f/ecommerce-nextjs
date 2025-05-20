@@ -1,8 +1,6 @@
-import BreadCrumb from "@/app/products/_components/BreadCrumb";
 import { getCategories } from "@/app/_lib/APIs/categoriesAPIs";
 import { getAllProducts } from "@/app/_lib/APIs/productsAPIs";
 import ProductsPage from "../_components/ProductsPage";
-import { NextRequest } from "next/server";
 
 interface pageProps {
   params: Promise<any>;

@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import type { Metadata } from "next";
 import Footer from "./_components/Footer/Footer";
 import Header from "./_components/Header/Header";
 

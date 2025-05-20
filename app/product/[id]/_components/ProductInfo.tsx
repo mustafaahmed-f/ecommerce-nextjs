@@ -1,6 +1,4 @@
 import AddToCartBtn from "@/app/_components/AddToCartBtn";
-import DecreaseQuantity from "@/app/_icons/DecreaseQuantity";
-import IncreaseQuantity from "@/app/_icons/IncreaseQuantity";
 import { colorMap } from "@/app/_lib/colorsArray";
 import ColorIndicator from "@/app/products/_components/ColorIndicator";
 import { FavoriteBorder } from "@mui/icons-material";

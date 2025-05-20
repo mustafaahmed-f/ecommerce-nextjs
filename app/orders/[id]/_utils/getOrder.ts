@@ -1,14 +1,5 @@
-import { instance } from "@/app/_lib/axiosInstance";
-import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
-
 export async function getOrder(id: string, token?: string) {
   try {
-    // const response = await instance.get(`/api/order?orderId=${id}`, {
-    //   headers: {
-    //     Cookie: `next_ecommerce_token=${token}`,
-    //   },
-    // });
-    // return response.data;
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/order?orderId=${id}`,
       {

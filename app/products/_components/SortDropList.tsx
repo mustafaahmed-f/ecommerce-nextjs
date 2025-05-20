@@ -1,4 +1,3 @@
-import { MouseEventHandler } from "react";
 import SortDropListOption from "./SortDropListOption";
 
 interface SortDropListProps {

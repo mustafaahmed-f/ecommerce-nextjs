@@ -1,8 +1,7 @@
 "use client";
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
+import * as React from "react";
 
 interface SnackBarProps {
   severity: "success" | "info" | "warning" | "error";
@@ -13,7 +12,7 @@ export default function SnackBar({ severity, message }: SnackBarProps) {
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
+    reason?: SnackbarCloseReason,
   ) => {
     if (reason === "clickaway") {
       return;

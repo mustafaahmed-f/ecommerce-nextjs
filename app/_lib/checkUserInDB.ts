@@ -1,6 +1,5 @@
-import connectDB from "../_mongodb/dbConnect";
-import userModel from "../_mongodb/models/userModel";
 import { v4 as uuidv4 } from "uuid";
+import userModel from "../_mongodb/models/userModel";
 
 export async function checkUserInDB(profile: any) {
   // await connectDB();

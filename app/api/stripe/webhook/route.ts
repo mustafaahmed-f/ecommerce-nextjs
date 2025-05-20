@@ -3,11 +3,11 @@ import { stripe } from "@/app/_lib/stripe";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-export const config = {
-  api: {
-    bodyParser: false, // ❗️Important: prevent Next.js from parsing body
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false, // ❗️Important: prevent Next.js from parsing body
+//   },
+// };
 
 //todo : add the endpoint of the webhook in the dashboard on stripe website
 

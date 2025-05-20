@@ -10,10 +10,6 @@ export default function CartCheckIcon({
   className?: string;
   checkColor?: string;
 }) {
-  const cartSize = size;
-  const checkSize = size * 0.6;
-  const checkOffset = size * 0.25;
-
   return (
     <svg
       className={className}

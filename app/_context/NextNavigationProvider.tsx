@@ -1,9 +1,4 @@
-import {
-  ReadonlyURLSearchParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createContext, useContext } from "react";
 
 interface NextNavigationProviderProps {
@@ -35,7 +30,7 @@ export function useNextNavigation() {
   const context = useContext(nextNavigateContext);
   if (!context) {
     throw new Error(
-      "Can't use nextNavigateContext outside NextNavigationProvider !!"
+      "Can't use nextNavigateContext outside NextNavigationProvider !!",
     );
   }
   return context;

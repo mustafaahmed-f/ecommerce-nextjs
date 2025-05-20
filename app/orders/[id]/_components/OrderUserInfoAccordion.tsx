@@ -1,11 +1,10 @@
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Typography,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useFormContext } from "@/app/_context/FormContext";
 interface OrderUserInfoAccordionProps {
   order: any;
 }

@@ -10,10 +10,6 @@ export default function CartPlusIcon({
   className?: string;
   plusColor?: string;
 }) {
-  const cartSize = size;
-  const plusSize = size * 0.6;
-  const plusOffset = size * 0.25;
-
   return (
     <svg
       className={className}

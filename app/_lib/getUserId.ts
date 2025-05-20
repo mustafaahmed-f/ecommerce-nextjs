@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
-import { verifyToken } from "./tokenMethods";
-import { authProviders } from "./authProviders";
 import { auth } from "./auth";
+import { verifyToken } from "./tokenMethods";
 
 export async function getUserId() {
   const session = await auth();

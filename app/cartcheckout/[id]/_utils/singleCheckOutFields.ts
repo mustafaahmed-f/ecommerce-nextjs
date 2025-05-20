@@ -1,7 +1,8 @@
 import { getCities, getCountries } from "@/app/_lib/APIs/CountriesAndCitiesAPI";
+import { CheckOutFormValues } from "../../_components/CheckoutFormTemplate";
 import { inputFieldType } from "../../_types/inputFieldType";
 
-export const singleCheckOutFields: inputFieldType[] = [
+export const singleCheckOutFields: inputFieldType<CheckOutFormValues>[] = [
   {
     type: "email",
     name: "userInfo.email",

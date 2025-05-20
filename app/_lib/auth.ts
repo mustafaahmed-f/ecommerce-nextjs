@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import userModel from "../_mongodb/models/userModel";
 import { checkUserInDB } from "./checkUserInDB";

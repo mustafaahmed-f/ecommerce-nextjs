@@ -1,6 +1,6 @@
 import { useNextNavigation } from "@/app/_context/NextNavigationProvider";
 import { Switch } from "@mui/material";
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 
 interface SortDropListOptionProps {
   text: string;
