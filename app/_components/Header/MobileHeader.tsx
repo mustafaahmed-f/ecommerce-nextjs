@@ -1,11 +1,12 @@
 import MainLogo from "../MainLogo";
 import ProductSearchDiv from "./ProductSearchDiv";
-import { Reorder, ShoppingBag } from "@mui/icons-material";
 
+import { useCart } from "@/app/_context/CartProvider";
+import ReorderSVG from "@/app/_icons/ReorderSVG";
+import ShoppingBagSVG from "@/app/_icons/ShoppingBagSVG";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import Menu from "./Menu";
-import Link from "next/link";
-import { useCart } from "@/app/_context/CartProvider";
 
 function MobileHeader() {
   const { 0: showMenu, 1: setShowMenu } = useState(false);
@@ -39,14 +40,14 @@ function MobileHeader() {
               className="cursor-pointer hover:text-sky-600"
               onClick={() => setShowMenu(true)}
             >
-              <Reorder />
+              <ReorderSVG />
             </div>
             <MainLogo />
             <Link
               href="/cart"
               className="flex cursor-pointer items-center gap-1 hover:text-sky-600"
             >
-              <ShoppingBag />
+              <ShoppingBagSVG />
               <p>Cart</p>
               <span className="flex h-6 w-6 items-center justify-center rounded-[50%] bg-green-500 p-1 text-white">
                 {cart.products.length}

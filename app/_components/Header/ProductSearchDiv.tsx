@@ -1,8 +1,9 @@
 import { useCategories } from "@/app/_context/CategoriesProvider";
 import { useNextNavigation } from "@/app/_context/NextNavigationProvider";
 import { useProducts } from "@/app/_context/ProductsProvider";
-import { KeyboardArrowDownOutlined, SearchOutlined } from "@mui/icons-material";
-import CloseIcon from "@mui/icons-material/Close";
+import CloseSVG from "@/app/_icons/CloseSVG";
+import KeyboardArrowDownSVG from "@/app/_icons/KeyboardArrowDownSVG";
+import SearchSVG from "@/app/_icons/SearchSVG";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import AutoCompleteDialog from "./AutoCompleteDialog";
@@ -60,7 +61,7 @@ function ProductSearchDiv() {
 
   return (
     <div
-      className={`productSearchDiv flex relative items-center gap-[2px] sm:gap-1 py-1 sm:text-base text-sm bg-white rounded-sm w-full sm:w-fit flex-nowrap ring-1 ring-neutral-400 ${
+      className={`productSearchDiv relative flex w-full flex-nowrap items-center gap-[2px] rounded-sm bg-white py-1 text-sm ring-1 ring-neutral-400 sm:w-fit sm:gap-1 sm:text-base ${
         loadingProducts ? "pointer-events-none opacity-40" : ""
       }`}
     >
@@ -75,7 +76,7 @@ function ProductSearchDiv() {
           setShowAutoComplete(true);
         }}
         placeholder="Search products"
-        className="flex-grow px-2 py-1 sm:px-3 focus:outline-0"
+        className="flex-grow px-2 py-1 focus:outline-0 sm:px-3"
         suppressHydrationWarning
       />
       {searchVal && showAutoComplete && (
@@ -83,7 +84,7 @@ function ProductSearchDiv() {
       )}
 
       <div
-        className={`${styles.dropdown} flex h-full bg-white cursor-pointer whitespace-nowrap flex-nowrap`}
+        className={`${styles.dropdown} flex h-full cursor-pointer flex-nowrap whitespace-nowrap bg-white`}
         onClick={() => setShowAutoComplete(false)}
       >
         {searchVal && (
@@ -91,39 +92,41 @@ function ProductSearchDiv() {
             onClick={() => {
               setSearchVal("");
             }}
-            className="cursor-pointer hover:text-primary-500  text-lg flex items-center  pe-2"
+            className="flex cursor-pointer items-center pe-2 text-lg hover:text-primary-500"
           >
-            <CloseIcon fontSize="small" />
+            <CloseSVG />
           </div>
         )}
-        <div>
-          <p>{category === "All" ? "All categories" : category}</p>
-          <div className={`${styles.list} bg-slate-50 border-2`}>
+        <div className="flex items-center">
+          <p className="flex items-center text-center">
+            {category === "All" ? "All categories" : category}
+          </p>
+        </div>
+        <div className={`${styles.list} border-2 bg-slate-50`}>
+          <p
+            onClick={() => setCategoryHandler("All")}
+            className={`${
+              category === "All" ? "bg-neutral-200" : ""
+            } hover:bg-neutral-300`}
+          >
+            All categories
+          </p>
+          {categories.categories.map((categoryEl: string) => (
             <p
-              onClick={() => setCategoryHandler("All")}
+              key={categoryEl}
+              onClick={() => {
+                setCategoryHandler(categoryEl);
+              }}
               className={`${
-                category === "All" ? "bg-neutral-200" : ""
+                category === categoryEl ? "bg-neutral-200" : ""
               } hover:bg-neutral-300`}
             >
-              All categories
+              {categoryEl}
             </p>
-            {categories.categories.map((categoryEl: string) => (
-              <p
-                key={categoryEl}
-                onClick={() => {
-                  setCategoryHandler(categoryEl);
-                }}
-                className={`${
-                  category === categoryEl ? "bg-neutral-200" : ""
-                } hover:bg-neutral-300`}
-              >
-                {categoryEl}
-              </p>
-            ))}
-          </div>
+          ))}
         </div>
         <span>
-          <KeyboardArrowDownOutlined />
+          <KeyboardArrowDownSVG />
         </span>
       </div>
       <Link
@@ -131,9 +134,9 @@ function ProductSearchDiv() {
         onClick={(e) => {
           if (!productsArr.length) e.preventDefault();
         }}
-        className="h-full px-1 bg-white cursor-pointer border-s-2"
+        className="h-full cursor-pointer border-s-2 bg-white px-1"
       >
-        <SearchOutlined />
+        <SearchSVG />
       </Link>
     </div>
   );

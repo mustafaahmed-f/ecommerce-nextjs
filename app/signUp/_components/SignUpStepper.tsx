@@ -1,6 +1,6 @@
 "use client";
 import { signUpSystemAction } from "@/app/_actions/authActions";
-import SnackBar from "@/app/_components/SnackBar";
+import { getFullAddress } from "@/app/_lib/getAddress";
 import { signupValidations } from "@/app/_lib/validationSchemas/signUpValidations";
 import FormRenderer from "@/app/cartcheckout/_components/FormRenderer";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -22,7 +22,6 @@ import {
   signupStep2Fields,
 } from "../_utils/signUpFieldsObjects";
 import ImageUploader from "./ImageUploader";
-import { getFullAddress } from "@/app/_lib/getAddress";
 
 const steps = ["Basic info", "Add address", "Upload profile image"];
 
@@ -151,9 +150,7 @@ export default function SignUpStepper() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      {!isLoading && alertMessage && isError && (
-        <SnackBar message={alertMessage} severity="error" />
-      )}
+      
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {};

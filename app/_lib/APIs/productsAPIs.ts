@@ -23,9 +23,7 @@ export async function getAllProducts({
   if (priceMax === undefined) priceMax = 50000;
   const response: Response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
-    { next: { revalidate: 0 } },
-    // { cache: "no-store" }
-    //TODO: make revalidate : 3600
+    { next: { revalidate: 1000 * 60 * 60 * 24 } },
   );
   const clonedResponse = await response.clone().json();
 
@@ -39,8 +37,6 @@ export async function getAllProducts({
   }
   return response.json();
 }
-
-// TODO : Update all these APIs to use api routes created in the app that depends on mongoDB
 
 export async function getSingleProduct(id: number) {
   const response = await fetch(
@@ -63,46 +59,46 @@ export async function getSingleProduct(id: number) {
   return response.json();
 }
 
-export async function addProduct(body: any) {
-  const newProduct = await fetch("https://fakestoreapi.in/api/products", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+// export async function addProduct(body: any) {
+//   const newProduct = await fetch("https://fakestoreapi.in/api/products", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(body),
+//   });
 
-  if (!newProduct.ok) throw new Error("Couldn't add product !!");
+//   if (!newProduct.ok) throw new Error("Couldn't add product !!");
 
-  return newProduct.json();
-}
+//   return newProduct.json();
+// }
 
-export async function updateProduct(id: number) {
-  const updatedProduct = await fetch(
-    `https://fakestoreapi.in/api/products/${String(id)}`,
-    {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "Apple vision pro Second Gen",
-        color: "Blue",
-        discount: 47,
-      }),
-    },
-  );
+// export async function updateProduct(id: number) {
+//   const updatedProduct = await fetch(
+//     `https://fakestoreapi.in/api/products/${String(id)}`,
+//     {
+//       method: "PUT",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         model: "Apple vision pro Second Gen",
+//         color: "Blue",
+//         discount: 47,
+//       }),
+//     },
+//   );
 
-  if (!updatedProduct.ok) throw new Error("Failed to update product !!");
+//   if (!updatedProduct.ok) throw new Error("Failed to update product !!");
 
-  return updatedProduct.json();
-}
+//   return updatedProduct.json();
+// }
 
-export async function deleteProduct(id: number) {
-  const response = await fetch(
-    `https://fakestoreapi.in/api/products/${String(id)}`,
-    {
-      method: "DELETE",
-    },
-  );
+// export async function deleteProduct(id: number) {
+//   const response = await fetch(
+//     `https://fakestoreapi.in/api/products/${String(id)}`,
+//     {
+//       method: "DELETE",
+//     },
+//   );
 
-  if (!response.ok) throw new Error("Failed to update product !!");
+//   if (!response.ok) throw new Error("Failed to update product !!");
 
-  return response.json();
-}
+//   return response.json();
+// }

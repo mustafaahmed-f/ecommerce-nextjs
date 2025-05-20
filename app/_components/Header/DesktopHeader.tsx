@@ -1,7 +1,5 @@
 "use client";
 
-// import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
-
 import { logOutAction } from "@/app/_actions/authActions";
 import { useCategories } from "@/app/_context/CategoriesProvider";
 import FavoriteBorderSVG from "@/app/_icons/FavoriteBorderSVG";

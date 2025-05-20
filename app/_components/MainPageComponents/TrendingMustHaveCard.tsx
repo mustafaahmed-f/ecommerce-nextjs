@@ -1,4 +1,4 @@
-import { Luggage } from "@mui/icons-material";
+import LuggageSVG from "@/app/_icons/LuggageSVG";
 import Image from "next/image";
 
 function TrendingMustHaveCard({ product }: { product: any }) {
@@ -7,7 +7,7 @@ function TrendingMustHaveCard({ product }: { product: any }) {
     <div className="relative flex h-full w-full min-w-80 flex-col justify-between rounded-md">
       {product.id % 2 !== 0 && (
         <div className="absolute left-2 top-2 flex w-fit max-w-[70%] items-center justify-center gap-1 rounded-md bg-green-500 p-1 text-[10px] text-white sm:max-w-full sm:text-base">
-          <Luggage fontSize="small" />
+          <LuggageSVG />
           <p className="capitalize">new arrival</p>
         </div>
       )}

@@ -1,5 +1,5 @@
-import { NearMeOutlined } from "@mui/icons-material";
-import InstagramIcon from "@mui/icons-material/Instagram";
+import InstagramSVG from "@/app/_icons/InstagramSVG";
+import NearMeOutlinedSVG from "@/app/_icons/NearMeOutlinedSVG";
 import Image from "next/image";
 
 function Footer() {
@@ -18,7 +18,7 @@ function Footer() {
             className="rounded-sm py-2 pe-7 ps-2"
           />
           <div className="absolute inset-y-0 right-0 flex items-center justify-center">
-            <NearMeOutlined />
+            <NearMeOutlinedSVG />
           </div>
         </div>
       </div>
@@ -96,11 +96,11 @@ function Footer() {
           </p>
           <div className="flex gap-2">
             <a className="cursor-pointer no-underline" href="">
-              <InstagramIcon />
+              <InstagramSVG />
             </a>
             <div>{/* <FacebookRoundedIcon /> */}</div>
             <div>
-              <NearMeOutlined />
+              <NearMeOutlinedSVG />
             </div>
           </div>
         </div>

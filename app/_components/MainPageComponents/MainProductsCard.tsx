@@ -1,8 +1,8 @@
-import { FavoriteBorder } from "@mui/icons-material";
+import FavoriteBorderSVG from "@/app/_icons/FavoriteBorderSVG";
 import Image from "next/image";
 import Link from "next/link";
-import Rating from "../Rating";
 import AddToCartBtn from "../AddToCartBtn";
+import Rating from "../Rating";
 
 function MainProductsCard({ product }: { product: any }) {
   return (
@@ -53,7 +53,7 @@ function MainProductsCard({ product }: { product: any }) {
         </div>
         <div className="flex h-full flex-row items-center justify-center gap-5 sm:flex-col sm:justify-start">
           <div className="cursor-pointer text-black hover:text-sky-500">
-            <FavoriteBorder />
+            <FavoriteBorderSVG />
           </div>
           <AddToCartBtn productId={product.productId} stock={product.stock} />
         </div>
