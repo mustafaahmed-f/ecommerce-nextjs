@@ -1,6 +1,6 @@
 export async function getAllProducts({
   page = 1,
-  size = 50,
+  size = 149,
   category = "",
   brand = "",
   model = "",
