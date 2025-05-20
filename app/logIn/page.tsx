@@ -1,23 +1,24 @@
 "use client";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import GoogleLogInBtn from "../_components/GoogleLogInBtn";
+import AutoFixHighIconSVG from "../_icons/AutoFixHighIconSVG";
+import FavoriteIconSVG from "../_icons/FavoriteIconSVG";
+import SettingsIconSVG from "../_icons/SettingsIconSVG";
+import ThumbUpIconSVG from "../_icons/ThumbUpIconSVG";
+import { instance } from "../_lib/axiosInstance";
+import { getAxiosErrMsg } from "../_lib/getAxiosErrMsg";
+import { ErrorToast, SuccessToast } from "../_lib/toasts";
 import { loginValidations } from "../_lib/validationSchemas/logInValidations";
 import FormRenderer from "../cartcheckout/_components/FormRenderer";
 import { logInDefaultValues } from "./_utils/logInDefaultValues";
 import { logInFieldsObject } from "./_utils/logInFieldsObject";
-import GoogleLogInBtn from "../_components/GoogleLogInBtn";
-import Link from "next/link";
-import { useState } from "react";
-import { getAxiosErrMsg } from "../_lib/getAxiosErrMsg";
-import { ErrorToast, SuccessToast } from "../_lib/toasts";
-import { useSearchParams } from "next/navigation";
-import { instance } from "../_lib/axiosInstance";
 interface PageProps {}
 
 const mainPragraphs = [
@@ -86,7 +87,7 @@ function Page({}: PageProps) {
   }
 
   return (
-    <div className="mt-10 flex w-full items-center justify-center gap-3 px-6 max-sm:mb-10 sm:px-12">
+    <div className="mt-10 flex w-full items-center justify-center px-6 max-sm:mb-10 sm:px-12">
       <div className="hidden w-1/2 p-4 sm:flex-col sm:items-center md:flex">
         <h2 className="mb-3 text-center text-3xl font-bold">
           Log in and get started with the best shopping experience
@@ -96,10 +97,10 @@ function Page({}: PageProps) {
             key={i}
             className="my-4 flex items-center gap-3 text-lg font-semibold"
           >
-            {i === 0 && <SettingsIcon />}
-            {i === 1 && <ThumbUpIcon />}
-            {i === 2 && <FavoriteIcon />}
-            {i === 3 && <AutoFixHighIcon />}
+            {i === 0 && <SettingsIconSVG />}
+            {i === 1 && <ThumbUpIconSVG />}
+            {i === 2 && <FavoriteIconSVG />}
+            {i === 3 && <AutoFixHighIconSVG />}
             <p>{el}</p>
           </div>
         ))}

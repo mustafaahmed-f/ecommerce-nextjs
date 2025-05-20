@@ -1,15 +1,14 @@
 "use client";
 
-import {
-  FavoriteBorder,
-  Person2Outlined,
-  Segment,
-  ShoppingBag,
-} from "@mui/icons-material";
-import ReceiptIcon from "@mui/icons-material/Receipt";
 // import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 
 import { logOutAction } from "@/app/_actions/authActions";
+import { useCategories } from "@/app/_context/CategoriesProvider";
+import FavoriteBorderSVG from "@/app/_icons/FavoriteBorderSVG";
+import Person2OutlinedSVG from "@/app/_icons/Person2OutlinedSVG";
+import ReceiptIconSVG from "@/app/_icons/ReceiptIconSVG";
+import SegmentSVG from "@/app/_icons/SegmentSVG";
+import ShoppingBagSVG from "@/app/_icons/ShoppingBagSVG";
 import { logOut } from "@/app/_lib/store/slices/userSlice/userSlice";
 import { useAppDispatch, useAppSelector } from "@/app/_lib/store/store";
 import {
@@ -28,7 +27,6 @@ import { useState } from "react";
 import LogoAndSearch from "./LogoAndSearch";
 import PagesLinks from "./PagesLinks";
 import SocialLinks from "./SocialLinks";
-import { useCategories } from "@/app/_context/CategoriesProvider";
 
 const settings = ["Update Profile", "Logout"];
 
@@ -104,7 +102,7 @@ function DesktopHeader() {
               className="flex cursor-pointer gap-2 text-white hover:text-sky-600"
             >
               <div className="-scale-x-100">
-                <Segment />
+                <SegmentSVG />
               </div>
               <p className="font-semibold">Categories</p>
             </Button>
@@ -143,7 +141,7 @@ function DesktopHeader() {
               className="flex items-center gap-2 hover:text-sky-600"
             >
               <div className="-scale-x-100">
-                <ReceiptIcon />
+                <ReceiptIconSVG />
               </div>
               <p className="whitespace-nowrap font-semibold">My Orders</p>
             </Link>
@@ -222,19 +220,19 @@ function DesktopHeader() {
             </Box>
           ) : (
             <div className="flex cursor-pointer items-center gap-2 hover:text-sky-600">
-              <Person2Outlined />
+              <Person2OutlinedSVG />
               <Link href="/login">Sign in</Link>
             </div>
           )}
           <div className="flex cursor-pointer items-center gap-2 hover:text-sky-600">
-            <FavoriteBorder />
+            <FavoriteBorderSVG />
             <Link href="">Favorites</Link>
           </div>
           <Link
             href="/cart"
             className="flex cursor-pointer items-center gap-2 hover:text-sky-600"
           >
-            <ShoppingBag />
+            <ShoppingBagSVG />
             <p>Cart</p>
             <span className="flex h-6 w-6 items-center justify-center rounded-[50%] bg-green-500 p-1 text-white">
               {cart.products.length}
