@@ -1,6 +1,5 @@
+import { Slider } from "@/app/_components/shadcn/slider";
 import { useNextNavigation } from "@/app/_context/NextNavigationProvider";
-import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
 import * as React from "react";
 
 function valuetext(value: number) {
@@ -13,61 +12,48 @@ export default function MinimumDistanceSlider({
   value,
   setValue,
 }: {
-  value: number | number[];
+  value: number[];
   setValue: React.Dispatch<React.SetStateAction<number[]>>;
 }) {
   const { searchParams, pathName, router } = useNextNavigation();
   const timeOut = React.useRef<NodeJS.Timeout | null>(null);
-  const handleChange = (
-    event: Event,
-    newValue: number | number[],
-    activeThumb: number
-  ) => {
-    if (!Array.isArray(newValue)) {
+
+  const handleChange = (newValue: number[]) => {
+    if (newValue.length !== 2) return;
+
+    // Enforce minDistance
+    if (newValue[1] - newValue[0] < minDistance) {
+      // If thumbs too close, ignore change
       return;
     }
+
     if (timeOut.current) clearTimeout(timeOut.current);
-    let params = new URLSearchParams(searchParams);
-    if (Array.isArray(value)) {
-      if (activeThumb === 0) {
-        setValue([Math.min(newValue[0], value[1] - minDistance), value[1]]);
-        timeOut.current = setTimeout(() => {
-          params.set(
-            "priceMin",
-            Math.min(newValue[0], value[1] - minDistance).toString()
-          );
-          params.set("page", "1");
-          router.replace(`${pathName}?${params.toString()}`);
-        }, 1000);
-      } else {
-        setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
-        timeOut.current = setTimeout(() => {
-          params.set(
-            "priceMax",
-            Math.max(newValue[1], value[0] + minDistance).toString()
-          );
-          params.set("page", "1");
-          router.replace(`${pathName}?${params.toString()}`);
-        }, 1000);
-      }
-    }
+
+    setValue(newValue);
+
+    timeOut.current = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      params.set("priceMin", newValue[0].toString());
+      params.set("priceMax", newValue[1].toString());
+      params.set("page", "1");
+      router.replace(`${pathName}?${params.toString()}`);
+    }, 1000);
   };
 
   return (
-    <Box sx={{ width: 220 }}>
+    <div className="mx-auto w-[220px]">
       <Slider
-        getAriaLabel={() => "Minimum distance"}
         value={value}
-        onChange={handleChange}
-        valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
+        onValueChange={handleChange}
         min={0}
-        className="text-[#4172DC]"
-        disableSwap
         max={10000}
         step={10}
-        size="medium"
+        aria-label="Minimum distance"
+        className="text-[#4172DC]"
       />
-    </Box>
+      <p className="mt-4 w-full text-center">
+        {valuetext(value[0])} - {valuetext(value[1])}
+      </p>
+    </div>
   );
 }
