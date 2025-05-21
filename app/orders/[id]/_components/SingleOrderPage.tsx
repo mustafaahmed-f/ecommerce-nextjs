@@ -154,7 +154,7 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
 
   return (
     <div
-      className={`mx-auto px-4 py-8 sm:px-8 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
+      className={`mx-auto min-w-[90%] px-4 py-8 sm:px-8 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
     >
       <Link href="/orders" className="underline">
         {"← "}
