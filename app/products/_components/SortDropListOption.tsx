@@ -1,5 +1,5 @@
+import { Switch } from "@/app/_components/shadcn/switch";
 import { useNextNavigation } from "@/app/_context/NextNavigationProvider";
-import { Switch } from "@mui/material";
 import { useState } from "react";
 
 interface SortDropListOptionProps {
@@ -28,15 +28,18 @@ function SortDropListOption({
     descending.some((el) => regex.test(el)),
   ); //// Default ascending; false = ascending, true = descending
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.stopPropagation();
-    let params = new URLSearchParams(searchParams);
-    setChecked(event.target.checked);
+  const handleChange = (checked: boolean | "indeterminate") => {
+    // 'checked' can be boolean or "indeterminate", but here we expect boolean
+    if (checked === "indeterminate") return;
 
-    const sortOption = `${event.target.checked ? "-" : ""}${text}`;
+    let params = new URLSearchParams(searchParams);
+    setChecked(checked);
+
+    const sortOption = `${checked ? "-" : ""}${text}`;
     const checkExistenceOfSelection = selected.some((option) =>
       regex.test(option),
     );
+
     if (checkExistenceOfSelection) {
       const newSelections = [
         ...selected.filter((el) => !regex.test(el)),
@@ -46,7 +49,8 @@ function SortDropListOption({
       router.replace(`${pathName}?${params.toString()}`);
       setSelected(newSelections);
     }
-    if (event.target.checked) {
+
+    if (checked) {
       setDescending((prev) => [...prev, text]);
     } else {
       setDescending((prev) => prev.filter((item) => item !== text));
@@ -61,18 +65,18 @@ function SortDropListOption({
       }
     >
       <span className="ps-4">{text}</span>
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-end p-2">
         <span
-          className={`text-xs ${checked ? "text-red-400" : "text-sky-600"}`}
+          className={`text-xs ${checked ? "text-red-400" : "text-sky-600"} me-1`}
         >
           {checked ? "Desc" : "Asc"}
         </span>
         <Switch
           id="sortSwitch"
           checked={checked}
-          onChange={handleChange}
+          onCheckedChange={(checked) => handleChange(checked)}
           onClick={(e) => e.stopPropagation()}
-          inputProps={{ "aria-label": "controlled" }}
+          aria-label="controlled"
         />
       </div>
     </div>
