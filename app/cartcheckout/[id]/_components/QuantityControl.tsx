@@ -1,7 +1,7 @@
+import { Input } from "@/app/_components/shadcn/input";
 import AddCircleIcon from "@/app/_icons/AddCircleIcon";
 import RemoveCircleIcon from "@/app/_icons/RemoveCircleIcon";
 import { getErrObject } from "@/app/_lib/getErrObj";
-import { Stack, TextField } from "@mui/material";
 import {
   FieldValues,
   Path,
@@ -86,39 +86,34 @@ function QuantityControl<T extends FieldValues>({
   };
 
   return (
-    <div className="col-span-2 my-2 flex justify-start">
-      <div className="w-fit">
-        <Stack direction="row" alignItems="center" spacing={1}>
+    <div className="col-span-2 flex justify-start">
+      <div className="flex w-fit flex-col gap-1">
+        <label
+          htmlFor={name}
+          className="mb-1 text-sm font-medium text-gray-700"
+        >
+          {lable}
+          {required && <span className="ms-1 text-red-500">*</span>}
+        </label>
+        <div className="flex items-center gap-2">
           <span onClick={handleDecrement}>
             <RemoveCircleIcon />
           </span>
-          <TextField
+          <Input
             {...register(name)}
-            type="number"
+            id={name}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             value={quantityValue}
             onChange={handleInputChange}
-            size="small"
-            error={!!errObj}
-            helperText={errObj?.message}
             placeholder={placeholder}
-            required={required}
-            label={lable}
-            sx={{
-              input: {
-                textAlign: "center",
-                maxWidth: "fit-content",
-                width: "50px",
-              },
-              //// Remove control buttons:
-              ".MuiInputAdornment-root": {
-                display: "none",
-              },
-            }}
+            className={`w-[60px] text-center ${errObj ? "border-red-500" : ""}`}
           />
           <span onClick={handleIncrement}>
             <AddCircleIcon />
           </span>
-        </Stack>
+        </div>
       </div>
     </div>
   );

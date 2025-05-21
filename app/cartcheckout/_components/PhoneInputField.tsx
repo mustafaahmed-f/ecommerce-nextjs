@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { Input } from "@/app/_components/shadcn/input";
 import {
   Control,
   Controller,
@@ -32,40 +32,39 @@ function PhoneInputField<T extends FieldValues>({
     <Controller
       name={name}
       control={control}
-      rules={required ? { required: true } : {}}
+      rules={required ? { required: "This field is required" } : {}}
       render={({ field, fieldState: { error } }) => (
-        <TextField
-          {...field}
-          value={field.value || ""}
-          error={!!error}
-          helperText={error?.message}
-          label={lable}
-          placeholder={placeholder}
-          required={required}
-          className={fullWidth ? "col-span-2" : "col-span-1"}
-          variant="outlined"
-          size="small"
-          onChange={(e) => {
-            // allow only digits
-            const value = e.target.value;
-            if (/^\d*$/.test(value)) {
-              field.onChange(value);
-            }
-          }}
-          sx={{
-            input: {
-              MozAppearance: "textfield",
-              "&::-webkit-outer-spin-button": {
-                WebkitAppearance: "none",
-                margin: 0,
-              },
-              "&::-webkit-inner-spin-button": {
-                WebkitAppearance: "none",
-                margin: 0,
-              },
-            },
-          }}
-        />
+        <div
+          className={`flex flex-col items-start ${
+            fullWidth ? "col-span-2" : "col-span-1"
+          } w-full`}
+        >
+          <label
+            htmlFor={name}
+            className="mb-1 text-sm font-medium text-gray-700"
+          >
+            {lable}
+            {required && <span className="ms-1 text-red-500">*</span>}
+          </label>
+
+          <Input
+            id={name}
+            type="text"
+            placeholder={placeholder}
+            value={field.value || ""}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^\d*$/.test(value)) {
+                field.onChange(value);
+              }
+            }}
+            className={`w-full ${error ? "border-red-500" : ""}`}
+          />
+
+          {error && (
+            <p className="mt-1 text-xs text-red-600">{error.message}</p>
+          )}
+        </div>
       )}
     />
   );
