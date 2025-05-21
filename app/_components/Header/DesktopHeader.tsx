@@ -11,13 +11,20 @@ import { logOut } from "@/app/_lib/store/slices/userSlice/userSlice";
 import { useAppDispatch, useAppSelector } from "@/app/_lib/store/store";
 import {
   Avatar,
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/_components/shadcn/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/app/_components/shadcn/dropdown-menu";
+import {
   Tooltip,
-  Typography,
-} from "@mui/material";
+  TooltipTrigger,
+  TooltipContent,
+} from "@/app/_components/shadcn/tooltip";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -29,30 +36,11 @@ import { Button } from "../shadcn/button";
 const settings = ["Update Profile", "Logout"];
 
 function DesktopHeader() {
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl2);
   const { 0: loading, 1: setLoading } = useState<boolean>(false);
   const user = useAppSelector((state) => state.user);
   const cart = useAppSelector((state) => state.cart);
   const { categories } = useCategories();
   const dispatch = useAppDispatch();
-
-  const handleClickCategories = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    setAnchorEl2(event.currentTarget);
-  };
-  const handleCloseCategories = () => {
-    setAnchorEl2(null);
-  };
-
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
 
   const logOutFn = async () => {
     if (!user.email || !user.provider) return;
@@ -63,7 +51,6 @@ function DesktopHeader() {
       (user.provider === "system" && response?.success)
     ) {
       dispatch(logOut());
-      handleCloseUserMenu();
       window.location.href = "/";
     } else {
       console.log("Error logging out : ", response.error);
@@ -90,48 +77,37 @@ function DesktopHeader() {
       <div className="grid bg-black py-3 text-white sm:grid-cols-[1fr_1fr] md:grid-cols-[1fr_1fr_1fr]">
         <div className="flex items-center sm:gap-14 sm:px-7 md:gap-24 md:px-20">
           <div>
-            <Button
-              variant={"default"}
-              id="basic-button"
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClickCategories}
-              color="inherit"
-              className="flex cursor-pointer gap-2 text-white hover:text-sky-600"
-            >
-              <div className="-scale-x-100">
-                <SegmentSVG />
-              </div>
-              <p className="font-semibold">Categories</p>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="default" id="basic-button">
+                  <div className="-scale-x-100">
+                    <SegmentSVG />
+                  </div>
+                  <p className="font-semibold">Categories</p>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem className="cursor-pointer" asChild>
+                  <Link
+                    href="/products"
+                    className="w-full text-center font-bold hover:text-sky-600"
+                  >
+                    All Categories
+                  </Link>
+                </DropdownMenuItem>
 
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl2}
-              open={open}
-              onClose={handleCloseCategories}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <Link href={`/products`}>
-                <MenuItem
-                  style={{ fontWeight: "bold" }}
-                  className="cursor-pointer text-center font-bold hover:text-sky-600"
-                >
-                  All Categories
-                </MenuItem>
-              </Link>
-              {categories.categories.map((category: string, i: number) => (
-                <Link key={i} href={`/products/${category}`}>
-                  <MenuItem className="cursor-pointer text-center hover:text-sky-600">
-                    {category.substring(0, 1).toUpperCase() +
-                      category.substring(1)}
-                  </MenuItem>
-                </Link>
-              ))}
-            </Menu>
+                {categories.categories.map((category: string, i: number) => (
+                  <DropdownMenuItem className="cursor-pointer" key={i} asChild>
+                    <Link
+                      href={`/products/${category}`}
+                      className="w-full text-center hover:text-sky-600"
+                    >
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {user.email || user.userName ? (
@@ -164,59 +140,52 @@ function DesktopHeader() {
         </div>
         <div className="flex items-center justify-center border-s-[1px] border-s-neutral-400 sm:gap-4 md:gap-6">
           {user.userName || user.email ? (
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    alt={user.firstName}
-                    src={user.profileImage || "icons8-male-user-40.png"}
-                    sx={{ width: 23, height: 23 }}
-                  />
-                  <p
-                    className="mb-0 ms-2 text-lg text-white"
-                    style={{ fontWeight: "400" }}
-                  >
-                    Profile
-                  </p>
-                </IconButton>
+            <div className="relative">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center gap-2 p-0 hover:bg-transparent"
+                        disabled={loading}
+                      >
+                        <Avatar className="h-6 w-6">
+                          <AvatarImage
+                            src={user.profileImage || "icons8-male-user-40.png"}
+                            alt={user.firstName}
+                          />
+                          <AvatarFallback>
+                            {user.firstName?.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <p className="mb-0 text-lg font-normal text-white hover:text-sky-500">
+                          Profile
+                        </p>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      align="end"
+                      className={`${loading ? "pointer-events-none opacity-50" : ""}`}
+                    >
+                      <DropdownMenuItem className="cursor-pointer" asChild>
+                        <Link href={`/updateprofile/${user.id}`}>
+                          {settings[0]}
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={logOutFn}
+                      >
+                        {settings[1]}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TooltipTrigger>
+                <TooltipContent>Open settings</TooltipContent>
               </Tooltip>
-              <Menu
-                sx={{
-                  mt: "45px",
-                  pointerEvents: loading ? "none" : "auto", // Prevent interactions
-                  opacity: loading ? 0.5 : 1, // Visually indicate disabled state
-                }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                <MenuItem
-                  key={"update profile menu item"}
-                  onClick={handleCloseUserMenu}
-                >
-                  <Typography sx={{ textAlign: "center" }}>
-                    <Link href={`/updateprofile/${user.id}`}>
-                      {settings[0]}
-                    </Link>
-                  </Typography>
-                </MenuItem>
-                <MenuItem key={"logout menu item"} onClick={logOutFn}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {settings[1]}
-                  </Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
+            </div>
           ) : (
             <div className="flex cursor-pointer items-center gap-2 hover:text-sky-600">
               <Person2OutlinedSVG />

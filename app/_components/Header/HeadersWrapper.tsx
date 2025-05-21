@@ -1,5 +1,6 @@
 "use client";
 
+import { TooltipProvider } from "../shadcn/tooltip";
 import DesktopHeader from "./DesktopHeader";
 import MobileHeader from "./MobileHeader";
 
@@ -8,8 +9,10 @@ interface HeadersWrapperProps {}
 function HeadersWrapper({}: HeadersWrapperProps) {
   return (
     <>
-      <DesktopHeader />
-      <MobileHeader />
+      <TooltipProvider>
+        <DesktopHeader />
+        <MobileHeader />
+      </TooltipProvider>
     </>
   );
 }
