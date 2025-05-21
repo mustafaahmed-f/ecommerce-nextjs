@@ -1,6 +1,6 @@
 import { getFullAddress } from "@/app/_lib/getAddress";
 import { getErrObject } from "@/app/_lib/getErrObj";
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useState } from "react";
 import {
   FieldValues,
@@ -11,6 +11,7 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 import { inputFieldType } from "../_types/inputFieldType";
+import { Button } from "@/app/_components/shadcn/button";
 
 interface TextInputFieldProps<T extends FieldValues> extends inputFieldType<T> {
   register: UseFormRegister<T>;
@@ -91,15 +92,16 @@ function TextInputField<T extends FieldValues>({
         helperText={errorObj?.message}
         error={!!errorObj}
       />
+
       <Button
-        color="inherit"
-        variant="contained"
+        variant="default"
         onClick={async () => {
           const { address } = await getFullAddress();
           setValue(name, address as PathValue<T, typeof name>);
           trigger(name);
         }}
-        sx={{ width: "100%", fontSize: "14px" }}
+        size={"default"}
+        className="min-h-10"
       >
         Get Address
       </Button>

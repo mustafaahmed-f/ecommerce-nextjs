@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Chip, Dialog } from "@mui/material";
+import { Chip, Dialog } from "@mui/material";
 import EditOrderForm from "./EditOrderForm";
 import OrderSummary from "./OrderSummary";
 
@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { getChipColors } from "../../_utils/getChipColors";
 import Link from "next/link";
+import { Button } from "@/app/_components/shadcn/button";
 
 interface SingleOrderPageProps {
   order: any;
@@ -186,9 +187,9 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
         <div className="flex flex-row items-start gap-2 max-md:flex-wrap md:flex-col md:items-end">
           {showCompleteOrder && (
             <Button
-              variant="contained"
+              variant="default"
               color="primary"
-              size="small"
+              className=""
               onClick={
                 order.paymentMethod.toLowerCase() === "card"
                   ? proceedHandler
@@ -201,8 +202,8 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
             </Button>
           )}
           <Button
-            variant="outlined"
-            size="small"
+            variant="outline"
+            size="default"
             disabled={!canEdit}
             onClick={handleEditOpen}
           >
@@ -211,8 +212,8 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
           {canCancel && order.orderStatus.status !== "cancelled" && (
             <Button
               onClick={handleCancleOrder}
-              variant="outlined"
-              size="small"
+              variant="destructive"
+              size="default"
               color="error"
             >
               Cancel Order
@@ -221,8 +222,8 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
           {canReturn && (
             <Button
               onClick={handleReturnOrder}
-              variant="outlined"
-              size="small"
+              variant="secondary"
+              size="default"
               color="warning"
             >
               Return Order

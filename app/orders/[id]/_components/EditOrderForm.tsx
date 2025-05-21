@@ -5,12 +5,12 @@ import FormRenderer from "@/app/cartcheckout/_components/FormRenderer";
 import { defaultValuesType } from "@/app/cartcheckout/_types/defaultValuesType";
 import { checkOutFormValidations } from "@/app/cartcheckout/_utils/formValidation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { ediFormFieldsObject } from "../_utils/editFormFieldsObject";
+import { Button } from "@/app/_components/shadcn/button";
 
 interface EditOrderFormProps {
   defaultValues: defaultValuesType;
@@ -83,7 +83,7 @@ function EditOrderForm({ defaultValues, orderId }: EditOrderFormProps) {
         />
       </section>
       <div className="mt-5 flex items-center justify-end">
-        <Button variant="outlined" type="submit" disabled={!isValid}>
+        <Button variant="secondary" type="submit" disabled={!isValid}>
           Edit
         </Button>
       </div>

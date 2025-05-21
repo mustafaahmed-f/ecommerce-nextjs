@@ -19,6 +19,7 @@ import { loginValidations } from "../_lib/validationSchemas/logInValidations";
 import FormRenderer from "../cartcheckout/_components/FormRenderer";
 import { logInDefaultValues } from "./_utils/logInDefaultValues";
 import { logInFieldsObject } from "./_utils/logInFieldsObject";
+import { Button } from "../_components/shadcn/button";
 interface PageProps {}
 
 const mainPragraphs = [
@@ -121,13 +122,14 @@ function Page({}: PageProps) {
               trigger={trigger}
               register={register}
             />
-            <button
+            <Button
               disabled={!isValid}
               type="submit"
-              className="mt-3 w-full rounded-md bg-primary-400 py-3 text-lg font-semibold text-white hover:bg-primary-500"
+              variant={"default"}
+              className="mt-3 h-full w-full rounded-md py-3 text-lg font-semibold"
             >
               {isLoading ? "Logging in..." : "Log in"}
-            </button>
+            </Button>
           </form>
           <GoogleLogInBtn />
           <Link href="/signup">

@@ -6,7 +6,6 @@ import FormRenderer from "@/app/cartcheckout/_components/FormRenderer";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Alert } from "@mui/material";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
@@ -22,6 +21,7 @@ import {
   signupStep2Fields,
 } from "../_utils/signUpFieldsObjects";
 import ImageUploader from "./ImageUploader";
+import { Button } from "@/app/_components/shadcn/button";
 
 const steps = ["Basic info", "Add address", "Upload profile image"];
 
@@ -150,7 +150,6 @@ export default function SignUpStepper() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {};
@@ -207,12 +206,12 @@ export default function SignUpStepper() {
               <>
                 <div className="mb-5 mt-2 w-full text-center">
                   <Button
-                    color="inherit"
-                    variant="outlined"
+                    variant="default"
                     onClick={handleGetAddress}
-                    className="mt-5"
+                    size={"default"}
+                    className="min-h-10"
                   >
-                    Get your address
+                    Get Address
                   </Button>
                 </div>
                 <FormRenderer<SignUpFormValues>
@@ -244,24 +243,24 @@ export default function SignUpStepper() {
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
-                sx={{ mr: 1 }}
                 type="button"
+                variant={"outline"}
               >
                 Back
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
               {isStepOptional(activeStep) && (
-                <Button
-                  color="inherit"
-                  onClick={handleSkip}
-                  sx={{ mr: 1 }}
-                  type="button"
-                >
+                <Button color="inherit" onClick={handleSkip} type="button">
                   Skip
                 </Button>
               )}
               {activeStep < steps.length - 1 && (
-                <Button color="inherit" onClick={handleNext} type={"button"}>
+                <Button
+                  color="inherit"
+                  onClick={handleNext}
+                  variant={"outline"}
+                  type={"button"}
+                >
                   Next
                 </Button>
               )}
@@ -280,7 +279,7 @@ export default function SignUpStepper() {
             </Box>
           </form>
           <div className="my-6 w-full text-center">
-            <Button variant="contained" color="inherit">
+            <Button variant="link" color="inherit">
               <Link href={"/login"}>Already have account ?</Link>
             </Button>
           </div>

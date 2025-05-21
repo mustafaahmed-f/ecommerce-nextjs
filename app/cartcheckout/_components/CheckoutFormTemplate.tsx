@@ -5,7 +5,7 @@ import { FormProvider } from "@/app/_context/FormContext";
 import { useAppSelector } from "@/app/_lib/store/store";
 import { CartProduct, ICart } from "@/app/cart/_types/CartType";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, Step, StepLabel, Stepper } from "@mui/material";
+import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -20,6 +20,7 @@ import { instance } from "@/app/_lib/axiosInstance";
 import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
 import { useRouter } from "next/navigation";
 import { cartInitialState } from "@/app/_lib/store/slices/cartSlice/cartSlice";
+import { Button } from "@/app/_components/shadcn/button";
 
 interface CheckOutFormTemplateProps {
   defaultValues: defaultValuesType;
@@ -220,7 +221,7 @@ function CheckOutFormTemplate({
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
-                sx={{ mr: 1 }}
+                variant={"outline"}
               >
                 Back
               </Button>
@@ -229,6 +230,11 @@ function CheckOutFormTemplate({
                 onClick={handleNext}
                 type={activeStep === steps.length ? "submit" : "button"}
                 disabled={!isValid}
+                variant={
+                  activeStep === steps.length - 1 || activeStep === steps.length
+                    ? "default"
+                    : "outline"
+                }
               >
                 {match(activeStep)
                   .with(0, () => "Next")

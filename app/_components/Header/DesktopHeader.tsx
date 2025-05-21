@@ -12,7 +12,6 @@ import { useAppDispatch, useAppSelector } from "@/app/_lib/store/store";
 import {
   Avatar,
   Box,
-  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -25,6 +24,7 @@ import { useState } from "react";
 import LogoAndSearch from "./LogoAndSearch";
 import PagesLinks from "./PagesLinks";
 import SocialLinks from "./SocialLinks";
+import { Button } from "../shadcn/button";
 
 const settings = ["Update Profile", "Logout"];
 
@@ -91,6 +91,7 @@ function DesktopHeader() {
         <div className="flex items-center sm:gap-14 sm:px-7 md:gap-24 md:px-20">
           <div>
             <Button
+              variant={"default"}
               id="basic-button"
               aria-controls={open ? "basic-menu" : undefined}
               aria-haspopup="true"

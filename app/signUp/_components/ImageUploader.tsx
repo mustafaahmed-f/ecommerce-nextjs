@@ -1,11 +1,11 @@
 import DeleteProductIcon from "@/app/_icons/DeleteProductIcon";
 import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
-import { Button } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { match } from "ts-pattern";
 import { SignUpFormValues } from "./SignUpStepper";
+import { Button } from "@/app/_components/shadcn/button";
 interface props {
   setValue: UseFormSetValue<any>;
   onUploadComplete: (uploaded: boolean) => void;
@@ -135,7 +135,7 @@ const ImageUploader = ({
         onClick={handleUpload}
         disabled={uploading || !file}
         type="button"
-        variant="contained"
+        variant="default"
         color="inherit"
       >
         {match(uploading)
