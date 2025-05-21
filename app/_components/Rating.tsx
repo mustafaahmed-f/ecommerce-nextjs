@@ -1,42 +1,34 @@
-"use client";
-
-import EmptyStar from "../_icons/EmptyStar";
-import FullStar from "../_icons/FullStar";
-import HalfStar from "../_icons/HalfStar";
+import { Star, StarHalf } from "lucide-react";
 
 interface RatingProps {
-  ratingValue: number;
+  value: number; // e.g. 3.5
+  max?: number; // default 5
+  readOnly?: boolean;
+  size?: number; // in pixels
 }
 
-function Rating({ ratingValue }: RatingProps) {
-  let rating: number = ratingValue;
-  let ratings: number[] = [];
-  while (ratings.length < 5) {
-    if (rating >= 1) {
-      ratings.push(1);
-      rating--;
-    } else {
-      if (rating === 0) {
-        ratings.push(0);
-      } else if (rating % 1 !== 0) {
-        ratings.push(0.5);
-        rating -= 0.5;
-      }
-    }
-  }
+export default function Rating({ value, max = 5, size = 20 }: RatingProps) {
+  // Clamp value between 0 and max
+  const safeValue = Math.min(Math.max(value ?? 0, 0), max);
+
+  const fullStars = Math.floor(safeValue);
+  const hasHalfStar = safeValue - fullStars >= 0.5;
+  const emptyStars = max - fullStars - (hasHalfStar ? 1 : 0);
+
   return (
-    <div className="flex items-center justify-start gap-2 text-sm">
-      {ratings.map((el, i) => {
-        return el === 1 ? (
-          <FullStar key={i} />
-        ) : el === 0.5 ? (
-          <HalfStar key={i} />
-        ) : (
-          <EmptyStar key={i} />
-        );
-      })}
+    <div
+      className="flex items-center space-x-0.5"
+      aria-label={`Rating: ${safeValue} out of ${max}`}
+    >
+      {[...Array(fullStars)].map((_, i) => (
+        <Star key={`full-${i}`} size={size} className="text-yellow-400" />
+      ))}
+
+      {hasHalfStar && <StarHalf size={size} className="text-yellow-400" />}
+
+      {[...Array(emptyStars)].map((_, i) => (
+        <Star key={`empty-${i}`} size={size} className="text-gray-300" />
+      ))}
     </div>
   );
 }
-
-export default Rating;

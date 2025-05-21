@@ -1,6 +1,6 @@
+import Rating from "@/app/_components/Rating";
 import DislikeIcon from "@/app/_icons/DislikeIcon";
 import LikeIcon from "@/app/_icons/LikeIcon";
-import { Rating } from "@mui/material";
 interface SingleReviewProps {
   name?: string;
   rating?: number;
@@ -23,7 +23,7 @@ function SingleReview({
       <div className="mb-2 flex items-center justify-between">
         <h3 className="text-lg font-semibold">{title}</h3>
         <div className="flex gap-1">
-          <Rating name="read-only" value={rating} readOnly />
+          <Rating value={rating!} readOnly />
         </div>
       </div>
 
