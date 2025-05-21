@@ -1,6 +1,7 @@
-import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
-import { IconButton, Stack, TextField } from "@mui/material";
-import { get } from "lodash";
+import AddCircleIcon from "@/app/_icons/AddCircleIcon";
+import RemoveCircleIcon from "@/app/_icons/RemoveCircleIcon";
+import { getErrObject } from "@/app/_lib/getErrObj";
+import { Stack, TextField } from "@mui/material";
 import {
   FieldValues,
   Path,
@@ -32,7 +33,7 @@ function QuantityControl<T extends FieldValues>({
   setValue,
   trigger,
 }: QuantityControlProps<T>) {
-  const errObj = get(errors, name);
+  const errObj = getErrObject<T>(errors, name);
   //TODO : check stock before increment or decrement;
   function set<P extends Path<T>>(path: P, value: PathValue<T, P>) {
     setValue(path, value);
@@ -88,9 +89,9 @@ function QuantityControl<T extends FieldValues>({
     <div className="col-span-2 my-2 flex justify-start">
       <div className="w-fit">
         <Stack direction="row" alignItems="center" spacing={1}>
-          <IconButton onClick={handleDecrement}>
-            <RemoveCircleOutline />
-          </IconButton>
+          <span onClick={handleDecrement}>
+            <RemoveCircleIcon />
+          </span>
           <TextField
             {...register(name)}
             type="number"
@@ -114,9 +115,9 @@ function QuantityControl<T extends FieldValues>({
               },
             }}
           />
-          <IconButton onClick={handleIncrement}>
-            <AddCircleOutline />
-          </IconButton>
+          <span onClick={handleIncrement}>
+            <AddCircleIcon />
+          </span>
         </Stack>
       </div>
     </div>

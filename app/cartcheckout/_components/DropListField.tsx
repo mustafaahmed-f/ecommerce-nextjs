@@ -1,3 +1,4 @@
+import { getErrObject } from "@/app/_lib/getErrObj";
 import {
   FormControl,
   InputLabel,
@@ -6,7 +7,6 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { get } from "lodash";
 import { useEffect, useState } from "react";
 import {
   FieldValues,
@@ -14,7 +14,7 @@ import {
   UseFormRegister,
   UseFormSetValue,
   UseFormTrigger,
-  UseFormWatch
+  UseFormWatch,
 } from "react-hook-form";
 import { inputFieldType } from "../_types/inputFieldType";
 
@@ -46,7 +46,7 @@ function DropListField<T extends FieldValues>({
     ? ["dependency dropListOptions", dependencyValue]
     : ["dropListOptions", fieldValue];
 
-  const errorObj = get(errors, name);
+  const errorObj = getErrObject<T>(errors, name);
 
   const { data, isPending, isError, error } = useQuery({
     queryKey,

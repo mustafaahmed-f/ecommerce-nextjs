@@ -1,6 +1,6 @@
 import { getFullAddress } from "@/app/_lib/getAddress";
+import { getErrObject } from "@/app/_lib/getErrObj";
 import { Button, TextField } from "@mui/material";
-import { get } from "lodash";
 import { useState } from "react";
 import {
   FieldValues,
@@ -35,7 +35,7 @@ function TextInputField<T extends FieldValues>({
   isPassword = false,
 }: TextInputFieldProps<T>) {
   const watchedValue: PathValue<T, typeof name> = watch(name);
-  const errorObj = get(errors, name);
+  const errorObj = getErrObject<T>(errors, name);
   const [showPass, setShowPass] = useState(false);
 
   return name !== "userInfo.address" ? (

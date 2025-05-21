@@ -1,5 +1,5 @@
 "use client";
-import CancelIcon from "@mui/icons-material/Cancel";
+import CancelIcon from "@/app/_icons/CancelIcon";
 import Link from "next/link";
 
 interface CancelUIProps {
@@ -10,7 +10,7 @@ function CancelUI({ orderNumber }: CancelUIProps) {
   return (
     <div className="outer-layout-stripe-redirect">
       <div className="inner-layout-stripe-redirect bg-red-50">
-        <CancelIcon fontSize="large" className="text-red-500" />
+        <CancelIcon />
         <h1 className="text-2xl font-semibold text-red-700">
           Payment Canceled
         </h1>

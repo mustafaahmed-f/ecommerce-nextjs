@@ -57,7 +57,6 @@ async function InitialDataProvider({
   let finalCart: ICart = initalCart;
 
   try {
-    console.time("MergeCart");
     if (isAuth && offLineCartId) {
       let mergedCart: ICart = mergeCartsFn(AuthCart.cart, OfflineCart.cart);
       let response = await mergeCarts(
@@ -76,7 +75,6 @@ async function InitialDataProvider({
     } else {
       finalCart = initalCart;
     }
-    console.timeEnd("MergeCart");
   } catch (error: any) {
     console.log(`Error during merging carts : ${error.message}`);
     finalCart = initalCart;
