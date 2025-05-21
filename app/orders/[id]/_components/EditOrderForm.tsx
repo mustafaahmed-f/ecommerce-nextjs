@@ -82,7 +82,7 @@ function EditOrderForm({ defaultValues, orderId }: EditOrderFormProps) {
           control={methods.control}
         />
       </section>
-      <div className="mt-5 flex items-center justify-end">
+      <div className="mt-5 flex items-center justify-end px-1 sm:px-4 md:px-8">
         <Button variant="secondary" type="submit" disabled={!isValid}>
           Edit
         </Button>

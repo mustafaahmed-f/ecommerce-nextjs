@@ -1,11 +1,20 @@
 import { getErrObject } from "@/app/_lib/getErrObj";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/app/_lib/shadcn/utils";
+import { Button } from "@/app/_components/shadcn/button";
 import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/app/_components/shadcn/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/app/_components/shadcn/popover";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import {
@@ -40,6 +49,7 @@ function DropListField<T extends FieldValues>({
   trigger,
 }: DropListFieldProps<T>) {
   const { 0: dropListOptions, 1: setDropListOptions } = useState<string[]>([]);
+  const { 0: open, 1: setOpen } = useState<boolean>(false);
   const dependencyValue = dependency ? watch(dependency) : "";
   const fieldValue = watch(name);
   const queryKey = dependency
@@ -65,49 +75,81 @@ function DropListField<T extends FieldValues>({
     }
   }, [data, setDropListOptions, fieldValue, setValue, name, trigger]);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setValue(name, event.target.value as PathValue<T, typeof name>);
+  // const handleChange = (event: SelectChangeEvent) => {
+  //   setValue(name, event.target.value as PathValue<T, typeof name>);
+  //   trigger(name);
+  // };
+
+  const onSelect = (val: string) => {
+    setValue(name, val as PathValue<T, typeof name>);
     trigger(name);
+    setOpen(false);
   };
 
   return (
     <div
       className={`flex flex-col gap-1 ${fullWidth ? "col-span-2" : "col-span-1"}`}
     >
-      <FormControl
-        fullWidth={true}
-        error={isError || !!errorObj}
-        disabled={isPending}
-        required={required}
-        className={fullWidth ? "col-span-2" : "col-span-1"}
-      >
-        <InputLabel id="demo-simple-select-label">{lable}</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={
-            dropListOptions.includes(fieldValue as string)
-              ? (fieldValue as string)
-              : ""
-          }
-          label={lable}
-          onChange={handleChange}
-          size="small"
-          className={fullWidth ? "col-span-2" : "col-span-1"}
-          error={isError || !!errorObj}
-          placeholder={placeholder}
-          MenuProps={{ disableAutoFocusItem: true, disableAutoFocus: true }}
-        >
-          {dropListOptions.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      {isError && <p className="text-red-600">{error?.message}</p>}
+      <label className="mb-1 font-semibold" htmlFor={name}>
+        {lable} {required && "*"}
+      </label>
+
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={cn(
+              "w-full justify-between",
+              fullWidth ? "col-span-2" : "col-span-1",
+              isError || errorObj ? "border-red-600" : "",
+            )}
+            id={name}
+          >
+            {fieldValue
+              ? (dropListOptions.find((opt) => opt === fieldValue) ??
+                placeholder ??
+                "Select...")
+              : (placeholder ?? "Select...")}
+            <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+
+        <PopoverContent className="p-0">
+          <Command>
+            <CommandInput placeholder={`Search ${lable}...`} className="h-9" />
+            <CommandList>
+              {isPending && <CommandEmpty>Loading...</CommandEmpty>}
+              {!isPending && dropListOptions.length === 0 && (
+                <CommandEmpty>No options found.</CommandEmpty>
+              )}
+
+              <CommandGroup>
+                {dropListOptions.map((option) => (
+                  <CommandItem
+                    key={option}
+                    value={option}
+                    onSelect={() => onSelect(option)}
+                  >
+                    {option}
+                    <Check
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        fieldValue === option ? "opacity-100" : "opacity-0",
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+
+      {isError && <p className="mt-1 text-xs text-red-600">{error?.message}</p>}
       {!!errorObj && (
-        <p className="mx-3 text-xs text-red-600">{errorObj.message}</p>
+        <p className="mt-1 text-xs text-red-600">{errorObj.message}</p>
       )}
     </div>
   );

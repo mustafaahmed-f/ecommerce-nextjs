@@ -1,22 +1,29 @@
 "use client";
 
-import { Chip, Dialog } from "@mui/material";
+import { Chip } from "@mui/material";
 import EditOrderForm from "./EditOrderForm";
 import OrderSummary from "./OrderSummary";
 
-import dayjs from "dayjs";
-import { useState } from "react";
-import OrderItemsAccordion from "./OrderItemsAccordion";
-import CouponApplied from "./CouponApplied";
-import OrderUserInfoAccordion from "./OrderUserInfoAccordion";
+import { Button } from "@/app/_components/shadcn/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogOverlay,
+  DialogTitle,
+} from "@/app/_components/shadcn/dialog";
+import { instance } from "@/app/_lib/axiosInstance";
 import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
 import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
-import { instance } from "@/app/_lib/axiosInstance";
+import dayjs from "dayjs";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Swal from "sweetalert2";
 import { getChipColors } from "../../_utils/getChipColors";
-import Link from "next/link";
-import { Button } from "@/app/_components/shadcn/button";
+import CouponApplied from "./CouponApplied";
+import OrderItemsAccordion from "./OrderItemsAccordion";
+import OrderUserInfoAccordion from "./OrderUserInfoAccordion";
 
 interface SingleOrderPageProps {
   order: any;
@@ -240,14 +247,20 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
       </div>
 
       {/* Edit Info Dialog */}
-      <Dialog open={editOpen} onClose={handleEditClose} maxWidth="md">
-        <div className="px-6 py-6">
-          <h2 className="mb-4 text-2xl font-semibold">Edit Shipping Info</h2>
+
+      <Dialog open={editOpen} onOpenChange={handleEditClose}>
+        {/* DialogTrigger is optional here if you want a button to open it; 
+          but since you control open state externally, you can omit it */}
+        {/* <DialogOverlay className="fixed inset-0 overflow-y-auto bg-black/50" /> */}
+        <DialogContent className="max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="px-100 mb-3 sm:px-4 md:px-8">
+            <DialogTitle>Edit Shipping Info</DialogTitle>
+          </DialogHeader>
           <EditOrderForm
             defaultValues={editFormDefaultValues}
             orderId={order._id}
           />
-        </div>
+        </DialogContent>
       </Dialog>
     </div>
   );
