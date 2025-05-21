@@ -1,10 +1,10 @@
-import { useFormContext } from "@/app/_context/FormContext";
+import { Label } from "@/app/_components/shadcn/label";
 import {
-  FormControl,
-  FormControlLabel,
-  Radio,
   RadioGroup,
-} from "@mui/material";
+  RadioGroupItem,
+} from "@/app/_components/shadcn/radio-group";
+import { useFormContext } from "@/app/_context/FormContext";
+
 import { useState } from "react";
 
 interface PaymentMethodSelectorProps {}
@@ -15,25 +15,29 @@ function PaymentMethodSelector({}: PaymentMethodSelectorProps) {
     "cash" | "card"
   >("cash");
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue("paymentMethod", event.target.value as "cash" | "card");
-    setCurrentSelection(event.target.value as "cash" | "card");
+  const handleValueChange = (value: string) => {
+    setValue("paymentMethod", value as "cash" | "card");
+    setCurrentSelection(value as "cash" | "card");
     trigger("paymentMethod");
   };
 
   return (
-    <FormControl>
-      <RadioGroup
-        row
-        aria-labelledby="demo-controlled-radio-buttons-group"
-        name="controlled-radio-buttons-group"
-        value={currentSelection}
-        onChange={handleChange}
-      >
-        <FormControlLabel value="cash" control={<Radio />} label="Cash" />
-        <FormControlLabel value="card" control={<Radio />} label="Card" />
-      </RadioGroup>
-    </FormControl>
+    <RadioGroup
+      value={currentSelection}
+      onValueChange={handleValueChange}
+      className="flex flex-row gap-4"
+      aria-label="Payment Method"
+      name="payment-method"
+    >
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="cash" id="cash" />
+        <Label htmlFor="cash">Cash</Label>
+      </div>
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem value="card" id="card" />
+        <Label htmlFor="card">Card</Label>
+      </div>
+    </RadioGroup>
   );
 }
 
