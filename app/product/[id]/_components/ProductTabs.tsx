@@ -1,12 +1,15 @@
 "use client";
-import { Tab } from "@mui/material";
+
 import { ProductType, Review } from "../_types/Product.type";
-import Box from "@mui/material/Box";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
+
 import { useState } from "react";
 import ProductReviewsSection from "./ProductReviewsSection";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/app/_components/shadcn/tabs";
 
 interface ProductTabsProps {
   product: ProductType;
@@ -16,27 +19,24 @@ function ProductTabs({ product }: ProductTabsProps) {
   const { description, reviews } = product;
   const [value, setValue] = useState("1");
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
+  const handleChange = (value: string) => {
+    setValue(value);
   };
+
   return (
     <div className="px-2 py-8 sm:px-8 md:px-20">
-      <Box sx={{ width: "100%", typography: "body1" }}>
-        <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Description" value="1" />
-              <Tab label="Reviews" value="2" />
-            </TabList>
-          </Box>
-          <TabPanel value="1">
-            <p>{description}</p>
-          </TabPanel>
-          <TabPanel value="2">
-            <ProductReviewsSection reviews={reviews as Review[]} />
-          </TabPanel>
-        </TabContext>
-      </Box>
+      <Tabs value={value} onValueChange={handleChange} className="w-full">
+        <TabsList className="border-b border-gray-200">
+          <TabsTrigger value="1">Description</TabsTrigger>
+          <TabsTrigger value="2">Reviews</TabsTrigger>
+        </TabsList>
+        <TabsContent value="1">
+          <p>{description}</p>
+        </TabsContent>
+        <TabsContent value="2">
+          <ProductReviewsSection reviews={reviews!} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
