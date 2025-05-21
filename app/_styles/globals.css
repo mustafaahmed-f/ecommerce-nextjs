@@ -283,15 +283,3 @@ body::-webkit-scrollbar-thumb {
     @apply bg-background text-foreground;
   }
 }
-
-/* To solve problem of using droplist inside dialog */
-
-/* Ensure overlay allows pointer events to children */
-.dialog-overlay {
-  pointer-events: auto; /* or remove pointer-events: none if applied */
-  z-index: 50; /* make sure it's below dropdown menu */
-}
-
-.MuiPopover-root {
-  z-index: 1300; /* MUI default, should be above the dialog overlay */
-}

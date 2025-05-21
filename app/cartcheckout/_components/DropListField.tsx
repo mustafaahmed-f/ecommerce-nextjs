@@ -90,8 +90,8 @@ function DropListField<T extends FieldValues>({
     <div
       className={`flex flex-col gap-1 ${fullWidth ? "col-span-2" : "col-span-1"}`}
     >
-      <label className="mb-1 font-semibold" htmlFor={name}>
-        {lable} {required && "*"}
+      <label className="mb-1 text-sm font-medium text-gray-700" htmlFor={name}>
+        {lable} {required && <span className="ms-1 text-red-500">*</span>}
       </label>
 
       <Popover open={open} onOpenChange={setOpen}>

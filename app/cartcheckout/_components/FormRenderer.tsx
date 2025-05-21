@@ -33,7 +33,7 @@ function FormRenderer<T extends FieldValues>({
   control,
 }: FormRendererProps<T>) {
   return (
-    <div className="grid w-full grid-cols-2 gap-x-2 gap-y-5">
+    <div className="grid w-full grid-cols-2 gap-x-2 gap-y-3">
       {fields.map((field: inputFieldType<T>) => {
         switch (field.type) {
           case "dropdown":

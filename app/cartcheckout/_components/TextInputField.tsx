@@ -1,6 +1,7 @@
+import { Button } from "@/app/_components/shadcn/button";
+import { Input } from "@/app/_components/shadcn/input";
 import { getFullAddress } from "@/app/_lib/getAddress";
 import { getErrObject } from "@/app/_lib/getErrObj";
-import { TextField } from "@mui/material";
 import { useState } from "react";
 import {
   FieldValues,
@@ -11,7 +12,6 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 import { inputFieldType } from "../_types/inputFieldType";
-import { Button } from "@/app/_components/shadcn/button";
 
 interface TextInputFieldProps<T extends FieldValues> extends inputFieldType<T> {
   register: UseFormRegister<T>;
@@ -43,55 +43,64 @@ function TextInputField<T extends FieldValues>({
     <div
       className={`flex flex-col items-start ${fullWidth ? "col-span-2" : "col-span-1"} w-full`}
     >
-      <TextField
-        label={lable}
-        variant="outlined"
-        placeholder={placeholder}
-        fullWidth={fullWidth}
-        required={required}
+      <label htmlFor={name} className="mb-1 text-sm font-medium text-gray-700">
+        {lable}
+        {required && <span className="ms-1 text-red-500">*</span>}
+      </label>
+      <Input
+        id={name}
         type={isPassword && !showPass ? "password" : "text"}
-        {...register(name)}
-        value={watchedValue || ""} // Force value, fallback to empty string
+        placeholder={placeholder}
+        value={watchedValue || ""}
         onChange={(e) =>
           setValue(name, e.target.value as PathValue<T, typeof name>, {
             shouldValidate: true,
           })
         }
         className="w-full"
-        size="small"
-        helperText={errorObj?.message}
-        error={!!errorObj}
       />
+      {errorObj && (
+        <p className="mt-1 text-xs text-red-600">{errorObj.message}</p>
+      )}
+
       {isPassword && name !== "rePassword" && (
         <div className="flex items-center gap-1 px-2 py-1">
           <input
             type="checkbox"
+            id={`${name}-show-password`}
             onChange={(e) => setShowPass(e.target.checked)}
           />
-          <span>Show password</span>
+          <label htmlFor={`${name}-show-password`} className="select-none">
+            Show password
+          </label>
         </div>
       )}
     </div>
   ) : (
-    <div className="col-span-2 grid w-full grid-cols-1 gap-1 max-md:mb-2 max-sm:grid-rows-2 md:grid-cols-[3fr_1fr]">
-      <TextField
-        label={lable}
-        variant="outlined"
-        placeholder={placeholder}
-        fullWidth={fullWidth}
-        required={required}
-        {...register(name)}
-        value={watchedValue || ""} // Force value, fallback to empty string
-        onChange={(e) =>
-          setValue(name, e.target.value as PathValue<T, typeof name>, {
-            shouldValidate: true,
-          })
-        }
-        className={"col-span-1"}
-        size="small"
-        helperText={errorObj?.message}
-        error={!!errorObj}
-      />
+    <div className="col-span-2 grid w-full grid-cols-1 gap-x-1 max-md:mb-2 max-sm:grid-rows-2 md:grid-cols-[3fr_1fr]">
+      <div className="flex flex-col">
+        <label
+          htmlFor={name}
+          className="mb-1 text-sm font-medium text-gray-700"
+        >
+          {lable}
+          {required && <span className="ms-1 text-red-500">*</span>}
+        </label>
+        <Input
+          id={name}
+          placeholder={placeholder}
+          value={watchedValue || ""}
+          onChange={(e) =>
+            setValue(name, e.target.value as PathValue<T, typeof name>, {
+              shouldValidate: true,
+            })
+          }
+          className="col-span-1 w-full"
+        />
+        {errorObj && (
+          <p className="mt-1 text-xs text-red-600">{errorObj.message}</p>
+        )}
+      </div>
 
       <Button
         variant="default"
@@ -101,7 +110,7 @@ function TextInputField<T extends FieldValues>({
           trigger(name);
         }}
         size={"default"}
-        className="min-h-10"
+        className="self-end"
       >
         Get Address
       </Button>
