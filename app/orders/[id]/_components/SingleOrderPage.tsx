@@ -1,6 +1,5 @@
 "use client";
 
-import { Chip } from "@mui/material";
 import EditOrderForm from "./EditOrderForm";
 import OrderSummary from "./OrderSummary";
 
@@ -9,7 +8,6 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogOverlay,
   DialogTitle,
 } from "@/app/_components/shadcn/dialog";
 import { instance } from "@/app/_lib/axiosInstance";
@@ -24,6 +22,7 @@ import { getChipColors } from "../../_utils/getChipColors";
 import CouponApplied from "./CouponApplied";
 import OrderItemsAccordion from "./OrderItemsAccordion";
 import OrderUserInfoAccordion from "./OrderUserInfoAccordion";
+import Chip from "@/app/_components/Chip";
 
 interface SingleOrderPageProps {
   order: any;

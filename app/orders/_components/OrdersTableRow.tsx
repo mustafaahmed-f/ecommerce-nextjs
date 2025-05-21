@@ -1,7 +1,7 @@
-import { Chip } from "@mui/material";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { getChipColors } from "../_utils/getChipColors";
+import Chip from "@/app/_components/Chip";
 
 interface OrdersTableRowProps {
   order: any;
