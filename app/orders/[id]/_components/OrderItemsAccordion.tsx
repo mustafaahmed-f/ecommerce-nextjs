@@ -1,6 +1,6 @@
+import ExpandMoreIcon from "@/app/_icons/ExpandMoreIcon";
 import { CartProduct } from "@/app/cart/_types/CartType";
 import ShoppingItem from "@/app/cartcheckout/_components/ShoppingItem";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
   AccordionDetails,

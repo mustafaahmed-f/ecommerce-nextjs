@@ -1,11 +1,11 @@
 import AddToCartBtn from "@/app/_components/AddToCartBtn";
 import { colorMap } from "@/app/_lib/colorsArray";
 import ColorIndicator from "@/app/products/_components/ColorIndicator";
-import { FavoriteBorder } from "@mui/icons-material";
 import Link from "next/link";
 import { ProductType } from "../_types/Product.type";
 import ProductProperty from "./ProductProperty";
 import UpdateProductQuantity from "./UpdateProductQuantity";
+import FavoriteBorderSVG from "@/app/_icons/FavoriteBorderSVG";
 
 interface ProductInfoProps {
   product: ProductType;
@@ -49,7 +49,7 @@ function ProductInfo({ product }: ProductInfoProps) {
           </div>
         </div>
         <div className="cursor-pointer text-black hover:text-sky-500">
-          <FavoriteBorder />
+          <FavoriteBorderSVG />
         </div>
       </div>
       {/* Other details */}

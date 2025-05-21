@@ -4,9 +4,9 @@ import {
   AccordionDetails,
   Typography,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { couponType } from "@/app/_lib/couponTypes";
 import { CartProduct } from "@/app/cart/_types/CartType";
+import ExpandMoreIcon from "@/app/_icons/ExpandMoreIcon";
 
 function OrderSummary({ order }: { order: any }) {
   const amountToDiscount = order.couponId

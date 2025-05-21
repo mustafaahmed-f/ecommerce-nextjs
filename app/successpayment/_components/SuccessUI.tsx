@@ -1,5 +1,5 @@
 "use client";
-import { CheckCircle } from "@mui/icons-material";
+import CheckCircleIcon from "@/app/_icons/CheckCircleIcon";
 import { motion } from "framer-motion";
 
 interface SuccessUIProps {
@@ -16,7 +16,7 @@ function SuccessUI({ orderNumber }: SuccessUIProps) {
           transition={{ duration: 0.5 }}
           className="text-green-600"
         >
-          <CheckCircle fontSize="large" className="text-green-500" />
+          <CheckCircleIcon />
         </motion.div>
         <h1 className="text-2xl font-semibold text-green-700">
           Payment Successful!
