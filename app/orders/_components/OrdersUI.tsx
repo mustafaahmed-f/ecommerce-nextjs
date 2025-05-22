@@ -1,6 +1,6 @@
 "use client";
 
-import ProductsPagination from "@/app/products/_components/ProductsPagination";
+import ShadcnPagination from "@/app/_components/ShadcnPagination";
 import OrdersTable from "./OrdersTable";
 
 interface OrdersUIProps {
@@ -8,11 +8,12 @@ interface OrdersUIProps {
 }
 
 function OrdersUI({ orders }: OrdersUIProps) {
+  let count = Math.ceil(orders.totalOrders / 7);
   return (
     <div className="mx-auto min-w-[50%] px-4 py-8 sm:px-8">
       <h1 className="mb-14 text-4xl font-bold sm:text-5xl">Orders</h1>
       <OrdersTable orders={orders} />
-      <ProductsPagination productsCount={orders.totalOrders} size={7} />
+      <ShadcnPagination count={count} />
     </div>
   );
 }

@@ -12,7 +12,6 @@ export async function getOrders({
   try {
     const decoded = jwt.decode(token);
     const userId = (decoded as JwtPayload)?.id;
-    console.log("userId : ", userId);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/order/getOrders?page=${page}&status=${status}`,
       {

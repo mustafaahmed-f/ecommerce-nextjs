@@ -16,7 +16,6 @@ async function Page(props: PageProps) {
     !searchParams.status || searchParams.status === ""
       ? null
       : searchParams.status;
-  console.log("status : ", status);
   const token = cookies().get("next_ecommerce_token")?.value;
   const orders = await getOrders({ page, status, token: token! });
 
