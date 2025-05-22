@@ -5,7 +5,6 @@ import { FormProvider } from "@/app/_context/FormContext";
 import { useAppSelector } from "@/app/_lib/store/store";
 import { CartProduct, ICart } from "@/app/cart/_types/CartType";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Step, StepLabel, Stepper } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -189,20 +188,31 @@ function CheckOutFormTemplate({
       className={`h-full w-full px-3 py-14 sm:px-10 sm:py-20 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
     >
       <div className="w-full">
-        <Stepper activeStep={activeStep}>
-          {steps.map((label) => {
-            const stepProps: { completed?: boolean } = {};
-            const labelProps: {
-              optional?: React.ReactNode;
-            } = {};
+        <div className="flex items-center justify-between gap-4 py-4">
+          {steps.map((label, index) => {
+            const isActive = index === activeStep;
+            const isCompleted = index < activeStep;
+
             return (
-              <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
-              </Step>
+              <div key={label} className="flex flex-1 items-center gap-2">
+                <div className="flex flex-row items-center gap-2">
+                  <div
+                    className={`flex h-8 w-8 flex-grow items-center justify-center rounded-full border-2 p-3 text-sm font-medium transition ${isCompleted ? "border-green-500 bg-green-500 text-white" : ""} ${isActive ? "border-primary bg-primary text-white" : ""} ${!isActive && !isCompleted ? "border-gray-300 text-gray-500" : ""} `}
+                  >
+                    {index + 1}
+                  </div>
+                  <div className="flex flex-col text-center text-sm font-medium">
+                    {label}
+                  </div>
+                </div>
+
+                {index < steps.length - 1 && (
+                  <div className="mx-auto mt-2 h-0.5 w-full max-w-[60%] bg-gray-300" />
+                )}
+              </div>
             );
           })}
-        </Stepper>
-        {/* //TODO : write here logic after finishing the form: */}
+        </div>
 
         <>
           <form onSubmit={methods.handleSubmit(handleSubmitForm)}>

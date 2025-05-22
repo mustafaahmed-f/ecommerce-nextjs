@@ -4,7 +4,6 @@ import { getFullAddress } from "@/app/_lib/getAddress";
 import { signupValidations } from "@/app/_lib/validationSchemas/signUpValidations";
 import FormRenderer from "@/app/cartcheckout/_components/FormRenderer";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Step, StepLabel, Stepper } from "@mui/material";
 import Link from "next/link";
 import * as React from "react";
 import { useForm } from "react-hook-form";
@@ -148,25 +147,38 @@ export default function SignUpStepper() {
 
   return (
     <div className="w-full">
-      <Stepper activeStep={activeStep}>
+      <div className="flex items-center justify-between gap-4 py-4">
         {steps.map((label, index) => {
-          const stepProps: { completed?: boolean } = {};
-          const labelProps: {
-            optional?: React.ReactNode;
-          } = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = <span className="text-xs">Optional</span>;
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
+          const isActive = index === activeStep;
+          const isCompleted = index < activeStep && !isStepSkipped(index);
+          const isOptional = isStepOptional(index);
+
           return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
+            <div key={label} className="flex flex-1 items-center gap-2">
+              <div className="flex flex-row items-center gap-2">
+                <div
+                  className={`flex h-8 w-8 flex-grow items-center justify-center rounded-full border-2 p-3 text-sm font-medium transition ${isCompleted ? "border-green-500 bg-green-500 text-white" : ""} ${isActive ? "border-primary bg-primary text-white" : ""} ${!isActive && !isCompleted ? "border-gray-300 text-gray-500" : ""} `}
+                >
+                  {index + 1}
+                </div>
+                <div className="flex flex-col text-center text-sm font-medium">
+                  {label}
+                  {isOptional && (
+                    <span className="ml-1 text-xs text-muted-foreground">
+                      (Optional)
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {index < steps.length - 1 && (
+                <div className="mx-auto mt-2 h-0.5 w-full max-w-[60%] bg-gray-300" />
+              )}
+            </div>
           );
         })}
-      </Stepper>
+      </div>
+
       {activeStep === steps.length ? (
         <React.Fragment>
           <Alert variant="success" color="" className="mt-3">
