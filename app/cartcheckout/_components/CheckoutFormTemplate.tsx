@@ -5,7 +5,7 @@ import { FormProvider } from "@/app/_context/FormContext";
 import { useAppSelector } from "@/app/_lib/store/store";
 import { CartProduct, ICart } from "@/app/cart/_types/CartType";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Step, StepLabel, Stepper } from "@mui/material";
+import { Step, StepLabel, Stepper } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -188,7 +188,7 @@ function CheckOutFormTemplate({
     <div
       className={`h-full w-full px-3 py-14 sm:px-10 sm:py-20 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
     >
-      <Box sx={{ width: "100%" }}>
+      <div className="w-full">
         <Stepper activeStep={activeStep}>
           {steps.map((label) => {
             const stepProps: { completed?: boolean } = {};
@@ -216,7 +216,7 @@ function CheckOutFormTemplate({
             </FormProvider>
 
             {/* //// Control buttons : */}
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <div className="flex w-full items-center justify-between">
               <Button
                 color="inherit"
                 disabled={activeStep === 0}
@@ -225,7 +225,7 @@ function CheckOutFormTemplate({
               >
                 Back
               </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
+
               <Button
                 onClick={handleNext}
                 type={activeStep === steps.length ? "submit" : "button"}
@@ -244,10 +244,10 @@ function CheckOutFormTemplate({
                       .otherwise(() => "Pay Now"),
                   )}
               </Button>
-            </Box>
+            </div>
           </form>
         </>
-      </Box>
+      </div>
     </div>
   );
 }

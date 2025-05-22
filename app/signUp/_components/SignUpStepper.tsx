@@ -4,12 +4,7 @@ import { getFullAddress } from "@/app/_lib/getAddress";
 import { signupValidations } from "@/app/_lib/validationSchemas/signUpValidations";
 import FormRenderer from "@/app/cartcheckout/_components/FormRenderer";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Alert } from "@mui/material";
-import Box from "@mui/material/Box";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Stepper from "@mui/material/Stepper";
-import Typography from "@mui/material/Typography";
+import { Step, StepLabel, Stepper } from "@mui/material";
 import Link from "next/link";
 import * as React from "react";
 import { useForm } from "react-hook-form";
@@ -22,6 +17,13 @@ import {
 } from "../_utils/signUpFieldsObjects";
 import ImageUploader from "./ImageUploader";
 import { Button } from "@/app/_components/shadcn/button";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/app/_components/shadcn/alert";
+import { AlertCircle } from "lucide-react";
+import { ErrorToast } from "@/app/_lib/toasts";
 
 const steps = ["Basic info", "Add address", "Upload profile image"];
 
@@ -34,10 +36,6 @@ const mySchema: Yup.ObjectSchema<any> = signupValidations;
 export type SignUpFormValues = Yup.InferType<typeof mySchema>;
 
 export default function SignUpStepper() {
-  const { 0: alertMessage, 1: setAlertMessage } = React.useState<string | null>(
-    null,
-  );
-  const { 0: isError, 1: setIsError } = React.useState<boolean>(false);
   const { 0: isLoading, 1: setIsLoading } = React.useState<boolean>(false);
   const { 0: activeStep, 1: setActiveStep } = React.useState(0);
   const { 0: skipped, 1: setSkipped } = React.useState(new Set<number>());
@@ -111,24 +109,24 @@ export default function SignUpStepper() {
     if (activeStep < steps.length - 1) return;
     try {
       setIsLoading(true);
-      setAlertMessage("");
-      setIsError(false);
+
       const response = await signUpSystemAction(data);
       console.log(response);
       if (response.success) {
         console.log("Here");
-        setAlertMessage(response.message); // Set success message
-        setIsError(false);
+
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
       } else {
-        setAlertMessage(response.message); // Set error message
-        setIsError(true);
+        ErrorToast.fire({
+          title: response.message,
+        });
         setIsLoading(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       setIsLoading(false);
-      setAlertMessage("An unexpected error occurred. Please try again.");
-      setIsError(true);
+      ErrorToast.fire({
+        title: error.message,
+      });
       console.log(error);
     } finally {
       setIsLoading(false);
@@ -149,7 +147,7 @@ export default function SignUpStepper() {
   }
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <div className="w-full">
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {};
@@ -157,9 +155,7 @@ export default function SignUpStepper() {
             optional?: React.ReactNode;
           } = {};
           if (isStepOptional(index)) {
-            labelProps.optional = (
-              <Typography variant="caption">Optional</Typography>
-            );
+            labelProps.optional = <span className="text-xs">Optional</span>;
           }
           if (isStepSkipped(index)) {
             stepProps.completed = false;
@@ -173,20 +169,19 @@ export default function SignUpStepper() {
       </Stepper>
       {activeStep === steps.length ? (
         <React.Fragment>
-          <Alert
-            severity="success"
-            sx={{ width: "100%" }}
-            variant="filled"
-            className="my-6"
-          >
-            Signed up successfully !!
+          <Alert variant="success" color="" className="mt-3">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Success</AlertTitle>
+            <AlertDescription>Signed up successfully !!</AlertDescription>
           </Alert>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Link href={"/login"} onClick={handleReset}>
-              Go to login page
-            </Link>
-          </Box>
+
+          <div className="mt-5 flex w-full justify-end">
+            <Button variant={"link"}>
+              <Link href={"/login"} onClick={handleReset}>
+                Go to login page
+              </Link>
+            </Button>
+          </div>
         </React.Fragment>
       ) : (
         <React.Fragment>
@@ -238,7 +233,7 @@ export default function SignUpStepper() {
               </div>
             )}
 
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <div className="mt-6 flex w-full items-center justify-between">
               <Button
                 color="inherit"
                 disabled={activeStep === 0}
@@ -248,22 +243,29 @@ export default function SignUpStepper() {
               >
                 Back
               </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              {isStepOptional(activeStep) && (
-                <Button color="inherit" onClick={handleSkip} type="button">
-                  Skip
-                </Button>
-              )}
-              {activeStep < steps.length - 1 && (
-                <Button
-                  color="inherit"
-                  onClick={handleNext}
-                  variant={"outline"}
-                  type={"button"}
-                >
-                  Next
-                </Button>
-              )}
+
+              <div className="flex">
+                {isStepOptional(activeStep) && (
+                  <Button
+                    color="inherit"
+                    onClick={handleSkip}
+                    className="me-1"
+                    type="button"
+                  >
+                    Skip
+                  </Button>
+                )}
+                {activeStep < steps.length - 1 && (
+                  <Button
+                    color="inherit"
+                    onClick={handleNext}
+                    variant={"outline"}
+                    type={"button"}
+                  >
+                    Next
+                  </Button>
+                )}
+              </div>
               {activeStep === steps.length - 1 && (
                 <Button
                   color="inherit"
@@ -276,7 +278,7 @@ export default function SignUpStepper() {
                     .otherwise(() => "")}
                 </Button>
               )}
-            </Box>
+            </div>
           </form>
           <div className="my-6 w-full text-center">
             <Button variant="link" color="inherit">
@@ -285,6 +287,6 @@ export default function SignUpStepper() {
           </div>
         </React.Fragment>
       )}
-    </Box>
+    </div>
   );
 }

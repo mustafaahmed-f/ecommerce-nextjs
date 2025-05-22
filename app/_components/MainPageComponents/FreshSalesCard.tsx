@@ -37,7 +37,7 @@ function FreshSalesCard({
         <p className="font-bold text-black">{product.title}</p>
         <p className="text-textGrey">{product.brand}</p>
         <div className="flex flex-row flex-wrap items-center justify-start gap-2">
-          <Rating ratingValue={product.rating} />
+          <Rating value={product.rating} />
           <p className="text-textGrey">{product.rating}</p>
         </div>
         <div className="flex flex-row items-center justify-start gap-[2px] sm:gap-3">
