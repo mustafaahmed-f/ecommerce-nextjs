@@ -14,6 +14,10 @@ function BreadCrumbWrapper({}: BreadCrumbWrapperProps) {
           href: "/",
         },
         {
+          label: "Products",
+          href: "/products",
+        },
+        {
           label: category as string,
           href: `/products/${category}`,
           current: true,
@@ -21,7 +25,7 @@ function BreadCrumbWrapper({}: BreadCrumbWrapperProps) {
       ]
     : [];
   return breadCrumbOptions.length ? (
-    <div className="flex items-center justify-start max-sm:bg-slate-100 bg-white w-full md:mx-0 px-2 list-none py-5  sm:gap-3 md:gap-16  sm:px-8 md:px-20 categoryList">
+    <div className="categoryList flex w-full list-none items-center justify-start bg-white px-2 py-5 max-sm:bg-slate-100 sm:gap-3 sm:px-8 md:mx-0 md:gap-16 md:px-20">
       <BreadCrumb breadCrumbOptions={breadCrumbOptions} />
     </div>
   ) : null;
