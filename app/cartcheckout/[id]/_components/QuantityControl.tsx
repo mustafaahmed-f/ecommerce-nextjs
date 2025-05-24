@@ -77,12 +77,15 @@ function QuantityControl<T extends FieldValues>({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === "" || e.target.value === "0") return;
-    set(
-      "products.0.quantity" as Path<T>,
-      parseInt(e.target.value) as PathValue<T, Path<T>>,
-    );
-    handlePaymentChange(parseInt(e.target.value));
-    trigger("products.0.quantity" as Path<T>);
+
+    if (/^\d*$/.test(e.target.value)) {
+      set(
+        "products.0.quantity" as Path<T>,
+        parseInt(e.target.value) as PathValue<T, Path<T>>,
+      );
+      handlePaymentChange(parseInt(e.target.value));
+      trigger("products.0.quantity" as Path<T>);
+    }
   };
 
   return (
@@ -96,7 +99,7 @@ function QuantityControl<T extends FieldValues>({
           {required && <span className="ms-1 text-red-500">*</span>}
         </label>
         <div className="flex items-center gap-2">
-          <span onClick={handleDecrement}>
+          <span onClick={handleDecrement} className="cursor-pointer">
             <RemoveCircleIcon />
           </span>
           <Input
@@ -110,7 +113,7 @@ function QuantityControl<T extends FieldValues>({
             placeholder={placeholder}
             className={`w-[60px] text-center ${errObj ? "border-red-500" : ""}`}
           />
-          <span onClick={handleIncrement}>
+          <span onClick={handleIncrement} className="cursor-pointer">
             <AddCircleIcon />
           </span>
         </div>

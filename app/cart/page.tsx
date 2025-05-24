@@ -1,9 +1,19 @@
 "use client";
+import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import Swal from "sweetalert2";
+import { useEffect, useRef, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../_components/shadcn/alert-dialog";
+import { Button } from "../_components/shadcn/button";
 import { useCart } from "../_context/CartProvider";
 import DeleteProductIcon from "../_icons/DeleteProductIcon";
 import {
@@ -18,7 +28,6 @@ import {
 } from "../_lib/APIs/offlineCartAPIs";
 import { useAppSelector } from "../_lib/store/store";
 import { CartProduct } from "./_types/CartType";
-import { useToast } from "@/hooks/use-toast";
 
 interface PageProps {}
 
@@ -35,6 +44,11 @@ function Page({}: PageProps) {
     return initial;
   });
   const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const { 0: emptyCartDialogOpen, 1: setEmptyCartDialogOpen } = useState(false);
+  const { 0: selectedProductID, 1: setSelectedProductID } = useState<
+    number | null
+  >(null);
   const router = useRouter();
 
   const user = useAppSelector((state) => state.user);
@@ -51,6 +65,14 @@ function Page({}: PageProps) {
   ) => Promise<any> = isAuth
     ? updateProductQuantityOfUserCart
     : updateProductQuantityOfOfflineCart;
+
+  useEffect(() => {
+    return () => {
+      if (quantityChangeTimeOut.current) {
+        clearTimeout(quantityChangeTimeOut.current);
+      }
+    };
+  }, []);
 
   const emptyCartMethod: (cartId: string) => Promise<any> = isAuth
     ? emptyUserCart
@@ -142,77 +164,6 @@ function Page({}: PageProps) {
     router.refresh();
   };
 
-  async function emptyCart() {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, empty it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        setIsLoading(true);
-        const response = await emptyCartMethod(cart._id!);
-        if (!response.success) {
-          toast({
-            description: response.error,
-            variant: "destructive",
-          });
-          setIsLoading(false);
-        } else {
-          setCart(response.cart);
-          setQuantityObj({});
-        }
-        setIsLoading(false);
-        router.refresh();
-        Swal.fire({
-          title: "Emptied !",
-          text: "Your cart is now empty !!",
-          icon: "success",
-        });
-      }
-    });
-  }
-
-  async function RemoveProduct(productId: number) {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, remove it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        setIsLoading(true);
-        const response = await deleteMethod(cart._id!, String(productId));
-        if (!response.success) {
-          toast({
-            description: response.error,
-            variant: "destructive",
-          });
-          setIsLoading(false);
-        } else {
-          setCart(response.cart);
-          //// remove product from quantity object :
-          const newQuantityObj = { ...quantityObj };
-          delete newQuantityObj[productId];
-          setQuantityObj(newQuantityObj);
-        }
-        router.refresh();
-        setIsLoading(false);
-        Swal.fire({
-          title: "Removed !",
-          text: "Product has been removed successfully !!",
-          icon: "success",
-        });
-      }
-    });
-  }
-
   return (
     <div className="mx-auto max-w-4xl p-4 py-8">
       <div className="mb-6">
@@ -271,7 +222,7 @@ function Page({}: PageProps) {
               <div className="flex flex-row items-center gap-4 max-sm:w-full max-sm:justify-between sm:flex-col">
                 <div className="flex items-center gap-2">
                   <button
-                    className="rounded border px-3 py-1"
+                    className="cursor-pointer rounded border px-3 py-1"
                     onClick={() => decrementQty(item.productID)}
                   >
                     −
@@ -283,28 +234,102 @@ function Page({}: PageProps) {
                     min={1}
                     minLength={1}
                     onChange={(e) => {
-                      if (isNaN(Number(e.target.value))) {
-                        return;
-                      } else if (Number(e.target.value) === 0) {
-                        handleQtyChange(item.productID, 1);
-                      } else {
-                        handleQtyChange(item.productID, Number(e.target.value));
+                      const val = e.target.value;
+                      if (/^\d*$/.test(val)) {
+                        handleQtyChange(
+                          item.productID,
+                          Math.max(1, Number(val)),
+                        );
                       }
                     }}
                   />
                   <button
-                    className="rounded border px-3 py-1"
+                    className="cursor-pointer rounded border px-3 py-1"
                     onClick={() => incrementQty(item.productID)}
                   >
                     +
                   </button>
                 </div>
-                <button
-                  onClick={() => RemoveProduct(item.productID)}
-                  className="cursor-pointer"
+                <AlertDialog
+                  open={open}
+                  onOpenChange={setOpen}
+                  key={item.productID}
                 >
-                  <DeleteProductIcon />
-                </button>
+                  <AlertDialogTrigger asChild>
+                    <button
+                      className="cursor-pointer"
+                      onClick={() => {
+                        console.log("Product ID : ", item.productID);
+                        setSelectedProductID(item.productID);
+                        setOpen(true);
+                      }}
+                    >
+                      <DeleteProductIcon />
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete this product?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          console.log(
+                            "Product ID before confirm : ",
+                            selectedProductID,
+                          );
+                          setSelectedProductID(null);
+                          setOpen(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={async () => {
+                          console.log(
+                            "Product ID after confirm : ",
+                            selectedProductID,
+                          );
+                          setIsLoading(true);
+                          const response = await deleteMethod(
+                            cart._id!,
+                            String(selectedProductID),
+                          );
+
+                          if (!response.success) {
+                            toast({
+                              description: response.error,
+                              variant: "destructive",
+                            });
+                            setIsLoading(false);
+                          }
+                          console.log("Response cart : ", response.cart);
+                          setCart(response.cart);
+
+                          const newQuantityObj = { ...quantityObj };
+                          delete newQuantityObj[selectedProductID!];
+                          setQuantityObj(newQuantityObj);
+
+                          router.refresh();
+                          setIsLoading(false);
+                          setOpen(false);
+                          toast({
+                            description:
+                              "Product has been removed successfully !!",
+                            variant: "success",
+                          });
+                        }}
+                      >
+                        Confirm
+                      </Button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           );
@@ -319,12 +344,65 @@ function Page({}: PageProps) {
             Total: ${cart.subTotal.toFixed(2)}
           </div>
           <div className="flex gap-4">
-            <button
-              onClick={emptyCart}
-              className="rounded bg-red-500 px-6 py-2 text-white transition hover:bg-red-600"
+            <AlertDialog
+              open={emptyCartDialogOpen}
+              onOpenChange={setEmptyCartDialogOpen}
             >
-              Empty Cart
-            </button>
+              <AlertDialogTrigger asChild>
+                <button
+                  className="cursor-pointer rounded bg-red-500 px-6 py-2 text-white transition hover:bg-red-600"
+                  onClick={() => {
+                    setEmptyCartDialogOpen(true);
+                  }}
+                >
+                  Empty Cart
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Empty cart</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to empty your cart ?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setEmptyCartDialogOpen(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={async () => {
+                      setIsLoading(true);
+                      const response = await emptyCartMethod(cart._id!);
+                      if (!response.success) {
+                        toast({
+                          description: response.error,
+                          variant: "destructive",
+                        });
+                        setIsLoading(false);
+                      } else {
+                        setCart(response.cart);
+                        setQuantityObj({});
+                      }
+                      setIsLoading(false);
+                      router.refresh();
+                      setEmptyCartDialogOpen(false);
+                      toast({
+                        description: "Cart has been emptied successfully !!",
+                        variant: "success",
+                      });
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             <Link
               href={"/cartcheckout"}
               className="rounded bg-black px-6 py-2 text-white transition hover:bg-gray-800"

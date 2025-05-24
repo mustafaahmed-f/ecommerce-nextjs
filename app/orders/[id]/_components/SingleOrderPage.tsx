@@ -4,6 +4,15 @@ import EditOrderForm from "./EditOrderForm";
 import OrderSummary from "./OrderSummary";
 
 import Chip from "@/app/_components/Chip";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/app/_components/shadcn/alert-dialog";
 import { Button } from "@/app/_components/shadcn/button";
 import {
   Dialog,
@@ -18,7 +27,6 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Swal from "sweetalert2";
 import { getChipColors } from "../../_utils/getChipColors";
 import CouponApplied from "./CouponApplied";
 import OrderItemsAccordion from "./OrderItemsAccordion";
@@ -30,6 +38,7 @@ interface SingleOrderPageProps {
 
 function SingleOrderPage({ order }: SingleOrderPageProps) {
   const [editOpen, setEditOpen] = useState(false);
+  const { 0: confirmDialogOpen, 1: setConfirmDialogOpen } = useState(false);
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const handleEditOpen = () => setEditOpen(true);
   const handleEditClose = () => setEditOpen(false);
@@ -112,43 +121,6 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
     }
   }
 
-  async function handleCancleOrder() {
-    Swal.fire({
-      title: "Are you sure you want to cancel order ?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, cancel it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          setIsLoading(true);
-          await instance.put(`/api/order/updateStatus?orderId=${order._id}`, {
-            status: "cancelled",
-          });
-
-          //// Logic here
-          Swal.fire({
-            title: "Removed !",
-            text: "Order has been cancelled !!",
-            icon: "success",
-          });
-          router.refresh();
-          setIsLoading(false);
-        } catch (error: any) {
-          setIsLoading(false);
-          const errMsg = getAxiosErrMsg(error);
-          toast({
-            description: errMsg,
-            variant: "destructive",
-          })
-        }
-      }
-    });
-  }
-
   //todo : see how return order occurs in real world ecommerces
   function handleReturnOrder() {
     console.log("handleReturnOrder");
@@ -219,14 +191,75 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
             Edit User Info
           </Button>
           {canCancel && order.orderStatus.status !== "cancelled" && (
-            <Button
-              onClick={handleCancleOrder}
-              variant="destructive"
-              size="default"
-              color="error"
+            <AlertDialog
+              open={confirmDialogOpen}
+              onOpenChange={setConfirmDialogOpen}
             >
-              Cancel Order
-            </Button>
+              <AlertDialogTrigger asChild>
+                <Button
+                  onClick={() => {
+                    setConfirmDialogOpen(true);
+                  }}
+                  variant="destructive"
+                  size="default"
+                  color="error"
+                >
+                  Cancel Order
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Cancel Order</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to cancel this order ?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setConfirmDialogOpen(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={async () => {
+                      try {
+                        setIsLoading(true);
+                        await instance.put(
+                          `/api/order/updateStatus?orderId=${order._id}`,
+                          {
+                            status: "cancelled",
+                          },
+                        );
+
+                        setIsLoading(false);
+                        router.refresh();
+                        setConfirmDialogOpen(false);
+                        //// Logic here
+                        toast({
+                          title: "Success",
+                          description: "Order cancelled successfully",
+                          variant: "success",
+                        });
+                      } catch (error: any) {
+                        setIsLoading(false);
+                        setConfirmDialogOpen(false);
+                        const errMsg = getAxiosErrMsg(error);
+                        toast({
+                          description: errMsg,
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
           {canReturn && (
             <Button

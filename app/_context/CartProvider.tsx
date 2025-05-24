@@ -1,7 +1,7 @@
 "use client";
+import { useToast } from "@/hooks/use-toast";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Swal from "sweetalert2";
 import { storeCart } from "../_lib/store/slices/cartSlice/cartSlice";
 import { ICart } from "../cart/_types/CartType";
 
@@ -37,6 +37,7 @@ function CartProvider({
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   const isFirstRender = useRef<boolean>(true);
+  const { toast } = useToast();
 
   if (isFirstRender.current) {
     isFirstRender.current = false;
@@ -71,31 +72,18 @@ function CartProvider({
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        Swal.fire({
-          title: "Your cart",
-          text: "Your cart has been merged successfully with the offline cart !!",
-          icon: "success",
-          showClass: {
-            popup: `
-              animate__animated
-              animate__fadeInUp
-              animate__faster
-            `,
-          },
-          hideClass: {
-            popup: `
-              animate__animated
-              animate__fadeOutDown
-              animate__faster
-            `,
-          },
+        toast({
+          title: "Success",
+          description:
+            "Your cart has been merged successfully with the offline cart !!",
+          variant: "success",
         });
       } catch (error) {
         console.error("Error removing offline cart cookie:", error);
-        Swal.fire({
+        toast({
           title: "Error",
-          text: "Error removing offline cart cookie !!",
-          icon: "error",
+          description: "Error while merging your cart with the offline cart !!",
+          variant: "destructive",
         });
         // You might want to display an error message to the user here
       }

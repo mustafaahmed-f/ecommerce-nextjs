@@ -1,3 +1,13 @@
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/app/_components/shadcn/alert-dialog";
+import { Button } from "@/app/_components/shadcn/button";
 import DeleteProductIcon from "@/app/_icons/DeleteProductIcon";
 import { instance } from "@/app/_lib/axiosInstance";
 import { colorMap } from "@/app/_lib/colorsArray";
@@ -9,7 +19,6 @@ import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Swal from "sweetalert2";
 
 interface ShoppingItemProps extends CartProduct {
   isOrdered?: boolean;
@@ -30,49 +39,13 @@ function ShoppingItem({
   orderId,
 }: ShoppingItemProps) {
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
+  const { 0: confirmDialogOpen, 1: setConfirmDialogOpen } = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  function RemoveProduct() {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, remove it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          setIsLoading(true);
-          await instance.put(
-            `/api/order/removeProduct?orderId=${orderId}&productId=${productID}`,
-          );
-
-          Swal.fire({
-            title: "Removed !",
-            text: "Product has been removed successfully !!",
-            icon: "success",
-          });
-          router.refresh();
-          setIsLoading(false);
-        } catch (error) {
-          console.log("Error removing product: ", error);
-          const errMsg = getAxiosErrMsg(error);
-          console.log("Err msg : ", errMsg);
-          toast({
-            description: errMsg,
-            variant: "destructive",
-          });
-          setIsLoading(false);
-        }
-      }
-    });
-  }
 
   return (
     <div
-      className={`grid w-full grid-cols-2 gap-2 sm:gap-4 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
+      className={`my-3 grid w-full grid-cols-2 gap-2 sm:gap-4 ${isLoading ? "pointer-events-none opacity-40" : ""}`}
     >
       <div className="grid grid-cols-[auto_1fr] gap-2 sm:gap-5">
         <div className="my-auto h-[70px] w-[58px] overflow-hidden rounded-md">
@@ -110,9 +83,71 @@ function ShoppingItem({
         <p>x{quantity}</p>
         {isOrdered &&
           (orderStatus === "pending" || orderStatus === "confirmed") && (
-            <button onClick={RemoveProduct} className="mt-3 cursor-pointer">
-              <DeleteProductIcon />
-            </button>
+            <AlertDialog
+              open={confirmDialogOpen}
+              onOpenChange={setConfirmDialogOpen}
+            >
+              <AlertDialogTrigger asChild>
+                <button
+                  onClick={() => {
+                    setConfirmDialogOpen(true);
+                  }}
+                  className="mt-3 cursor-pointer"
+                >
+                  <DeleteProductIcon />
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Remove Product</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to remove this product ?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setConfirmDialogOpen(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={async () => {
+                      try {
+                        setIsLoading(true);
+                        await instance.put(
+                          `/api/order/removeProduct?orderId=${orderId}&productId=${productID}`,
+                        );
+                        router.refresh();
+                        setIsLoading(false);
+                        setConfirmDialogOpen(false);
+                        toast({
+                          title: "Success",
+                          description: "Product removed successfully",
+                          variant: "success",
+                        });
+                      } catch (error) {
+                        console.log("Error removing product: ", error);
+                        const errMsg = getAxiosErrMsg(error);
+                        console.log("Err msg : ", errMsg);
+                        setIsLoading(false);
+                        setConfirmDialogOpen(false);
+                        toast({
+                          title: "Error",
+                          description: errMsg,
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
       </div>
     </div>
