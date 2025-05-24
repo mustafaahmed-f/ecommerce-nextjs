@@ -6,8 +6,8 @@ import IncreaseQuantity from "@/app/_icons/IncreaseQuantity";
 import { updateProductQuantityOfUserCart } from "@/app/_lib/APIs/loggedInCartAPIs";
 import { updateProductQuantityOfOfflineCart } from "@/app/_lib/APIs/offlineCartAPIs";
 import { useAppSelector } from "@/app/_lib/store/store";
-import { ErrorToast } from "@/app/_lib/toasts";
 import { CartProduct } from "@/app/cart/_types/CartType";
+import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -17,6 +17,7 @@ interface UpdateProductQuantityProps {
 
 function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
   const { cart, setCart } = useCart();
+  const { toast } = useToast();
   const { 0: quantity, 1: setQuantity } = useState(() => {
     const product = cart.products.find(
       (p: CartProduct) => p.productID === productId,
@@ -62,8 +63,9 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
         qty,
       );
       if (!response.success) {
-        ErrorToast.fire({
-          title: response.error,
+        toast({
+          description: response.error,
+          variant: "destructive",
         });
         setQuantity(quantityRef.current!);
       } else {
@@ -83,8 +85,9 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
       quantity + 1,
     );
     if (!response.success) {
-      ErrorToast.fire({
-        title: response.error,
+      toast({
+        description: response.error,
+        variant: "destructive",
       });
       setQuantity(quantityRef.current!);
     } else {
@@ -103,8 +106,9 @@ function UpdateProductQuantity({ productId }: UpdateProductQuantityProps) {
       quantity - 1,
     );
     if (!response.success) {
-      ErrorToast.fire({
-        title: response.error,
+      toast({
+        description: response.error,
+        variant: "destructive",
       });
       setQuantity(quantityRef.current!);
     } else {

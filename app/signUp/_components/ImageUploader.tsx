@@ -1,11 +1,11 @@
+import { Button } from "@/app/_components/shadcn/button";
 import DeleteProductIcon from "@/app/_icons/DeleteProductIcon";
-import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
+import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { useState } from "react";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { match } from "ts-pattern";
 import { SignUpFormValues } from "./SignUpStepper";
-import { Button } from "@/app/_components/shadcn/button";
 interface props {
   setValue: UseFormSetValue<any>;
   onUploadComplete: (uploaded: boolean) => void;
@@ -25,7 +25,7 @@ const ImageUploader = ({
 }: props) => {
   const { 0: file, 1: setFile } = useState<null | File>(null);
   const [uploading, setUploading] = useState(false);
-
+  const { toast } = useToast();
   const isFileUploaded = watch("profileImage");
 
   const handleFileChange = (event: any) => {
@@ -66,8 +66,9 @@ const ImageUploader = ({
       const url = `https://gateway.pinata.cloud/ipfs/${response.IpfsHash}`;
       console.log(url);
       setUrl(url);
-      SuccessToast.fire({
+      toast({
         title: "Image uploaded successfully",
+        variant: "success",
       });
       setUploading(false);
       onUploadComplete(true);
@@ -79,8 +80,9 @@ const ImageUploader = ({
     } catch (error) {
       console.log(error);
       setUploading(false);
-      ErrorToast.fire({
-        title: "Error uploading image",
+      toast({
+        description: "Error uploading image",
+        variant: "destructive",
       });
     }
   }
@@ -109,8 +111,9 @@ const ImageUploader = ({
         throw new Error("Failed to unpin file");
       }
 
-      SuccessToast.fire({
-        title: "Image removed successfully",
+      toast({
+        description: "Image removed successfully",
+        variant: "success",
       });
 
       setUrl("");
@@ -122,8 +125,9 @@ const ImageUploader = ({
       await trigger("cid");
     } catch (error) {
       console.error("Error unpinning file:", error);
-      ErrorToast.fire({
-        title: "Error removing image",
+      toast({
+        description: "Error removing image",
+        variant: "destructive",
       });
     }
   }

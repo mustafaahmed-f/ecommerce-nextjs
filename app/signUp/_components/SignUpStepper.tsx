@@ -22,7 +22,7 @@ import {
   AlertTitle,
 } from "@/app/_components/shadcn/alert";
 import { AlertCircle } from "lucide-react";
-import { ErrorToast } from "@/app/_lib/toasts";
+import { useToast } from "@/hooks/use-toast";
 
 const steps = ["Basic info", "Add address", "Upload profile image"];
 
@@ -39,6 +39,7 @@ export default function SignUpStepper() {
   const { 0: activeStep, 1: setActiveStep } = React.useState(0);
   const { 0: skipped, 1: setSkipped } = React.useState(new Set<number>());
   const { 0: onUploadComplete, 1: setOnUploadComplete } = React.useState(false);
+  const { toast } = useToast();
 
   const {
     register,
@@ -116,15 +117,17 @@ export default function SignUpStepper() {
 
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
       } else {
-        ErrorToast.fire({
-          title: response.message,
+        toast({
+          description: response.message,
+          variant: "destructive",
         });
         setIsLoading(false);
       }
     } catch (error: any) {
       setIsLoading(false);
-      ErrorToast.fire({
-        title: error.message,
+      toast({
+        description: error.message,
+        variant: "destructive",
       });
       console.log(error);
     } finally {

@@ -3,9 +3,9 @@ import { instance } from "@/app/_lib/axiosInstance";
 import { colorMap } from "@/app/_lib/colorsArray";
 import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
 import { orderStatus } from "@/app/_lib/OrderStatus";
-import { ErrorToast } from "@/app/_lib/toasts";
 import { CartProduct } from "@/app/cart/_types/CartType";
 import ColorIndicator from "@/app/products/_components/ColorIndicator";
+import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -30,6 +30,7 @@ function ShoppingItem({
   orderId,
 }: ShoppingItemProps) {
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
+  const { toast } = useToast();
   const router = useRouter();
   function RemoveProduct() {
     Swal.fire({
@@ -59,8 +60,9 @@ function ShoppingItem({
           console.log("Error removing product: ", error);
           const errMsg = getAxiosErrMsg(error);
           console.log("Err msg : ", errMsg);
-          ErrorToast.fire({
-            title: errMsg,
+          toast({
+            description: errMsg,
+            variant: "destructive",
           });
           setIsLoading(false);
         }

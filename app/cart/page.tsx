@@ -17,8 +17,8 @@ import {
   updateProductQuantityOfOfflineCart,
 } from "../_lib/APIs/offlineCartAPIs";
 import { useAppSelector } from "../_lib/store/store";
-import { ErrorToast } from "../_lib/toasts";
 import { CartProduct } from "./_types/CartType";
+import { useToast } from "@/hooks/use-toast";
 
 interface PageProps {}
 
@@ -34,7 +34,7 @@ function Page({}: PageProps) {
     });
     return initial;
   });
-
+  const { toast } = useToast();
   const router = useRouter();
 
   const user = useAppSelector((state) => state.user);
@@ -74,8 +74,9 @@ function Page({}: PageProps) {
         qty,
       );
       if (!response.success) {
-        ErrorToast.fire({
-          title: response.error,
+        toast({
+          description: response.error,
+          variant: "destructive",
         });
         setQuantityObj(quantityRef.current!);
       } else {
@@ -99,8 +100,9 @@ function Page({}: PageProps) {
       quantityObj[productId] + 1,
     );
     if (!response.success) {
-      ErrorToast.fire({
-        title: response.error,
+      toast({
+        description: response.error,
+        variant: "destructive",
       });
       setQuantityObj(quantityRef.current!);
     } else {
@@ -125,8 +127,9 @@ function Page({}: PageProps) {
       quantityObj[productId] - 1,
     );
     if (!response.success) {
-      ErrorToast.fire({
-        title: response.error,
+      toast({
+        description: response.error,
+        variant: "destructive",
       });
       setQuantityObj(quantityRef.current!);
     } else {
@@ -153,8 +156,9 @@ function Page({}: PageProps) {
         setIsLoading(true);
         const response = await emptyCartMethod(cart._id!);
         if (!response.success) {
-          ErrorToast.fire({
-            title: response.error,
+          toast({
+            description: response.error,
+            variant: "destructive",
           });
           setIsLoading(false);
         } else {
@@ -186,8 +190,9 @@ function Page({}: PageProps) {
         setIsLoading(true);
         const response = await deleteMethod(cart._id!, String(productId));
         if (!response.success) {
-          ErrorToast.fire({
-            title: response.error,
+          toast({
+            description: response.error,
+            variant: "destructive",
           });
           setIsLoading(false);
         } else {

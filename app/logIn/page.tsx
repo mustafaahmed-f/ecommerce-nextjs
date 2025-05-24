@@ -2,24 +2,24 @@
 
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import GoogleLogInBtn from "../_components/GoogleLogInBtn";
+import { Button } from "../_components/shadcn/button";
 import AutoFixHighIconSVG from "../_icons/AutoFixHighIconSVG";
 import FavoriteIconSVG from "../_icons/FavoriteIconSVG";
 import SettingsIconSVG from "../_icons/SettingsIconSVG";
 import ThumbUpIconSVG from "../_icons/ThumbUpIconSVG";
 import { instance } from "../_lib/axiosInstance";
 import { getAxiosErrMsg } from "../_lib/getAxiosErrMsg";
-import { ErrorToast, SuccessToast } from "../_lib/toasts";
 import { loginValidations } from "../_lib/validationSchemas/logInValidations";
 import FormRenderer from "../cartcheckout/_components/FormRenderer";
 import { logInDefaultValues } from "./_utils/logInDefaultValues";
 import { logInFieldsObject } from "./_utils/logInFieldsObject";
-import { Button } from "../_components/shadcn/button";
 interface PageProps {}
 
 const mainPragraphs = [
@@ -34,6 +34,7 @@ export type logInFormValues = yup.InferType<typeof loginValidations>;
 function Page({}: PageProps) {
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const searchParams = useSearchParams();
+  const { toast } = useToast();
   const redirectURL = searchParams.get("redirectto") || "/";
   const {
     register,
@@ -65,13 +66,15 @@ function Page({}: PageProps) {
       });
 
       if (routeResponse.status !== 200) {
-        ErrorToast.fire({
-          title: routeResponse.data.error || "Server error",
+        toast({
+          description: routeResponse.data.error || "Server error",
+          variant: "destructive",
         });
         setIsLoading(false);
       } else {
-        SuccessToast.fire({
-          title: "Logged in successfully!",
+        toast({
+          description: "Logged in successfully!",
+          variant: "success",
         });
         setIsLoading(false);
         setTimeout(() => {
@@ -80,8 +83,9 @@ function Page({}: PageProps) {
       }
     } catch (error: any) {
       const errMsg = getAxiosErrMsg(error);
-      ErrorToast.fire({
-        title: errMsg,
+      toast({
+        description: errMsg,
+        variant: "destructive",
       });
       setIsLoading(false);
     }

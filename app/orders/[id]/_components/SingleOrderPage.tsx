@@ -3,6 +3,7 @@
 import EditOrderForm from "./EditOrderForm";
 import OrderSummary from "./OrderSummary";
 
+import Chip from "@/app/_components/Chip";
 import { Button } from "@/app/_components/shadcn/button";
 import {
   Dialog,
@@ -12,7 +13,7 @@ import {
 } from "@/app/_components/shadcn/dialog";
 import { instance } from "@/app/_lib/axiosInstance";
 import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
-import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
+import { useToast } from "@/hooks/use-toast";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -22,7 +23,6 @@ import { getChipColors } from "../../_utils/getChipColors";
 import CouponApplied from "./CouponApplied";
 import OrderItemsAccordion from "./OrderItemsAccordion";
 import OrderUserInfoAccordion from "./OrderUserInfoAccordion";
-import Chip from "@/app/_components/Chip";
 
 interface SingleOrderPageProps {
   order: any;
@@ -37,7 +37,7 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
   const router = useRouter();
   const canEdit = ["pending", "confirmed"].includes(orderStatus);
   const showCompleteOrder = orderStatus === "pending";
-
+  const { toast } = useToast();
   const canCancel = ["pending", "confirmed", "shipped"].includes(orderStatus);
 
   const canReturn = orderStatus === "delivered";
@@ -95,8 +95,9 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
         `/api/order/confirmOrder?orderId=${order._id}`,
       );
       if (response.data.success) {
-        SuccessToast.fire({
-          title: "Order confirmed successfully",
+        toast({
+          description: "Order confirmed successfully",
+          variant: "success",
         });
       }
       setIsLoading(false);
@@ -104,8 +105,9 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
     } catch (error: any) {
       setIsLoading(false);
       const errMsg = getAxiosErrMsg(error);
-      ErrorToast.fire({
-        title: errMsg,
+      toast({
+        description: errMsg,
+        variant: "destructive",
       });
     }
   }
@@ -138,9 +140,10 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
         } catch (error: any) {
           setIsLoading(false);
           const errMsg = getAxiosErrMsg(error);
-          ErrorToast.fire({
-            title: errMsg,
-          });
+          toast({
+            description: errMsg,
+            variant: "destructive",
+          })
         }
       }
     });

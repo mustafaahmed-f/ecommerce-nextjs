@@ -1,16 +1,16 @@
+import { Button } from "@/app/_components/shadcn/button";
 import { instance } from "@/app/_lib/axiosInstance";
 import { getAxiosErrMsg } from "@/app/_lib/getAxiosErrMsg";
-import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
 import FormRenderer from "@/app/cartcheckout/_components/FormRenderer";
 import { defaultValuesType } from "@/app/cartcheckout/_types/defaultValuesType";
 import { checkOutFormValidations } from "@/app/cartcheckout/_utils/formValidation";
+import { useToast } from "@/hooks/use-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { ediFormFieldsObject } from "../_utils/editFormFieldsObject";
-import { Button } from "@/app/_components/shadcn/button";
 
 interface EditOrderFormProps {
   defaultValues: defaultValuesType;
@@ -26,6 +26,7 @@ export type CheckOutFormValues = yup.InferType<typeof checkOutFormValidations>;
 function EditOrderForm({ defaultValues, orderId }: EditOrderFormProps) {
   const router = useRouter();
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
+  const { toast } = useToast();
   const methods = useForm<CheckOutFormValues>({
     resolver: yupResolver(checkOutFormValidations),
     mode: "onChange",
@@ -50,8 +51,9 @@ function EditOrderForm({ defaultValues, orderId }: EditOrderFormProps) {
         dataObj,
       );
       if (response.data.success) {
-        SuccessToast.fire({
-          title: "Order edited successfully",
+        toast({
+          description: "Order edited successfully",
+          variant: "success",
         });
       }
       setIsLoading(false);
@@ -59,8 +61,9 @@ function EditOrderForm({ defaultValues, orderId }: EditOrderFormProps) {
     } catch (error: any) {
       setIsLoading(false);
       const errMsg = getAxiosErrMsg(error);
-      ErrorToast.fire({
-        title: errMsg,
+      toast({
+        description: errMsg,
+        variant: "destructive",
       });
     }
     console.log(dataObj);

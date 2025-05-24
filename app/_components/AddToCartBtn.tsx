@@ -1,9 +1,13 @@
 "use client";
 
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "../_context/CartProvider";
+import AddToBasketIcon from "../_icons/AddToBasketIcon";
 import CartCheckIcon from "../_icons/CartCheckIcon";
 import CartPlusIcon from "../_icons/CartPlusIcon";
+import InCartBasketIcon from "../_icons/InCartBasketIcon";
 import {
   addToUserCart,
   removeFromUserCart,
@@ -14,11 +18,7 @@ import {
 } from "../_lib/APIs/offlineCartAPIs";
 import { storeCart } from "../_lib/store/slices/cartSlice/cartSlice";
 import { useAppDispatch, useAppSelector } from "../_lib/store/store";
-import { ErrorToast, SuccessToast } from "../_lib/toasts";
 import { CartProduct } from "../cart/_types/CartType";
-import AddToBasketIcon from "../_icons/AddToBasketIcon";
-import InCartBasketIcon from "../_icons/InCartBasketIcon";
-import { useRouter } from "next/navigation";
 
 interface AddToCartBtnProps {
   productId: number;
@@ -37,6 +37,7 @@ function AddToCartBtn({
   const isAuth: boolean = user.email.length > 0 || user.userName.length > 0;
   const router = useRouter();
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
+  const { toast } = useToast();
 
   //TODO : use useOptimistic instead of loading state to show product is added while add operation is done in background
 
@@ -59,16 +60,21 @@ function AddToCartBtn({
       ? await addMethod(cartId, productId)
       : await deleteMethod(cartId, productId);
     if (!response.success) {
-      ErrorToast.fire({
-        title: `Failed to ${isAdd ? "add" : "remove"} product to cart : ${response.error}`,
+      toast({
+        description: `Failed to ${isAdd ? "add" : "remove"} product to cart : ${response.error}`,
+        variant: "destructive",
       });
       setIsLoading(false);
       return;
     }
     setCart(response.cart);
     dispatch(storeCart(response.cart));
-    SuccessToast.fire({
-      title: `Product ${isAdd ? "added to cart" : "removed from cart"} successfully`,
+
+    toast({
+      description: isAdd
+        ? "Product has bee added to cart"
+        : "Product has been removed from cart",
+      variant: "success",
     });
     setIsLoading(false);
     router.refresh();

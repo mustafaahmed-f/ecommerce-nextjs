@@ -1,11 +1,16 @@
 "use client";
 
+import { Button } from "@/app/_components/shadcn/button";
 import { useCart } from "@/app/_context/CartProvider";
 import { FormProvider } from "@/app/_context/FormContext";
+import { instance } from "@/app/_lib/axiosInstance";
+import { cartInitialState } from "@/app/_lib/store/slices/cartSlice/cartSlice";
 import { useAppSelector } from "@/app/_lib/store/store";
 import { CartProduct, ICart } from "@/app/cart/_types/CartType";
+import { useToast } from "@/hooks/use-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { match } from "ts-pattern";
@@ -15,11 +20,6 @@ import { checkOutFormValidations } from "../_utils/formValidation";
 import FormSections from "./FormSections";
 import OrderConfirmation from "./OrderConfirmation";
 import OrderSummary from "./OrderSummary";
-import { instance } from "@/app/_lib/axiosInstance";
-import { ErrorToast, SuccessToast } from "@/app/_lib/toasts";
-import { useRouter } from "next/navigation";
-import { cartInitialState } from "@/app/_lib/store/slices/cartSlice/cartSlice";
-import { Button } from "@/app/_components/shadcn/button";
 
 interface CheckOutFormTemplateProps {
   defaultValues: defaultValuesType;
@@ -39,6 +39,7 @@ function CheckOutFormTemplate({
   const [activeStep, setActiveStep] = useState<number>(0);
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const route = useRouter();
+  const { toast } = useToast();
 
   let finalProductsArr: CartProduct[] = match(product)
     .with(undefined, () => cart?.products || [])
@@ -132,8 +133,9 @@ function CheckOutFormTemplate({
 
       if (watch("paymentMethod") === "cash") {
         setIsLoading(false);
-        SuccessToast.fire({
-          title: response.data.message,
+        toast({
+          description: response.data.message,
+          variant: "success",
         });
 
         route.push("/orders");
@@ -158,8 +160,9 @@ function CheckOutFormTemplate({
         error.response.data?.message === "Validation failed"
           ? error.response.data.errors["code"]._errors[0]
           : error.response.data.error;
-      ErrorToast.fire({
-        title: errorMsg,
+      toast({
+        description: errorMsg,
+        variant: "destructive",
       });
       setIsLoading(false);
     }
