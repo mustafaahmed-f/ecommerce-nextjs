@@ -136,7 +136,7 @@ function Page({}: PageProps) {
             </Button>
           </form>
           <GoogleLogInBtn />
-          <Link href="/signup">
+          <Link href="/signUp">
             <p className="mt-3 text-center text-sm hover:text-sky-600">
               Don&apos;t have an account ? Sign up
             </p>
