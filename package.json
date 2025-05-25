@@ -32,7 +32,7 @@
     "@tanstack/react-query": "^5.67.1",
     "@tanstack/react-query-devtools": "^5.67.1",
     "@upstash/redis": "^1.34.8",
-    "axios": "^1.7.7",
+    "axios": "^0.21.1",
     "axios-cache-adapter": "^2.7.3",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
