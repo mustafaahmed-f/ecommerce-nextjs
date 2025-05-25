@@ -35,7 +35,8 @@ export async function getAllProducts({
     console.error("API Error:", errorText); // Log error in console
     throw new Error("Couldn't get products! " + errorText);
   }
-  return response.json();
+  const finalResponse = await response.json();
+  return finalResponse;
 }
 
 export async function getSingleProduct(id: number) {
@@ -54,8 +55,8 @@ export async function getSingleProduct(id: number) {
     console.error("API Error:", errorText); // Log error in console
     throw new Error("Couldn't get the product !!");
   }
-
-  return response.json();
+  const finalResponse = await response.json();
+  return finalResponse;
 }
 
 // export async function addProduct(body: any) {

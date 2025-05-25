@@ -24,8 +24,8 @@ const cartContext = createContext<initialStateType>(initialState);
 
 interface CartProviderProps {
   cart: ICart;
-  children: React.ReactNode;
   isMerged: boolean;
+  children: React.ReactNode;
 }
 
 function CartProvider({

@@ -7,8 +7,8 @@ export async function getBrands() {
   });
   // console.log("response", response.data);
   if (!response.ok) throw new Error("Couldn't get brands !!");
-
-  return response.json();
+  const finalResponse = await response.json();
+  return finalResponse;
 }
 
 export async function getBrandsFromDB() {

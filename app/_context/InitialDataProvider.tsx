@@ -6,8 +6,6 @@ import { getAllProducts } from "../_lib/APIs/productsAPIs";
 import { mergeCartsFn } from "../_lib/MergeCarts";
 import { ICart } from "../cart/_types/CartType";
 import Providers from "./Providers";
-import CartProvider from "./CartProvider";
-import UserProvider from "./UserProvider";
 
 interface InitialDataProviderProps {
   user: any;
@@ -82,14 +80,13 @@ async function InitialDataProvider({
 
   return (
     <Providers
-      intitialCategories={categories.success ? categories : { categories: [] }}
+      initialCategories={categories.success ? categories : { categories: [] }}
       initialProducts={products.success ? products.products : []}
+      user={user}
+      cart={finalCart}
+      isMerged={isMerged}
     >
-      <UserProvider user={user}>
-        <CartProvider cart={finalCart} isMerged={isMerged}>
-          {children}
-        </CartProvider>
-      </UserProvider>
+      {children}
     </Providers>
   );
 }
