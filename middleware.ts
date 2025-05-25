@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://ecommerce-nextjs-by-mustafa-e1bw1uo8h.vercel.app",
+  "https://ecommerce-nextjs-by-mustafa.vercel.app",
 ];
 
 const corsOptions = {
