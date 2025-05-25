@@ -1,8 +1,10 @@
 import { apiFeatures } from "@/app/_lib/apiFeatures";
+import connectDB from "@/app/_mongodb/dbConnect";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
+  await connectDB();
   const searchParams = request.nextUrl.searchParams;
   const page = searchParams.get("page") ?? "1";
   const size = searchParams.get("size") ?? "149";
