@@ -82,19 +82,30 @@ function SingleOrderPage({ order }: SingleOrderPageProps) {
   };
 
   async function proceedHandler() {
-    setIsLoading(true);
-    const paymentResponse = await instance.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/checkout_sessions`,
-      order,
-      {
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      setIsLoading(true);
+      const paymentResponse = await instance.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/checkout_sessions`,
+        order,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
         },
-      },
-    );
-    setIsLoading(false);
+      );
+      setIsLoading(false);
 
-    window.location.href = paymentResponse.data.url;
+      window.location.href = paymentResponse.data.url;
+    } catch (error) {
+      const errMsg = getAxiosErrMsg(error);
+      toast({
+        title: "Error",
+        description: errMsg,
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    }
   }
 
   async function handleConfirmOrder() {

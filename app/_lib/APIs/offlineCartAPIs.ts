@@ -10,7 +10,9 @@ export async function getOfflineCart(cartId: string) {
 }
 
 export async function createOfflineCart() {
-  const response = await instance.post(`${mainURL}`);
+  const response = await instance.post(`${mainURL}`, {
+    withCredentials: true,
+  });
   return response.data;
 }
 
@@ -19,6 +21,9 @@ export async function addToOfflineCart(cartId: string, productId: string) {
   params.append("productId", productId);
   const response = await instance.post(
     `${mainURL + "/AddToCart"}?${params.toString()}`,
+    {
+      withCredentials: true,
+    },
   );
   console.log("Response : ", response);
   return response.data;
@@ -36,6 +41,9 @@ export async function updateProductQuantityOfOfflineCart(
     `${mainURL + "/updateQuantity"}?${params.toString()}`,
     {
       quantity,
+    },
+    {
+      withCredentials: true,
     },
   );
   return response.data;

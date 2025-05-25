@@ -53,29 +53,37 @@ function AddToCartBtn({
     cartId: string,
     productId: string,
   ) {
-    setIsLoading(true);
-    const response = isAdd
-      ? await addMethod(cartId, productId)
-      : await deleteMethod(cartId, productId);
-    if (!response.success) {
+    try {
+      setIsLoading(true);
+      const response = isAdd
+        ? await addMethod(cartId, productId)
+        : await deleteMethod(cartId, productId);
+      if (!response.success) {
+        toast({
+          description: `Failed to ${isAdd ? "add" : "remove"} product to cart : ${response.error}`,
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+      setCart(response.cart);
+      dispatch(storeCart(response.cart));
+
       toast({
-        description: `Failed to ${isAdd ? "add" : "remove"} product to cart : ${response.error}`,
-        variant: "destructive",
+        description: isAdd
+          ? "Product has bee added to cart"
+          : "Product has been removed from cart",
+        variant: "success",
       });
       setIsLoading(false);
-      return;
+      router.refresh();
+    } catch (error) {
+      setIsLoading(false);
+      toast({
+        description: `Failed to ${isAdd ? "add" : "remove"} product to cart : ${error}`,
+        variant: "destructive",
+      });
     }
-    setCart(response.cart);
-    dispatch(storeCart(response.cart));
-
-    toast({
-      description: isAdd
-        ? "Product has bee added to cart"
-        : "Product has been removed from cart",
-      variant: "success",
-    });
-    setIsLoading(false);
-    router.refresh();
   }
 
   return !isSingleProduct ? (
