@@ -5,7 +5,7 @@ import { getOfflineCart } from "../_lib/APIs/offlineCartAPIs";
 import { getAllProducts } from "../_lib/APIs/productsAPIs";
 import { mergeCartsFn } from "../_lib/MergeCarts";
 import { ICart } from "../cart/_types/CartType";
-import Providers from "../Providers";
+import Providers from "./Providers";
 import CartProvider from "./CartProvider";
 import UserProvider from "./UserProvider";
 

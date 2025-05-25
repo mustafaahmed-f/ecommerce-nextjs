@@ -4,11 +4,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Provider } from "react-redux";
-import AlertContextProvider from "./_context/AlertProvider";
-import CategoriesProvider from "./_context/CategoriesProvider";
-import NextNavigationProvider from "./_context/NextNavigationProvider";
-import ProductsProvider from "./_context/ProductsProvider";
-import { store } from "./_lib/store/store";
+import AlertContextProvider from "./AlertProvider";
+import CategoriesProvider from "./CategoriesProvider";
+import NextNavigationProvider from "./NextNavigationProvider";
+import ProductsProvider from "./ProductsProvider";
+import { store } from "../_lib/store/store";
 
 interface ProvidersProps {
   children: React.ReactNode;
