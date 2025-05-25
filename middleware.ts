@@ -19,9 +19,7 @@ export default async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   // Set CORS Headers for all responses
-  if (allowedOrigins.includes(origin)) {
-    response.headers.set("Access-Control-Allow-Origin", origin);
-  }
+  response.headers.set("Access-Control-Allow-Origin", "*");
   Object.entries(corsOptions).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
