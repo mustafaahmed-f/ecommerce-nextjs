@@ -1,5 +1,4 @@
 import axios from "axios";
-// import cacheAdapter from "axios-cache-adapter";
 
 export const instance = axios.create({
   baseURL: process.env.NEXTAUTH_URL,
