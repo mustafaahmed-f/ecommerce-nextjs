@@ -215,4 +215,4 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
 
 ## Deployment
 
-Live demo: [Luminae Store](https://luminae-store.vercel.app)
+Live demo: [Luminae Store](https://ecommerce-nextjs-by-mustafa-pkoeqiacj.vercel.app/)
