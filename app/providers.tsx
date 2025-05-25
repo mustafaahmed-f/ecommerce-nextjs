@@ -16,7 +16,7 @@ interface ProvidersProps {
   initialProducts: any[];
 }
 
-export function Providers({
+function Providers({
   children,
   intitialCategories,
   initialProducts,
@@ -49,3 +49,5 @@ export function Providers({
     </Provider>
   );
 }
+
+export default Providers;
