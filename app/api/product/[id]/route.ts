@@ -1,7 +1,9 @@
+import connectDB from "@/app/_mongodb/dbConnect";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest, props: any) {
+  await connectDB();
   const params = await props.params;
   const product = await productsModel.findOne({ productId: params.id });
   if (!product) {

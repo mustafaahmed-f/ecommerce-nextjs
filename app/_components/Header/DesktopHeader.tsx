@@ -189,7 +189,7 @@ function DesktopHeader() {
           ) : (
             <div className="flex cursor-pointer items-center gap-2 hover:text-sky-600">
               <Person2OutlinedSVG />
-              <Link href="/login">Sign in</Link>
+              <Link href="/logIn">Sign in</Link>
             </div>
           )}
           <div className="flex cursor-pointer items-center gap-2 hover:text-sky-600">

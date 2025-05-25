@@ -67,7 +67,7 @@ function Menu({ setShowMenu }: { setShowMenu: any }) {
           <ul className="flex flex-col items-center gap-4 pb-1 pt-2 font-semibold">
             {!user.userName && !user.email ? (
               <Link
-                href="/login"
+                href="/logIn"
                 className="flex w-full cursor-pointer items-center justify-between hover:text-sky-400"
               >
                 <p>Login/Register</p>

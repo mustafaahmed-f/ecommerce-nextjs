@@ -9,7 +9,7 @@ const corsOptions = {
 };
 
 const AuthPaths: string[] = ["/updateprofile", "/cartcheckout", "/orders"];
-const nonAuthPaths: string[] = ["/login", "/signup"];
+const nonAuthPaths: string[] = ["/logIn", "/signUp"];
 
 export default async function middleware(request: NextRequest) {
   const origin = request.headers.get("origin") ?? "";
