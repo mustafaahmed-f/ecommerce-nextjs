@@ -166,11 +166,6 @@ function CheckOutFormTemplate({
       });
       setIsLoading(false);
     }
-    if (watch("paymentMethod") === "cash") {
-      //todo: Call order backend API to create the order manually
-      console.log("Cash payment confirmed. Order data:", data);
-      return;
-    }
   }
 
   if (defaultValues.isFromCart && !cart.products.length) {

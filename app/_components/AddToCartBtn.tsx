@@ -39,8 +39,6 @@ function AddToCartBtn({
   const { 0: isLoading, 1: setIsLoading } = useState<boolean>(false);
   const { toast } = useToast();
 
-  //TODO : use useOptimistic instead of loading state to show product is added while add operation is done in background
-
   const addMethod: (cartId: string, productId: string) => Promise<any> = isAuth
     ? addToUserCart
     : addToOfflineCart;
@@ -85,14 +83,14 @@ function AddToCartBtn({
       {!productExistsInCart ? (
         <button
           className={`flex cursor-pointer items-center overflow-visible hover:text-sky-500 ${stock === 0 || isLoading ? "pointer-events-none opacity-50" : ""}`}
-          onClick={() => handleClick(true, cart._id!, productId.toString())} //TODO : use useOptimistic(cart._id!, productId.toString())}
+          onClick={() => handleClick(true, cart._id!, productId.toString())}
         >
           <CartPlusIcon />
         </button>
       ) : (
         <button
           className={`cursor-pointer ${isLoading ? "pointer-events-none opacity-50" : ""} hover:text-sky-500`}
-          onClick={() => handleClick(false, cart._id!, productId.toString())} //TODO : use useOptimistic(cart._id!, productId.toString())}
+          onClick={() => handleClick(false, cart._id!, productId.toString())}
         >
           <CartCheckIcon />
         </button>
