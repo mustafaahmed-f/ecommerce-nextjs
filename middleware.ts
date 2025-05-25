@@ -8,7 +8,8 @@ const allowedOrigins = [
 
 const corsOptions = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Headers":
+    "Content-Type, Authorization, X-Custom-Header",
 };
 
 const AuthPaths: string[] = ["/updateprofile", "/cartcheckout", "/orders"];
