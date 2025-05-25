@@ -9,8 +9,6 @@ export const PATCH = withMiddleWare({
   applyAuth: false,
   middleWares: [],
   handler: async (request: NextRequest) => {
-    //TODO : Re-use session inside the save method when convert to mongoDB atlas
-    //// Start session of mongoose so if one of the updating processes ( product or cart ) failed, both of the processes stop:
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -31,7 +29,7 @@ export const PATCH = withMiddleWare({
         let product = await productsModel.findOne({ productId: p.productID });
         if (product) {
           product.stock += p.quantity;
-          return product.save();
+          return product.save({ session });
         } else {
           //// Remove product from cart if not found :
           cart.products = cart.products.filter(

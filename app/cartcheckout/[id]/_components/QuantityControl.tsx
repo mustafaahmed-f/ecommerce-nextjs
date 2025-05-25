@@ -44,7 +44,7 @@ function QuantityControl<T extends FieldValues>({
   const productId = params.id;
 
   const { toast } = useToast();
-  //TODO : check stock before increment or decrement;
+
   function set<P extends Path<T>>(path: P, value: PathValue<T, P>) {
     setValue(path, value);
   }

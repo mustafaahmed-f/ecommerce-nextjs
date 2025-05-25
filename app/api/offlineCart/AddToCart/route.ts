@@ -12,8 +12,6 @@ export const POST = withMiddleWare({
   applyAuth: false,
   middleWares: [],
   handler: async (request: NextRequest) => {
-    //TODO : Re-use session inside the save method when convert to mongoDB atlas
-    //// Start session of mongoose so if one of the updating processes ( product or cart ) failed, both of the processes stop:
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -93,7 +91,7 @@ export const POST = withMiddleWare({
         throw new Error("Product is out of stock !", { cause: 400 });
 
       product.stock -= 1;
-      await product.save();
+      await product.save({ session });
 
       let newProduct: CartProduct = {
         productID: product.productId,

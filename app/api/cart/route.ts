@@ -46,8 +46,6 @@ export const GET = withMiddleWare({
 //// add to cart
 export const POST = withMiddleWare({
   handler: async (request: NextRequest) => {
-    //TODO : Re-use session inside the save method when convert to mongoDB atlas
-    //// Start session of mongoose so if one of the updating processes ( product or cart ) failed, both of the processes stop:
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -88,7 +86,7 @@ export const POST = withMiddleWare({
           const subTotal = getSubTotal(cartProducts);
           cart.products = cartProducts;
           cart.subTotal = subTotal;
-          await cart.save();
+          await cart.save({ session });
 
           await session.commitTransaction();
           session.endSession();
@@ -144,11 +142,11 @@ export const POST = withMiddleWare({
       console.log("Sub total : ", subTotal);
       cart.products = cartProducts;
       cart.subTotal = subTotal;
-      await cart.save();
+      await cart.save({ session });
 
       //// Reduce product's stock by one:
       product.stock! -= 1;
-      await product.save();
+      await product.save({ session });
 
       await session.commitTransaction();
       session.endSession();
@@ -173,8 +171,6 @@ export const POST = withMiddleWare({
 //// update cart ( quantity )
 export const PATCH = withMiddleWare({
   handler: async (request: NextRequest) => {
-    //TODO : Re-use session inside the save method when convert to mongoDB atlas
-    //// Start session of mongoose so if one of the updating processes ( product or cart ) failed, both of the processes stop:
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -216,7 +212,7 @@ export const PATCH = withMiddleWare({
           const subTotal = getSubTotal(cartProducts);
           cart.products = cartProducts;
           cart.subTotal = subTotal;
-          await cart.save();
+          await cart.save({ session });
 
           await session.commitTransaction();
           session.endSession();
@@ -256,7 +252,7 @@ export const PATCH = withMiddleWare({
 
       //// Update product's stock;
       product.stock = newStockValue;
-      await product.save();
+      await product.save({ session });
 
       //// Update cart:
       const newCartProducts: CartProduct[] = cart.products.map(
@@ -282,7 +278,7 @@ export const PATCH = withMiddleWare({
 
       cart.products = newCartProducts;
       cart.subTotal = newSubTotal;
-      await cart.save();
+      await cart.save({ session });
 
       await session.commitTransaction();
       session.endSession();

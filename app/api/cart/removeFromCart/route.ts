@@ -11,8 +11,7 @@ export const PATCH = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
-    //TODO : Re-use session inside the save method when convert to mongoDB atlas
-    //// Start session of mongoose so if one of the updating processes ( product or cart ) failed, both of the processes stop:
+ 
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -54,7 +53,7 @@ export const PATCH = withMiddleWare({
           const subTotal = getSubTotal(cartProducts);
           cart.products = cartProducts;
           cart.subTotal = subTotal;
-          await cart.save();
+          await cart.save({session});
 
           await session.commitTransaction();
           session.endSession();
@@ -89,11 +88,11 @@ export const PATCH = withMiddleWare({
       let newSubTotal = getSubTotal(newCartProducts);
 
       product.stock = newProductStock;
-      await product.save();
+      await product.save({session});
 
       cart.products = newCartProducts;
       cart.subTotal = newSubTotal;
-      await cart.save();
+      await cart.save({session});
 
       await session.commitTransaction();
       session.endSession();

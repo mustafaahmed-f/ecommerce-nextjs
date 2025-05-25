@@ -51,8 +51,7 @@ export const POST = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
-    //TODO : Re-use session inside the save method when convert to mongoDB atlas
-    //// Start session of mongoose so if one of the updating processes ( product or cart ) failed, both of the processes stop:
+    
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
@@ -100,7 +99,7 @@ export const POST = withMiddleWare({
             },
             { $inc: { stock: -orderObj.products[0].quantity } },
             { new: true },
-          );
+          ).session(session);
           if (!product) {
             throw new Error(
               "Product not found or error while updating product !!",
@@ -117,7 +116,7 @@ export const POST = withMiddleWare({
         }
         cart.products = [];
         cart.subTotal = 0;
-        await cart.save();
+        await cart.save({session});
       }
 
       const order = await orderModel.create(newOrderObj);

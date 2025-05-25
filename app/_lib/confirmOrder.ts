@@ -5,7 +5,7 @@ import couponsModel from "../_mongodb/models/couponsModel";
 import { revalidateTag } from "next/cache";
 
 export async function confirmOrder(orderId: string, userId?: string) {
-  //TODO : Re-use session inside the save method when convert to mongoDB atlas
+
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -29,7 +29,7 @@ export async function confirmOrder(orderId: string, userId?: string) {
         },
         { $inc: { stock: -order.products[0].quantity } },
         { new: true },
-      );
+      ).session(session);
       if (!product) {
         throw new Error("Product not found or stock issue !!");
       }
@@ -39,7 +39,7 @@ export async function confirmOrder(orderId: string, userId?: string) {
       orderId,
       { $set: { orderStatus: { status: "confirmed", updatedAt: new Date() } } },
       { new: true },
-    );
+    ).session(session);
     if (!updatedOrder) {
       throw new Error("Order update failed !!");
     }
@@ -51,7 +51,7 @@ export async function confirmOrder(orderId: string, userId?: string) {
           $inc: { usageCount: 1 },
         },
         { new: true },
-      );
+      ).session(session);
 
       if (!updatedCoupon) {
         throw new Error("Error while updating coupon !!");

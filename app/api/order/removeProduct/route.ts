@@ -11,8 +11,6 @@ export const PUT = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
-    //TODO : Re-use session inside the save method when convert to mongoDB atlas
-    //// Start session of mongoose so if one of the updating processes ( product or cart ) failed, both of the processes stop:
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
@@ -39,7 +37,7 @@ export const PUT = withMiddleWare({
         (!order.isFromCart && order.orderStatus.status === "confirmed")
       ) {
         product.stock += productQuantity;
-        await product.save();
+        await product.save({ session });
       } else {
         throw new Error("You can't remove product from order !!", {
           cause: 403,
@@ -52,7 +50,7 @@ export const PUT = withMiddleWare({
       order.subTotal -= (product.price - product.discount) * productQuantity;
       order.finalPaidAmount -=
         (product.price - product.discount) * productQuantity;
-      await order.save();
+      await order.save({ session });
 
       await session.commitTransaction();
       session.endSession();
