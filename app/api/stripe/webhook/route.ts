@@ -9,12 +9,13 @@ import Stripe from "stripe";
 //   },
 // };
 
+export const runtime = "nodejs";
 //todo : add the endpoint of the webhook in the dashboard on stripe website
 
 // Required to read raw body in App Router (Edge doesn't support this well)
 export async function POST(request: NextRequest) {
-  const rawBody = await request.arrayBuffer();
-  const body = Buffer.from(rawBody);
+  // const rawBody = await request.arrayBuffer();
+  const body = Buffer.from(await request.arrayBuffer());
   const signature = request.headers.get("stripe-signature")!;
 
   let event: Stripe.Event;
