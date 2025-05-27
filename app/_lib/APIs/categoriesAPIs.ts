@@ -6,7 +6,7 @@ export async function getCategories() {
   // const response = await instance.get("/api/categories");
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
+      `https://ecommerce-nextjs-by-mustafa-9orjzsek0.vercel.app/api/categories`,
       {
         next: { revalidate: 3600 * 24 },
       },
