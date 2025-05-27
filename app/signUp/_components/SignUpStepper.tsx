@@ -192,7 +192,7 @@ export default function SignUpStepper() {
 
           <div className="mt-5 flex w-full justify-end">
             <Button variant={"link"}>
-              <Link href={"/login"} onClick={handleReset}>
+              <Link href={"/logIn"} onClick={handleReset}>
                 Go to login page
               </Link>
             </Button>
@@ -297,7 +297,7 @@ export default function SignUpStepper() {
           </form>
           <div className="my-6 w-full text-center">
             <Button variant="link" color="inherit">
-              <Link href={"/login"}>Already have account ?</Link>
+              <Link href={"/logIn"}>Already have account ?</Link>
             </Button>
           </div>
         </React.Fragment>
