@@ -2,6 +2,7 @@ import { getSubCurrency } from "@/app/_lib/getSubCurrency";
 import { getUserId } from "@/app/_lib/getUserId";
 import { stripe } from "@/app/_lib/stripe";
 import { validateSchema } from "@/app/_lib/validateSchema";
+import { withCORS } from "@/app/_lib/withCORS";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
 import connectDB from "@/app/_mongodb/dbConnect";
 import couponsModel from "@/app/_mongodb/models/couponsModel";
@@ -15,13 +16,14 @@ export const POST = withMiddleWare({
   handler: async (request) => {
     await connectDB();
     try {
+      const headersList = headers();
+      const origin =
+        headersList.get("origin") || process.env.NEXT_PUBLIC_API_URL || "";
+
       // const searchParams = request.nextUrl.searchParams;
       //// We need it to see if we need to re-check out the order
       // const isNewOrder = searchParams.get("isNewOrder");
       const orderObj = await request.json();
-      const headersList = headers();
-      const origin =
-        headersList.get("origin") ?? process.env.NEXT_PUBLIC_API_URL;
 
       //// validate data:
       const validationResult = validateSchema(stripeOrderSchema, orderObj);
@@ -107,14 +109,20 @@ export const POST = withMiddleWare({
         ],
       });
 
-      return NextResponse.json({
-        success: true,
-        url: session.url,
-      });
+      return withCORS(
+        NextResponse.json({
+          success: true,
+          url: session.url,
+        }),
+        origin,
+      );
     } catch (error: any) {
-      return NextResponse.json(
-        { success: false, error: error?.message },
-        { status: 500 },
+      return withCORS(
+        NextResponse.json(
+          { success: false, error: error?.message },
+          { status: 500 },
+        ),
+        origin,
       );
     }
   },
