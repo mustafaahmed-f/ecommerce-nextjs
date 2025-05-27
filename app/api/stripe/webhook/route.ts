@@ -15,8 +15,15 @@ export const runtime = "nodejs";
 // Required to read raw body in App Router (Edge doesn't support this well)
 export async function POST(request: NextRequest) {
   // const rawBody = await request.arrayBuffer();
+  console.log(
+    "Headers:",
+    JSON.stringify(Object.fromEntries(request.headers.entries())),
+  );
   const body = Buffer.from(await request.arrayBuffer());
   const signature = request.headers.get("stripe-signature")!;
+
+  console.log("Raw body:", body.toString()); // optionally string or hex
+  console.log("Stripe signature:", signature);
 
   let event: Stripe.Event;
 
