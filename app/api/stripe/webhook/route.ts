@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     "Headers:",
     JSON.stringify(Object.fromEntries(request.headers.entries())),
   );
-  const body = Buffer.from(await request.arrayBuffer());
+  const body = await request.text();
   const signature = request.headers.get("stripe-signature")!;
 
   console.log("Raw body:", body.toString()); // optionally string or hex
