@@ -29,9 +29,9 @@ export default async function middleware(request: NextRequest) {
     response.headers.set("Access-Control-Allow-Credentials", "true");
   }
 
-  Object.entries(corsOptions).forEach(([key, value]) => {
-    response.headers.set(key, value);
-  });
+  // Object.entries(corsOptions).forEach(([key, value]) => {
+  //   response.headers.set(key, value);
+  // });
 
   const nextAuthToken = cookies().get("authjs.session-token")?.value;
   const systemAuthToken = cookies().get("next_ecommerce_token")?.value;
