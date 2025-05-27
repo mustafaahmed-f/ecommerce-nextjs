@@ -20,14 +20,14 @@ export default async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   // Set CORS Headers for all responses
-  if (
-    origin?.endsWith(".vercel.app") ||
-    origin?.startsWith("https://ecommerce-nextjs-by-mustafa") ||
-    allowedOrigins.includes(origin)
-  ) {
-    response.headers.set("Access-Control-Allow-Origin", origin);
-    response.headers.set("Access-Control-Allow-Credentials", "true");
-  }
+  // if (
+  //   origin?.endsWith(".vercel.app") ||
+  //   origin?.startsWith("https://ecommerce-nextjs-by-mustafa") ||
+  //   allowedOrigins.includes(origin)
+  // ) {
+  //   response.headers.set("Access-Control-Allow-Origin", origin);
+  //   response.headers.set("Access-Control-Allow-Credentials", "true");
+  // }
 
   // Object.entries(corsOptions).forEach(([key, value]) => {
   //   response.headers.set(key, value);
