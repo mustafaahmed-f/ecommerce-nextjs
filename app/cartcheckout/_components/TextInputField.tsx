@@ -111,6 +111,7 @@ function TextInputField<T extends FieldValues>({
         }}
         size={"default"}
         className="self-end"
+        type="button"
       >
         Get Address
       </Button>
