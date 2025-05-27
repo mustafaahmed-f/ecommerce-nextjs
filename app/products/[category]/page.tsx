@@ -21,8 +21,8 @@ export const revalidate = 3600 * 24;
 
 export async function generateStaticParams() {
   const categories = await getCategories();
-  // console.log("Categories : ", categories);
-  return categories.map((category: any) => ({
+
+  return categories.categories.map((category: any) => ({
     category,
   }));
 }

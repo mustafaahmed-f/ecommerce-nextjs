@@ -14,7 +14,7 @@ export async function getCategories() {
     // console.log("response", response.data);
     if (!response.ok) throw new Error("Couldn't get categories !!");
     const categories = await response.json();
-    return categories.categories;
+    return categories;
   } catch (error) {
     const ErrMsg = getAxiosErrMsg(error);
     console.log("Error fetching categories from API: ", ErrMsg);

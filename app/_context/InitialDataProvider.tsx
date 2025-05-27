@@ -80,7 +80,7 @@ async function InitialDataProvider({
 
   return (
     <Providers
-      initialCategories={categories.success ? categories : { categories: [] }}
+      initialCategories={categories.success ? categories : [{ categories: [] }]}
       initialProducts={products.success ? products.products : []}
       user={user}
       cart={finalCart}
