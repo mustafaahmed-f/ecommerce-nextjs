@@ -14,6 +14,13 @@ const objectIdSchema = z
     message: invalidSchemaFormatMsg("ObjectId", "MongoDB ObjectId format"),
   });
 
+const couponObjectSchema = z.object({
+  _id: objectIdSchema,
+  code: z.string(),
+  discount: z.number().min(0),
+  discountType: z.enum(["percentage", "fixed"]), // adjust your allowed types here
+});
+
 // Saved order response schema
 export const stripeOrderSchema = z.object({
   _id: objectIdSchema,
@@ -36,14 +43,7 @@ export const stripeOrderSchema = z.object({
     }),
   ),
 
-  couponId: z
-    .object({
-      _id: objectIdSchema,
-      code: z.string().min(1, minLengthMsg(1)),
-      discount: z.number().min(0, invalidNumberMsg()),
-      discountType: z.enum(["percentage", "amount"]), // adjust types as per your backend logic
-    })
-    .nullable(),
+  couponId: z.union([objectIdSchema, couponObjectSchema]).nullable(),
 
   subTotal: z.number().min(0, invalidNumberMsg()),
 
