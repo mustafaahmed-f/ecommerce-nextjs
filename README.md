@@ -58,7 +58,7 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
 
 - **Framework**: Next.js 14
 - **Language**: TypeScript
-- **UI Components**: Material-UI
+- **UI Components & alerts**: Shadcn
 - **State Management**: Redux Toolkit
 - **Form Handling**: React Hook Form
 - **Validation**: Yup
@@ -77,7 +77,6 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
 
 ### Development Tools
 
-- **Testing**: Jest
 - **Linting**: ESLint
 - **Formatting**: Prettier
 - **Build**: Next.js
