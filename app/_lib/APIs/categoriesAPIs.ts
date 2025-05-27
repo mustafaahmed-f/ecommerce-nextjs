@@ -4,9 +4,10 @@ import { getAxiosErrMsg } from "../getAxiosErrMsg";
 
 export async function getCategories() {
   // const response = await instance.get("/api/categories");
+  // ALERT : Here i used static url so static pages can be generated on vercel
   try {
     const response = await fetch(
-      `https://ecommerce-nextjs-by-mustafa-9orjzsek0.vercel.app/api/categories`,
+      `https://ecommerce-nextjs-by-mustafa.vercel.app/api/categories`,
       {
         next: { revalidate: 3600 * 24 },
       },
