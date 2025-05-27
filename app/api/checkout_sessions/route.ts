@@ -10,6 +10,13 @@ import { stripeOrderSchema } from "@/app/_mongodb/validationSchemas/Orders/strip
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
+export async function OPTIONS() {
+  const headersList = headers();
+  const origin = headersList.get("origin");
+
+  return withCORS(new NextResponse(null, { status: 200 }), origin);
+}
+
 export const POST = withMiddleWare({
   applyAuth: true,
   middleWares: [],
