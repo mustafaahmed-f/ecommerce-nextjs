@@ -14,6 +14,6 @@ export async function getCategories() {
 
 export async function getCategoriesFromDB() {
   await connectDB();
-  const categories = await categoriesModel.find({}, "title"); // fetch only titles
+  const categories = await categoriesModel.find({});
   return categories.map((category) => category.title);
 }
