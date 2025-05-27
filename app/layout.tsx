@@ -7,6 +7,7 @@ import { Toaster } from "./_components/shadcn/toaster";
 import AuthHandler from "./_context/AuthHandler";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
+import connectDB from "./_mongodb/dbConnect";
 
 export const metadata: Metadata = {
   title: {
@@ -24,6 +25,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await connectDB();
   return (
     <html lang="en">
       <body
