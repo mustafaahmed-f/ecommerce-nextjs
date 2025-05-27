@@ -5,9 +5,12 @@ import { getAxiosErrMsg } from "../getAxiosErrMsg";
 export async function getCategories() {
   // const response = await instance.get("/api/categories");
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/categories`, {
-      next: { revalidate: 3600 * 24 },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
+      {
+        next: { revalidate: 3600 * 24 },
+      },
+    );
     // console.log("response", response.data);
     if (!response.ok) throw new Error("Couldn't get categories !!");
     const categories = await response.json();
