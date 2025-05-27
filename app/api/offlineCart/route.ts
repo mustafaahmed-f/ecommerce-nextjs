@@ -1,5 +1,6 @@
 import { redis } from "@/app/_lib/redisClient";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import { ICart } from "@/app/cart/_types/CartType";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
@@ -9,6 +10,7 @@ export const GET = withMiddleWare({
   middleWares: [],
   applyAuth: false,
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       const searchParams = request.nextUrl.searchParams;
       const cartId = searchParams.get("cartId");
@@ -37,6 +39,7 @@ export const POST = withMiddleWare({
   middleWares: [],
   applyAuth: false,
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       const cartId = uuidv4();
       const cart: ICart = {

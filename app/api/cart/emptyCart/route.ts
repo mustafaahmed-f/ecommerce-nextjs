@@ -1,5 +1,6 @@
 import { getUserId } from "@/app/_lib/getUserId";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import cartModel from "@/app/_mongodb/models/cartModel";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { CartProduct } from "@/app/cart/_types/CartType";
@@ -10,6 +11,7 @@ export const PATCH = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     const session = await mongoose.startSession();
     session.startTransaction();
     try {

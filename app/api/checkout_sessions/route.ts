@@ -3,6 +3,7 @@ import { getUserId } from "@/app/_lib/getUserId";
 import { stripe } from "@/app/_lib/stripe";
 import { validateSchema } from "@/app/_lib/validateSchema";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import couponsModel from "@/app/_mongodb/models/couponsModel";
 import { stripeOrderSchema } from "@/app/_mongodb/validationSchemas/Orders/stripeOrderSchema";
 import { headers } from "next/headers";
@@ -12,6 +13,7 @@ export const POST = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request) => {
+    await connectDB();
     try {
       // const searchParams = request.nextUrl.searchParams;
       //// We need it to see if we need to re-check out the order

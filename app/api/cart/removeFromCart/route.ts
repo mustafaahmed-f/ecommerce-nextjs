@@ -1,6 +1,7 @@
 import { getSubTotal } from "@/app/_lib/getSubTotal";
 import { getUserId } from "@/app/_lib/getUserId";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import cartModel from "@/app/_mongodb/models/cartModel";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { CartProduct } from "@/app/cart/_types/CartType";
@@ -11,7 +12,7 @@ export const PATCH = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
- 
+    await connectDB();
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -53,7 +54,7 @@ export const PATCH = withMiddleWare({
           const subTotal = getSubTotal(cartProducts);
           cart.products = cartProducts;
           cart.subTotal = subTotal;
-          await cart.save({session});
+          await cart.save({ session });
 
           await session.commitTransaction();
           session.endSession();
@@ -88,11 +89,11 @@ export const PATCH = withMiddleWare({
       let newSubTotal = getSubTotal(newCartProducts);
 
       product.stock = newProductStock;
-      await product.save({session});
+      await product.save({ session });
 
       cart.products = newCartProducts;
       cart.subTotal = newSubTotal;
-      await cart.save({session});
+      await cart.save({ session });
 
       await session.commitTransaction();
       session.endSession();

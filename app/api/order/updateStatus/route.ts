@@ -3,6 +3,7 @@ import { orderStatus } from "@/app/_lib/OrderStatus";
 import { validateSchema } from "@/app/_lib/validateSchema";
 import { requiredFieldMsg } from "@/app/_lib/validattionErrorMessages";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import orderModel from "@/app/_mongodb/models/orderModel";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { CartProduct } from "@/app/cart/_types/CartType";
@@ -14,6 +15,7 @@ export const PUT = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       const searchParams = request.nextUrl.searchParams;
       const orderId = searchParams.get("orderId");

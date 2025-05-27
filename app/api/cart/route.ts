@@ -1,6 +1,7 @@
 import { getSubTotal } from "@/app/_lib/getSubTotal";
 import { getUserId } from "@/app/_lib/getUserId";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import cartModel from "@/app/_mongodb/models/cartModel";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { CartProduct } from "@/app/cart/_types/CartType";
@@ -10,6 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 //// Get cart info
 export const GET = withMiddleWare({
   handler: async (request: NextRequest) => {
+    await connectDB();
     // const searchParams = request.nextUrl.searchParams;
     try {
       const userId = await getUserId();
@@ -46,6 +48,7 @@ export const GET = withMiddleWare({
 //// add to cart
 export const POST = withMiddleWare({
   handler: async (request: NextRequest) => {
+    await connectDB();
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -171,6 +174,7 @@ export const POST = withMiddleWare({
 //// update cart ( quantity )
 export const PATCH = withMiddleWare({
   handler: async (request: NextRequest) => {
+    await connectDB();
     const session = await mongoose.startSession();
     session.startTransaction();
 

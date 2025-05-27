@@ -1,6 +1,7 @@
 import { getUserId } from "@/app/_lib/getUserId";
 import { validateSchema } from "@/app/_lib/validateSchema";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import cartModel from "@/app/_mongodb/models/cartModel";
 import couponsModel from "@/app/_mongodb/models/couponsModel";
 import orderModel from "@/app/_mongodb/models/orderModel";
@@ -20,6 +21,7 @@ export const GET = withMiddleWare({
   // authorization: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       const searchParams = request.nextUrl.searchParams;
       const orderId = searchParams.get("orderId");
@@ -51,7 +53,7 @@ export const POST = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
-    
+    await connectDB();
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
@@ -92,14 +94,16 @@ export const POST = withMiddleWare({
         newOrderObj.orderStatus.status = "confirmed";
         //// if order is for single product , then update product stock
         if (!orderObj.isFromCart) {
-          const product = await productsModel.findOneAndUpdate(
-            {
-              productId: orderObj.products[0].productID,
-              stock: { $gte: orderObj.products[0].quantity },
-            },
-            { $inc: { stock: -orderObj.products[0].quantity } },
-            { new: true },
-          ).session(session);
+          const product = await productsModel
+            .findOneAndUpdate(
+              {
+                productId: orderObj.products[0].productID,
+                stock: { $gte: orderObj.products[0].quantity },
+              },
+              { $inc: { stock: -orderObj.products[0].quantity } },
+              { new: true },
+            )
+            .session(session);
           if (!product) {
             throw new Error(
               "Product not found or error while updating product !!",
@@ -116,7 +120,7 @@ export const POST = withMiddleWare({
         }
         cart.products = [];
         cart.subTotal = 0;
-        await cart.save({session});
+        await cart.save({ session });
       }
 
       const order = await orderModel.create(newOrderObj);
@@ -171,6 +175,7 @@ export const PUT = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       const searchParams = request.nextUrl.searchParams;
       const orderId = searchParams.get("orderId");

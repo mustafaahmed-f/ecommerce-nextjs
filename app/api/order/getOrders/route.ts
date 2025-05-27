@@ -1,5 +1,6 @@
 import { getUserId } from "@/app/_lib/getUserId";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import orderModel from "@/app/_mongodb/models/orderModel";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,6 +8,7 @@ export const GET = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       const searchParams = request.nextUrl.searchParams;
       const page = searchParams.get("page") || "1";

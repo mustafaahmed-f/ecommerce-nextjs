@@ -1,6 +1,7 @@
 import { confirmOrder } from "@/app/_lib/confirmOrder";
 import { getUserId } from "@/app/_lib/getUserId";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,6 +9,7 @@ export const PUT = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       const userId = await getUserId();
       const orderId = request.nextUrl.searchParams.get("orderId")!;

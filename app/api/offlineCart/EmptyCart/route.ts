@@ -1,5 +1,6 @@
 import { redis } from "@/app/_lib/redisClient";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { CartProduct, ICart } from "@/app/cart/_types/CartType";
 import mongoose from "mongoose";
@@ -9,6 +10,7 @@ export const PATCH = withMiddleWare({
   applyAuth: false,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     const session = await mongoose.startSession();
     session.startTransaction();
 

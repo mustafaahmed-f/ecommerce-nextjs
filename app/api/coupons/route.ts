@@ -2,6 +2,7 @@ import { getUserId } from "@/app/_lib/getUserId";
 import { stripe } from "@/app/_lib/stripe";
 import { validateSchema } from "@/app/_lib/validateSchema";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import couponsModel from "@/app/_mongodb/models/couponsModel";
 import { addNewCouponSchema } from "@/app/_mongodb/validationSchemas/Coupons/AddNewCouponSchema";
 import { NextRequest, NextResponse } from "next/server";
@@ -12,6 +13,7 @@ export const POST = withMiddleWare({
   authorization: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       const userId = await getUserId();
       const { code, discount, discountType, expirationDate, usageLimit } =
@@ -97,6 +99,7 @@ export const GET = withMiddleWare({
   authorization: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       return NextResponse.json({ success: true }, { status: 200 });
     } catch (error: any) {
@@ -115,6 +118,7 @@ export const PATCH = withMiddleWare({
   authorization: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       return NextResponse.json({ success: true }, { status: 200 });
     } catch (error: any) {
@@ -133,6 +137,7 @@ export const DELETE = withMiddleWare({
   authorization: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       return NextResponse.json({ success: true }, { status: 200 });
     } catch (error: any) {

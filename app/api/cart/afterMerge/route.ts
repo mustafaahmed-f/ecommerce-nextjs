@@ -1,6 +1,7 @@
 import { getUserId } from "@/app/_lib/getUserId";
 import { redis } from "@/app/_lib/redisClient";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import cartModel from "@/app/_mongodb/models/cartModel";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -9,6 +10,7 @@ export const PATCH = withMiddleWare({
   applyAuth: true,
   middleWares: [],
   handler: async (request: NextRequest) => {
+    await connectDB();
     try {
       const searchParams = request.nextUrl.searchParams;
       const userId = await getUserId();

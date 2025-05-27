@@ -1,5 +1,6 @@
 import { validateSchema } from "@/app/_lib/validateSchema";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -8,6 +9,7 @@ export const PUT = withMiddleWare({
   applyAuth: false,
   middleWares: [],
   handler: async (request: NextRequest, props: any) => {
+    await connectDB();
     try {
       const { id } = await props.params;
       const { removedQuantity } = await request.json();

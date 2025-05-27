@@ -1,5 +1,6 @@
 import { stripe } from "@/app/_lib/stripe";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
+import connectDB from "@/app/_mongodb/dbConnect";
 import couponsModel from "@/app/_mongodb/models/couponsModel";
 import { addNewCouponSchema } from "@/app/_mongodb/validationSchemas/Coupons/AddNewCouponSchema";
 import { NextRequest, NextResponse } from "next/server";
@@ -10,6 +11,7 @@ export const POST = withMiddleWare({
   middleWares: [],
   handler: async (request: NextRequest) => {
     try {
+      await connectDB();
       const { code } = await request.json();
 
       const validationSchema = z.object({
