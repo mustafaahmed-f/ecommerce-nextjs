@@ -3,8 +3,10 @@ import { getAllProducts } from "@/app/_lib/APIs/productsAPIs";
 import ProductsPage from "../_components/ProductsPage";
 
 interface pageProps {
-  params: Promise<any>;
-  searchParams: Promise<{
+  params: {
+    category: string;
+  };
+  searchParams: {
     page?: string;
     size?: string;
     sort?: string;
@@ -12,7 +14,7 @@ interface pageProps {
     color?: string;
     priceMin?: string;
     priceMax?: string;
-  }>;
+  };
 }
 
 export const revalidate = 3600 * 24;
@@ -21,13 +23,13 @@ export async function generateStaticParams() {
   const categories = await getCategoriesFromDB();
   // console.log("Categories : ", categories);
   return categories.map((category: string) => ({
-    params: category,
+    category,
   }));
 }
 
 async function page(props: pageProps) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+  const searchParams = props.searchParams;
+  const params = props.params;
   const { category } = params;
 
   const page = searchParams.page ?? "1";
