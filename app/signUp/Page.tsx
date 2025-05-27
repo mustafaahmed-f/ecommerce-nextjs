@@ -1,5 +1,8 @@
 import SignUpStepper from "./_components/SignUpStepper";
 
+export const metadata = {
+  title: "Sign up - Luminae Store",
+};
 function Page() {
   return (
     <div className="mx-auto mt-10 flex w-full flex-col justify-center rounded-lg bg-primary-200 px-2 py-4 sm:px-3 md:w-1/2">
