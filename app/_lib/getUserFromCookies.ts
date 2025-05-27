@@ -4,8 +4,10 @@ import { auth } from "./auth";
 import { User } from "./store/slices/userSlice/userSlice.types";
 import { verifyToken } from "./tokenMethods";
 import { instance } from "./axiosInstance";
+import connectDB from "../_mongodb/dbConnect";
 
 export async function getUserFromCookies(): Promise<User | null> {
+  await connectDB();
   let user: User | null = null;
   const session = await auth();
   if (session?.user) {
