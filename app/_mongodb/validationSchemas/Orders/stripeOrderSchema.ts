@@ -36,7 +36,14 @@ export const stripeOrderSchema = z.object({
     }),
   ),
 
-  couponId: objectIdSchema.nullable(),
+  couponId: z
+    .object({
+      _id: objectIdSchema,
+      code: z.string().min(1, minLengthMsg(1)),
+      discount: z.number().min(0, invalidNumberMsg()),
+      discountType: z.enum(["percentage", "amount"]), // adjust types as per your backend logic
+    })
+    .nullable(),
 
   subTotal: z.number().min(0, invalidNumberMsg()),
 

@@ -31,7 +31,7 @@ export const POST = withMiddleWare({
       //// We need it to see if we need to re-check out the order
       // const isNewOrder = searchParams.get("isNewOrder");
       const orderObj = await request.json();
-
+      console.log("orderObj", orderObj);
       //// validate data:
       const validationResult = validateSchema(stripeOrderSchema, orderObj);
       if (!validationResult.success) {
@@ -44,7 +44,7 @@ export const POST = withMiddleWare({
           { status: 400 },
         );
       }
-
+      console.log("No validation errors !!");
       const userId = await getUserId();
       if (String(userId) !== String(orderObj.userID)) {
         throw new Error("Order doesn't belong to user !!");
@@ -72,7 +72,7 @@ export const POST = withMiddleWare({
         },
         quantity: product.quantity,
       }));
-
+      console.log("Items array: ", itemsArr);
       //// Get coupon :
       let promotionCode: any = null;
       if (orderObj.couponId) {
@@ -83,6 +83,8 @@ export const POST = withMiddleWare({
           throw new Error("Coupon is not active !!", { cause: 400 });
         promotionCode = couponFromDB.stipePromotionCodeId;
       }
+
+      console.log("Promotion code: ", promotionCode);
       // Create Checkout Sessions from body params.
       const session = await stripe.checkout.sessions.create({
         line_items: itemsArr,
@@ -115,21 +117,21 @@ export const POST = withMiddleWare({
           },
         ],
       });
-
-      return withCORS(
-        NextResponse.json({
-          success: true,
-          url: session.url,
-        }),
-        origin,
-      );
+      console.log("Session: ", session);
+      return NextResponse.json({
+        success: true,
+        url: session.url,
+      });
     } catch (error: any) {
-      return withCORS(
-        NextResponse.json(
-          { success: false, error: error?.message },
-          { status: 500 },
-        ),
-        origin,
+      console.error("Stripe checkout error", {
+        message: error?.message,
+        cause: error?.cause,
+        stack: error?.stack,
+        full: error,
+      });
+      return NextResponse.json(
+        { success: false, error: error?.message },
+        { status: 500 },
       );
     }
   },
