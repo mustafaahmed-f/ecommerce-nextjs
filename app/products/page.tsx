@@ -32,6 +32,16 @@ async function Page(props: PageProps) {
     priceMin: parseInt(priceMin),
     priceMax: parseInt(priceMax),
   });
+  console.log(
+    `🚀 ~ file: page.tsx:25 ~ Page : ${page} & size : ${size} ~ products:`,
+    products.totalProducts,
+  );
+  if (!products.success)
+    return (
+      <div className="flex h-full w-full items-center justify-center text-center">
+        <h1>{products.error}</h1>
+      </div>
+    );
   return <ProductsPage products={products} />;
 }
 

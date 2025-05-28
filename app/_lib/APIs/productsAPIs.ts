@@ -19,24 +19,32 @@ export async function getAllProducts({
   priceMin?: number | undefined;
   priceMax?: number | undefined;
 } = {}) {
-  if (priceMin === undefined) priceMin = 0;
-  if (priceMax === undefined) priceMax = 50000;
-  const response: Response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
-    { next: { revalidate: 1000 * 60 * 60 * 24 } },
-  );
-  const clonedResponse = await response.clone().json();
+  try {
+    if (priceMin === undefined) priceMin = 0;
+    if (priceMax === undefined) priceMax = 50000;
+    const response: Response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
+      // { next: { revalidate: 1000 * 60 * 60 * 24 } },
+      { next: { revalidate: 0 } },
+    );
 
-  if (!clonedResponse.success && clonedResponse.message === "No products found")
-    return { ...clonedResponse, products: [] };
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("API Error:", errorText); // Log error in console
+      throw new Error("Couldn't get products! " + errorText);
+    }
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error("API Error:", errorText); // Log error in console
-    throw new Error("Couldn't get products! " + errorText);
+    const finalResponse = await response.json();
+    if (!finalResponse.success) {
+      if (finalResponse.message === "No products found")
+        return { ...finalResponse, error: "No products found", products: [] };
+      throw new Error(finalResponse.message);
+    }
+    return finalResponse;
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message, products: [] };
   }
-  const finalResponse = await response.json();
-  return finalResponse;
 }
 
 export async function getSingleProduct(id: number) {
