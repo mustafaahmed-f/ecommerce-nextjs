@@ -62,16 +62,18 @@ function Menu({ setShowMenu }: { setShowMenu: any }) {
           </ul>
         </div>
 
-        <div className="mb-1 mt-4 flex items-center justify-start gap-3 px-2">
-          <Avatar className="h-6 w-6">
-            <AvatarImage
-              src={user.profileImage || "icons8-male-user-40.png"}
-              alt={user.firstName}
-            />
-            <AvatarFallback>{user.firstName?.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <p className="font-semibold">Welcome, {user.firstName}</p>
-        </div>
+        {user.userName && (
+          <div className="mb-1 mt-4 flex items-center justify-start gap-3 px-2">
+            <Avatar className="h-6 w-6">
+              <AvatarImage
+                src={user.profileImage || "icons8-male-user-40.png"}
+                alt={user.firstName}
+              />
+              <AvatarFallback>{user.firstName?.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <p className="font-semibold">Welcome, {user.firstName}</p>
+          </div>
+        )}
 
         <div className="border-b-2 border-slate-400 px-2 pb-3">
           <ul className="flex flex-col items-center gap-4 pb-1 pt-2 font-semibold">
