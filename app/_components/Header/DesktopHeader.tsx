@@ -161,7 +161,7 @@ function DesktopHeader() {
                           </AvatarFallback>
                         </Avatar>
                         <p className="mb-0 text-lg font-normal text-white hover:text-sky-500">
-                          Profile
+                          {user.firstName ?? "Profile"}
                         </p>
                       </Button>
                     </DropdownMenuTrigger>
