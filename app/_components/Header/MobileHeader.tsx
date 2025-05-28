@@ -7,11 +7,12 @@ import ShoppingBagSVG from "@/app/_icons/ShoppingBagSVG";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Menu from "./Menu";
+import { usePathname } from "next/navigation";
 
 function MobileHeader() {
   const { 0: showMenu, 1: setShowMenu } = useState(false);
   const { cart } = useCart();
-
+  const pathName = usePathname();
   useEffect(
     function () {
       function eventListnerFunc() {
@@ -26,6 +27,11 @@ function MobileHeader() {
     },
     [setShowMenu],
   );
+
+  useEffect(() => {
+    setShowMenu(false);
+    //// Close menu on navigation
+  }, [pathName, setShowMenu]);
 
   return (
     <div className="relative">
