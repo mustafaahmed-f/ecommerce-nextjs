@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 function Menu({ setShowMenu }: { setShowMenu: any }) {
-  const categories = useCategories();
+  const { categories } = useCategories();
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const { 0: loading, 1: setLoading } = useState<boolean>(false);
@@ -42,24 +42,22 @@ function Menu({ setShowMenu }: { setShowMenu: any }) {
 
         <div className="border-y-2 border-slate-400 border-b-white px-2 py-3">
           <ul className="flex list-none flex-col gap-4">
-            <Link href={`products}`} key={"All_caategories"}>
+            <Link href={`/products`} key={"All_caategories"}>
               <p
                 className={`mb-1 cursor-pointer font-semibold hover:text-orange-300`}
               >
                 All Categories
               </p>
             </Link>
-            {categories?.categories?.categories?.map(
-              (el: string, i: number) => (
-                <Link href={`products/${el}`} key={i}>
-                  <p
-                    className={`mb-1 cursor-pointer font-semibold hover:text-orange-300`}
-                  >
-                    {el.substring(0, 1).toUpperCase() + el.substring(1)}
-                  </p>
-                </Link>
-              ),
-            )}
+            {categories?.categories?.map((el: string, i: number) => (
+              <Link href={`/products/${el}`} key={i}>
+                <p
+                  className={`mb-1 cursor-pointer font-semibold hover:text-orange-300`}
+                >
+                  {el.substring(0, 1).toUpperCase() + el.substring(1)}
+                </p>
+              </Link>
+            ))}
           </ul>
         </div>
 
