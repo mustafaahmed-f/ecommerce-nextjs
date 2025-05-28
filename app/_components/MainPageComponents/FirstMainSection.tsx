@@ -1,5 +1,6 @@
 import ShopSVG from "@/app/_icons/ShopSVG";
 import Image from "next/image";
+import Link from "next/link";
 
 interface FirstMainSectionProps {}
 
@@ -33,7 +34,7 @@ function FirstMainSection({}: FirstMainSectionProps) {
         <button className="cursor-pointer rounded-sm bg-sky-700 px-4 py-2 text-sm text-white hover:text-sky-300">
           <div className="flex w-fit flex-row items-center justify-center gap-2">
             <ShopSVG />
-            <span>SHOP NOW</span>
+            <Link href="/products">SHOP NOW</Link>
           </div>
         </button>
       </div>
