@@ -32,9 +32,10 @@ function ShadcnPagination({
   const createPageRange = (): (number | string)[] => {
     const totalPages = count;
     const DOTS = "...";
-    const totalPageNumbers = siblingCount * 2 + 1;
 
-    if (totalPageNumbers >= totalPages) {
+    const totalPageNumbersToShow = siblingCount * 2 + 5;
+
+    if (totalPageNumbersToShow >= totalPages) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 

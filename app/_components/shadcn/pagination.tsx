@@ -47,21 +47,19 @@ const PaginationLink = ({
   href = "#",
   ...props
 }: PaginationLinkProps) => (
-  <PaginationItem>
-    <Link
-      role="button"
-      aria-current={isActive ? "page" : undefined}
-      className={cn(
-        buttonVariants({
-          variant: isActive ? "outline" : "ghost",
-          size,
-        }),
-        className,
-      )}
-      href={href}
-      {...props}
-    />
-  </PaginationItem>
+  <Link
+    role="button"
+    aria-current={isActive ? "page" : undefined}
+    className={cn(
+      buttonVariants({
+        variant: isActive ? "outline" : "ghost",
+        size,
+      }),
+      className,
+    )}
+    href={href}
+    {...props}
+  />
 );
 PaginationLink.displayName = "PaginationLink";
 
