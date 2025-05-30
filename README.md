@@ -31,7 +31,7 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
 - Seamless cart merging for logged-in users
 - Single product checkout option
 - Advanced autocomplete search using Trie data structure
-- Modern and responsive UI with Material-UI components
+- Modern and responsive UI with Shadcn components
 
 ### Security & Authentication
 
