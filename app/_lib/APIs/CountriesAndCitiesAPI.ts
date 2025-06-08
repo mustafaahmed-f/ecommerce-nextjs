@@ -17,6 +17,7 @@ export async function getCities(country?: string): Promise<string[]> {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ country }),
+      next: { revalidate: 3600 * 24 },
     },
   );
   const cities = await response.json();
