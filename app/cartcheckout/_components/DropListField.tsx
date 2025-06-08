@@ -52,6 +52,7 @@ function DropListField<T extends FieldValues>({
   const { 0: open, 1: setOpen } = useState<boolean>(false);
   const dependencyValue = dependency ? watch(dependency) : "";
   const fieldValue = watch(name);
+
   const queryKey = dependency
     ? ["dependency dropListOptions", dependencyValue]
     : ["dropListOptions", fieldValue];
@@ -75,16 +76,27 @@ function DropListField<T extends FieldValues>({
     }
   }, [data, setDropListOptions, fieldValue, setValue, name, trigger]);
 
-  // const handleChange = (event: SelectChangeEvent) => {
-  //   setValue(name, event.target.value as PathValue<T, typeof name>);
-  //   trigger(name);
-  // };
-
   const onSelect = (val: string) => {
     setValue(name, val as PathValue<T, typeof name>);
     trigger(name);
     setOpen(false);
   };
+
+  if (name === "userInfo.country") {
+    console.log("fieldValue", fieldValue);
+    console.log(
+      dropListOptions?.find((opt) => opt === fieldValue) ??
+        placeholder ??
+        "Select...",
+    );
+    console.log(
+      fieldValue
+        ? (dropListOptions.find((opt) => opt === fieldValue) ??
+            placeholder ??
+            "Select...")
+        : (placeholder ?? "Select..."),
+    );
+  }
 
   return (
     <div

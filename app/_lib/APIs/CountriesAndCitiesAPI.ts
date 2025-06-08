@@ -1,9 +1,12 @@
+import { countries } from "../Coutries";
+
 export async function getCountries(): Promise<string[]> {
-  const response = await fetch("https://restcountries.com/v3.1/all");
-  const countries = await response.json();
-  const finalCountries = countries.map((country: any) => {
-    return country.name.common;
-  });
+  // const response = await fetch("https://www.apicountries.com/countries");
+  // const countries = await response.json();
+  // const finalCountries = countries.map((country: any) => {
+  //   return country.name;
+  // });
+  const finalCountries = countries;
   return finalCountries;
 }
 
