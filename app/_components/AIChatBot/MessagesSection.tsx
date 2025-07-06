@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Input } from "../shadcn/input";
 import ChatMessage from "./ChatMessage";
 
@@ -14,9 +15,22 @@ function MessagesSection({}: MessagesSectionProps) {
     { msgText: "Bye", msgSender: "user1" },
     { msgText: "Goodbye", msgSender: "user2" },
   ];
+
+  const msgContainer = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = msgContainer.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, []);
+
   return (
-    <div className="flex max-h-[400px] min-h-[330px] w-full flex-col bg-sky-300 px-2 pb-1 pt-3 text-black">
-      <div className="messages-section flex-grow scroll-m-2 overflow-y-auto px-1 shadow-inner">
+    <div className="flex max-h-screen min-h-[300px] w-full flex-col bg-sky-300 px-2 pb-1 pt-3 text-black">
+      <div
+        className="messages-section flex-grow scroll-m-2 overflow-y-auto px-1 shadow-inner"
+        ref={msgContainer}
+      >
         {messages.map((message, index) => (
           <ChatMessage
             key={index}
