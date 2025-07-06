@@ -248,11 +248,13 @@ p {
   display: grid;
 }
 
-.flashSalesSection::-webkit-scrollbar-track {
+.flashSalesSection::-webkit-scrollbar-track,
+.messages-section::-webkit-scrollbar-track {
   opacity: 0.3;
   background-color: #f5f5f5;
 }
-.flashSalesSection::-webkit-scrollbar-thumb {
+.flashSalesSection::-webkit-scrollbar-thumb,
+.messages-section::-webkit-scrollbar-thumb {
   background-color: #a5a4a4;
 }
 .flashSalesSection::-webkit-scrollbar {
@@ -266,7 +268,8 @@ p {
   }
 }
 
-body::-webkit-scrollbar {
+body::-webkit-scrollbar,
+.messages-section::-webkit-scrollbar {
   width: 5px;
 }
 body::-webkit-scrollbar-thumb {

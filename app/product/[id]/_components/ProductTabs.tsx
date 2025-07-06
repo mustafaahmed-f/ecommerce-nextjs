@@ -1,15 +1,15 @@
 "use client";
 
-import { ProductType, Review } from "../_types/Product.type";
+import { ProductType } from "../_types/Product.type";
 
-import { useState } from "react";
-import ProductReviewsSection from "./ProductReviewsSection";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/app/_components/shadcn/tabs";
+import { useState } from "react";
+import ProductReviewsSection from "./ProductReviewsSection";
 
 interface ProductTabsProps {
   product: ProductType;

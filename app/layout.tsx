@@ -8,6 +8,7 @@ import AuthHandler from "./_context/AuthHandler";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
 import connectDB from "./_mongodb/dbConnect";
+import AIBotSecion from "./_components/AIChatBot/AIBotSecion";
 
 export const metadata: Metadata = {
   title: {
@@ -39,6 +40,7 @@ export default async function RootLayout({
             {children}
           </main>
           <Toaster />
+          <AIBotSecion />
           <Footer />
         </AuthHandler>
       </body>
