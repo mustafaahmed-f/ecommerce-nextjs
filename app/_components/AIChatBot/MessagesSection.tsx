@@ -85,7 +85,7 @@ function MessagesSection({ messages, setMessages }: MessagesSectionProps) {
           />
         ))}
         {loading && (
-          <div className="my-2 w-full">
+          <div className="my-2 h-2 w-full">
             <span className="my-1 me-auto h-2 w-2 animate-pulse rounded-full bg-slate-50 p-2"></span>
           </div>
         )}
