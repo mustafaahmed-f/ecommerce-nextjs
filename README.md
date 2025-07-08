@@ -17,6 +17,7 @@ A modern e-commerce platform built with Next.js, TypeScript, MongoDB, Redis, and
 - [Project Structure](#project-structure)
 - [API Routes](#api-routes)
 - [Database Schema](#database-schema)
+- [Performance Optimization](#performance-optimization)
 - [Deployment](#deployment)
 
 ## Overview
@@ -47,10 +48,10 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
 
 ### Advanced Features
 
-- AI-powered chat assistant (coming soon)
+- AI-powered chat assistant
+- Form rendering system with reusable components
 - Recently viewed products section (coming soon)
 - Top viewed products using Max Heap data structure (coming soon)
-- Form rendering system with reusable components
 
 ## Technology Stack
 
@@ -64,6 +65,9 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
 - **Validation**: Yup
 - **Animations**: Framer Motion
 - **Styling**: Tailwind CSS
+- **Icons**: Luicid and custom ones
+- **Data Fetching**: TanStack Query
+- **Chat bot**: Gemini and Generative AI
 
 ### Backend
 
@@ -211,6 +215,10 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
         src="https://res.cloudinary.com/dvvmu40wx/image/upload/v1747771322/Public%20images/Next.js_Ecommerce_DB_diagram_ujcimn.png"
         alt="E-commerce DB Design"
 />
+
+## Performance Optimization
+
+- Optimized the initial load time so it is reduced from 12 s to nearly 5 s after replacing mui material components and icons with shadcn components, luicid icons and custom icons.
 
 ## Deployment
 
