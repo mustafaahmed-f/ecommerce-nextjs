@@ -3,6 +3,8 @@ import connectDB from "@/app/_mongodb/dbConnect";
 import productsModel from "@/app/_mongodb/models/productsModel";
 import { NextRequest, NextResponse } from "next/server";
 
+const nestedFields = ["brand", "category", "model"];
+
 export async function GET(request: NextRequest) {
   await connectDB();
   const searchParams = request.nextUrl.searchParams;
@@ -17,9 +19,32 @@ export async function GET(request: NextRequest) {
   const priceMin = searchParams.get("priceMin");
   const priceMax = searchParams.get("priceMax");
 
+  let modifiedSort = sort;
+  if (modifiedSort) {
+    let sortArr = modifiedSort.split("/");
+    modifiedSort = sortArr
+      .map((sortItem) => {
+        if (sortItem.startsWith("-")) {
+          let currentSortItem = sortItem.slice(1);
+          if (nestedFields.includes(currentSortItem)) {
+            return `-${currentSortItem}.title`;
+          } else {
+            return `-${currentSortItem}`;
+          }
+        } else {
+          if (nestedFields.includes(sortItem)) {
+            return `${sortItem}.title`;
+          } else {
+            return `${sortItem}`;
+          }
+        }
+      })
+      .join("/");
+  }
+
   let filter: any = {};
-  if (category) filter.category = category; // Directly filtering by category name
-  if (brand) filter.brand = { $in: brand.split("/") }; // Filtering by multiple brand names
+  if (category) filter["category.title"] = category; // Directly filtering by category name
+  if (brand) filter["brand.title"] = { $in: brand.split("/") };
   if (color) filter.color = { $in: color.split("/") };
   if (priceMin) filter.price = { ...filter.price, $gte: parseFloat(priceMin) };
   if (priceMax) filter.price = { ...filter.price, $lte: parseFloat(priceMax) };
@@ -31,7 +56,7 @@ export async function GET(request: NextRequest) {
     size: parseInt(size),
     brand,
     model,
-    sort,
+    sort: modifiedSort,
     color,
     priceMin,
     priceMax,
@@ -52,8 +77,19 @@ export async function GET(request: NextRequest) {
       { status: 404 },
     );
   }
+
+  let finalProducts = products.map((product: any) => {
+    product = product.toObject();
+    return {
+      ...product,
+      brand: product.brand.title,
+      category: product.category.title,
+      model: product.model.title,
+    };
+  });
+
   return NextResponse.json(
-    { success: true, products, totalProducts },
+    { success: true, products: finalProducts, totalProducts },
     {
       status: 200,
     },

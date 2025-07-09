@@ -16,8 +16,31 @@ const productSchema = new Schema(
     image: { type: String, required: true },
     price: { type: Number, required: true },
     description: { type: String, required: true },
-    brand: { type: String, required: true },
-    model: { type: String, required: true },
+
+    brand: {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Brand",
+        required: true,
+      },
+      title: { type: String, required: true },
+    },
+    category: {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        required: true,
+      },
+      title: { type: String, required: true },
+    },
+    model: {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Model",
+        required: true,
+      },
+      title: { type: String, required: true },
+    },
 
     color: { type: String, default: null },
 
@@ -28,7 +51,6 @@ const productSchema = new Schema(
     soundOutput: { type: Number, default: null }, // For audio
     screenSize: { type: Number, default: null }, // For TVs
 
-    category: { type: String, required: true },
     discount: { type: Number, default: 0 },
     stock: { type: Number, default: 10 }, // Default stock value
     sold: { type: Number, default: 0 },
