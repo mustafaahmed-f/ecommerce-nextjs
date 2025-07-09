@@ -12,5 +12,15 @@ export async function GET(request: NextRequest, props: any) {
       { status: 404 },
     );
   }
-  return NextResponse.json({ success: true, product }, { status: 200 });
+  const finalProduct = {
+    ...product.toObject(),
+    brand: product.brand.title,
+    model: product.model.title,
+    category: product.category.title,
+  };
+
+  return NextResponse.json(
+    { success: true, product: finalProduct },
+    { status: 200 },
+  );
 }
