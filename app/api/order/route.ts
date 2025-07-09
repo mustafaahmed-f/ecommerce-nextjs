@@ -100,7 +100,12 @@ export const POST = withMiddleWare({
                 productId: orderObj.products[0].productID,
                 stock: { $gte: orderObj.products[0].quantity },
               },
-              { $inc: { stock: -orderObj.products[0].quantity } },
+              {
+                $inc: {
+                  stock: -orderObj.products[0].quantity,
+                  sold: orderObj.products[0].quantity,
+                },
+              },
               { new: true },
             )
             .session(session);

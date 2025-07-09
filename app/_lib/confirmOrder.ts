@@ -5,7 +5,6 @@ import couponsModel from "../_mongodb/models/couponsModel";
 import { revalidateTag } from "next/cache";
 
 export async function confirmOrder(orderId: string, userId?: string) {
-
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -22,36 +21,49 @@ export async function confirmOrder(orderId: string, userId?: string) {
     }
 
     if (!order.isFromCart) {
-      const product = await productsModel.findOneAndUpdate(
-        {
-          productId: order.products[0].productID,
-          stock: { $gte: order.products[0].quantity },
-        },
-        { $inc: { stock: -order.products[0].quantity } },
-        { new: true },
-      ).session(session);
+      const product = await productsModel
+        .findOneAndUpdate(
+          {
+            productId: order.products[0].productID,
+            stock: { $gte: order.products[0].quantity },
+          },
+          {
+            $inc: {
+              stock: -order.products[0].quantity,
+              sold: order.products[0].quantity,
+            },
+          },
+          { new: true },
+        )
+        .session(session);
       if (!product) {
         throw new Error("Product not found or stock issue !!");
       }
     }
 
-    const updatedOrder = await orderModel.findByIdAndUpdate(
-      orderId,
-      { $set: { orderStatus: { status: "confirmed", updatedAt: new Date() } } },
-      { new: true },
-    ).session(session);
+    const updatedOrder = await orderModel
+      .findByIdAndUpdate(
+        orderId,
+        {
+          $set: { orderStatus: { status: "confirmed", updatedAt: new Date() } },
+        },
+        { new: true },
+      )
+      .session(session);
     if (!updatedOrder) {
       throw new Error("Order update failed !!");
     }
 
     if (order.couponId) {
-      const updatedCoupon = await couponsModel.findByIdAndUpdate(
-        order.couponId,
-        {
-          $inc: { usageCount: 1 },
-        },
-        { new: true },
-      ).session(session);
+      const updatedCoupon = await couponsModel
+        .findByIdAndUpdate(
+          order.couponId,
+          {
+            $inc: { usageCount: 1 },
+          },
+          { new: true },
+        )
+        .session(session);
 
       if (!updatedCoupon) {
         throw new Error("Error while updating coupon !!");

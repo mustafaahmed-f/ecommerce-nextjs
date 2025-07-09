@@ -44,7 +44,7 @@ export const POST = withMiddleWare({
           { status: 400 },
         );
       }
-      console.log("No validation errors !!");
+      // console.log("No validation errors !!");
       const userId = await getUserId();
       if (String(userId) !== String(orderObj.userID)) {
         throw new Error("Order doesn't belong to user !!");
@@ -84,7 +84,7 @@ export const POST = withMiddleWare({
         promotionCode = couponFromDB.stipePromotionCodeId;
       }
 
-      console.log("Promotion code: ", promotionCode);
+      // console.log("Promotion code: ", promotionCode);
       // Create Checkout Sessions from body params.
       const session = await stripe.checkout.sessions.create({
         line_items: itemsArr,
@@ -117,7 +117,7 @@ export const POST = withMiddleWare({
           },
         ],
       });
-      console.log("Session: ", session);
+      // console.log("Session: ", session);
       return NextResponse.json({
         success: true,
         url: session.url,

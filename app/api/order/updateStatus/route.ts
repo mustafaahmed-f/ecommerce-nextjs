@@ -94,6 +94,7 @@ export const PUT = withMiddleWare({
           });
           if (!product) throw new Error("Product not found !!", { cause: 404 });
           product.stock += p.quantity;
+          product.sold -= p.quantity;
           return product.save();
         });
 
