@@ -132,8 +132,8 @@ export const POST = withMiddleWare({
         discount: product.discount,
         quantity: 1,
         color: product.color,
-        category: product.category,
-        brand: product.brand,
+        category: product.category.title,
+        brand: product.brand.title,
         image: product.image,
       };
 
