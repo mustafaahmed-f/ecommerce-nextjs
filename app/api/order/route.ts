@@ -1,4 +1,8 @@
+import { orderStatus } from "./../../_lib/OrderStatus";
 import { getUserId } from "@/app/_lib/getUserId";
+import { PushNotification } from "@/app/_lib/Notifications/PushNotifications";
+import { redis } from "@/app/_lib/redisClient";
+import { channelName } from "@/app/_lib/redisPublishChannel";
 import { validateSchema } from "@/app/_lib/validateSchema";
 import { withMiddleWare } from "@/app/_lib/withMiddleWare";
 import connectDB from "@/app/_mongodb/dbConnect";
@@ -115,6 +119,8 @@ export const POST = withMiddleWare({
             );
           }
         }
+
+        //// Publish message to redis:
       }
 
       //// Empty user's cart:
@@ -145,6 +151,48 @@ export const POST = withMiddleWare({
         if (!updatedCoupon) {
           throw new Error("Error while updating coupon !!");
         }
+      }
+
+      if ((order.orderStatus.status = "confirmed")) {
+        try {
+          await PushNotification(
+            userId,
+            "orders",
+            "Created",
+            "created",
+            `# ${order.orderNumber}`,
+            `/view/orders/details/${order._id}`,
+          );
+
+          await PushNotification(
+            userId,
+            "orders",
+            "Created",
+            "created",
+            `# ${order.orderNumber}`,
+            `/view/orders/details/${order._id}`,
+          );
+        } catch (error: any) {
+          console.log(error);
+          throw new Error(
+            `Error while sending push notification : ${error} !!`,
+            { cause: 404 },
+          );
+        }
+
+        await redis.publish(
+          channelName,
+          JSON.stringify({
+            event: "order_created",
+            message: `Order #${order.orderNumber} has been placed.`,
+            userId: userId,
+            audience: "admin",
+            module: "orders",
+            read: false,
+            createdAt: new Date("2025-07-12T14:23:00.123Z"),
+            url: `/view/orders/details/${order._id}`,
+          }),
+        );
       }
 
       await session.commitTransaction();

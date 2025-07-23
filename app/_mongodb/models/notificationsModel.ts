@@ -28,6 +28,10 @@ const NotificationSchema = new mongoose.Schema(
       required: true,
       enum: ["user", "admin"],
     },
+    module: {
+      type: String,
+      required: true,
+    },
     read: {
       type: Boolean,
       default: false,
