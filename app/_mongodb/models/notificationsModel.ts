@@ -6,13 +6,6 @@ const NotificationSchema = new mongoose.Schema(
     event: {
       type: String,
       required: true,
-      enum: [
-        "order_created",
-        "product_added",
-        "user_registered",
-        "order_shipped",
-        // Add other event types as needed
-      ],
     },
     message: {
       type: String,
