@@ -15,9 +15,31 @@ const corsOptions = {
 const AuthPaths: string[] = ["/updateprofile", "/cartcheckout", "/orders"];
 const nonAuthPaths: string[] = ["/logIn", "/signUp"];
 
+//* Will be used to block some agents from hitting endpoint multiple times
+const blockedAgents = [
+  "bot",
+  "crawler",
+  "spider",
+  "curl",
+  "wget",
+  "python",
+  "scrapy",
+  "axios",
+  "node-fetch",
+];
+
 export default async function middleware(request: NextRequest) {
   const origin = request.headers.get("origin") ?? "";
   const response = NextResponse.next();
+
+  //* Block agents :
+  const ua = request.headers.get("user-agent")?.toLowerCase() || "";
+
+  for (const agent of blockedAgents) {
+    if (ua.includes(agent)) {
+      return new NextResponse("Blocked", { status: 403 });
+    }
+  }
 
   // Set CORS Headers for all responses
   // if (
