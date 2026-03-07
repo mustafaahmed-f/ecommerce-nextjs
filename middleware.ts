@@ -28,9 +28,22 @@ const blockedAgents = [
   "node-fetch",
 ];
 
+//* Blocked path that is hit usually by bots
+const blockedPaths = [
+  "/wp-admin",
+  "/wp-login",
+  "/xmlrpc.php",
+  "/.env",
+  "/.git",
+  "/config",
+];
+
 export default async function middleware(request: NextRequest) {
   const origin = request.headers.get("origin") ?? "";
   const response = NextResponse.next();
+  const pathname = request.nextUrl.pathname;
+
+  //========================================================================
 
   //* Block agents :
   const ua = request.headers.get("user-agent")?.toLowerCase() || "";
@@ -40,6 +53,16 @@ export default async function middleware(request: NextRequest) {
       return new NextResponse("Blocked", { status: 403 });
     }
   }
+
+  if (blockedPaths.some((p) => pathname.startsWith(p))) {
+    return new NextResponse("Blocked", { status: 403 });
+  }
+
+  if (ua.includes("bot") || ua.includes("crawler") || ua.includes("spider")) {
+    return new NextResponse("Blocked", { status: 403 });
+  }
+
+  //========================================================================
 
   // Set CORS Headers for all responses
   // if (
@@ -57,8 +80,6 @@ export default async function middleware(request: NextRequest) {
 
   const nextAuthToken = cookies().get("authjs.session-token")?.value;
   const systemAuthToken = cookies().get("next_ecommerce_token")?.value;
-
-  const pathname = request.nextUrl.pathname;
 
   // Check if the request is for a protected path
   const needsAuth = AuthPaths.some(
