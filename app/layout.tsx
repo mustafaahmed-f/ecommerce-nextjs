@@ -1,14 +1,13 @@
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Metadata } from "next";
 import Footer from "./_components/Footer/Footer";
 import Header from "./_components/Header/Header";
 
+import AIBotSecion from "./_components/AIChatBot/AIBotSecion";
 import { Toaster } from "./_components/shadcn/toaster";
 import AuthHandler from "./_context/AuthHandler";
+import connectDB from "./_mongodb/dbConnect";
 import { Josefin_sans } from "./_styles/fonts";
 import "./_styles/globals.css";
-import connectDB from "./_mongodb/dbConnect";
-import AIBotSecion from "./_components/AIChatBot/AIBotSecion";
 
 export const metadata: Metadata = {
   title: {
@@ -34,7 +33,6 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <AuthHandler>
-          <ReactQueryDevtools initialIsOpen={false} />
           <Header />
           <main className="flex flex-grow overflow-hidden overflow-x-auto pb-2 pt-[124px] max-sm:px-2 sm:pt-0">
             {children}

@@ -153,7 +153,7 @@ export const POST = withMiddleWare({
         }
       }
 
-      if ((order.orderStatus.status = "confirmed")) {
+      if (order.orderStatus.status === "confirmed") {
         try {
           await PushNotification(
             userId,

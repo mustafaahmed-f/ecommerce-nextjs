@@ -12,14 +12,20 @@ interface ProductsPageProps {
 function ProductsPage({ products }: ProductsPageProps) {
   return (
     <>
-      <div className="flex items-center max-sm:justify-center max-sm:gap-9 w-full sm:justify-end mb-5">
-        <SortBtn />
-        <FilterBtn />
+      <div className="mb-5 flex w-full items-center max-sm:justify-center max-sm:gap-9 sm:justify-end">
+        {products.products.length ? (
+          <>
+            <SortBtn />
+            <FilterBtn />
+          </>
+        ) : null}
       </div>
       <Suspense fallback={<Spinner />}>
         <ProductsList products={products.products} />
       </Suspense>
-      <ProductsPagination productsCount={products.totalProducts} />
+      {products.products.length ? (
+        <ProductsPagination productsCount={products.totalProducts} />
+      ) : null}
     </>
   );
 }

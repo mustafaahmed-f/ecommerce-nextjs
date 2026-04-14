@@ -16,7 +16,7 @@ function ColorIndicator({
 }: ColorIndicatorProps) {
   return (
     <div
-      className={`color-indicator ${size && size === "small" ? "h-4 w-4" : "h-6 w-6"} relative flex cursor-pointer items-center justify-center rounded-full`}
+      className={`color-indicator border border-black ${size && size === "small" ? "h-4 w-4" : "h-6 w-6"} relative flex cursor-pointer items-center justify-center rounded-full`}
       style={{ backgroundColor: colorHex }}
       // title={colorString}
     >

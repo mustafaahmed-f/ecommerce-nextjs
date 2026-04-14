@@ -82,22 +82,6 @@ function DropListField<T extends FieldValues>({
     setOpen(false);
   };
 
-  if (name === "userInfo.country") {
-    console.log("fieldValue", fieldValue);
-    console.log(
-      dropListOptions?.find((opt) => opt === fieldValue) ??
-        placeholder ??
-        "Select...",
-    );
-    console.log(
-      fieldValue
-        ? (dropListOptions.find((opt) => opt === fieldValue) ??
-            placeholder ??
-            "Select...")
-        : (placeholder ?? "Select..."),
-    );
-  }
-
   return (
     <div
       className={`flex flex-col gap-1 ${fullWidth ? "col-span-2" : "col-span-1"}`}

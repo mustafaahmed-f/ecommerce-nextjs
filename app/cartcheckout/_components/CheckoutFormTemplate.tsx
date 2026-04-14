@@ -20,6 +20,7 @@ import { checkOutFormValidations } from "../_utils/formValidation";
 import FormSections from "./FormSections";
 import OrderConfirmation from "./OrderConfirmation";
 import OrderSummary from "./OrderSummary";
+import { CheckIcon } from "lucide-react";
 
 interface CheckOutFormTemplateProps {
   defaultValues: defaultValuesType;
@@ -93,6 +94,8 @@ function CheckOutFormTemplate({
     // getValues,
   } = methods;
 
+  console.log("Payment MEthod : ", methods.getValues().paymentMethod);
+
   const handleNext = () => {
     if (activeStep !== steps.length) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -121,6 +124,8 @@ function CheckOutFormTemplate({
           },
         },
       );
+
+      console.log("Order created : ", response.data);
 
       if (watch("isFromCart")) {
         let newCart: ICart = {
@@ -195,9 +200,13 @@ function CheckOutFormTemplate({
               <div key={label} className="flex flex-1 items-center gap-2">
                 <div className="flex flex-row items-center gap-2">
                   <div
-                    className={`flex h-8 w-8 flex-grow items-center justify-center rounded-full border-2 p-3 text-sm font-medium transition ${isCompleted ? "border-green-500 bg-green-500 text-white" : ""} ${isActive ? "border-primary bg-primary text-white" : ""} ${!isActive && !isCompleted ? "border-gray-300 text-gray-500" : ""} `}
+                    className={`flex h-8 w-8 flex-grow items-center justify-center rounded-full border-2 text-sm font-medium transition ${isCompleted ? "border-green-500 bg-green-500 text-white" : "p-3"} ${isActive ? "border-primary bg-primary text-white" : ""} ${!isActive && !isCompleted ? "border-gray-300 text-gray-500" : ""} `}
                   >
-                    {index + 1}
+                    {isCompleted && !isActive ? (
+                      <CheckIcon size={20} />
+                    ) : (
+                      index + 1
+                    )}
                   </div>
                   <div className="flex flex-col text-center text-sm font-medium">
                     {label}

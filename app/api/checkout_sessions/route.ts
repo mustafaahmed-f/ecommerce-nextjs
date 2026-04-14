@@ -32,6 +32,7 @@ export const POST = withMiddleWare({
       // const isNewOrder = searchParams.get("isNewOrder");
       const orderObj = await request.json();
       console.log("orderObj", orderObj);
+      console.log("ORDER STATUS BEFORE CHECK:", orderObj.orderStatus.status);
       //// validate data:
       const validationResult = validateSchema(stripeOrderSchema, orderObj);
       if (!validationResult.success) {

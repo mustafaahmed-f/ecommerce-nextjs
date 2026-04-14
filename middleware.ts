@@ -24,7 +24,6 @@ const blockedAgents = [
   "wget",
   "python",
   "scrapy",
-  "axios",
   "node-fetch",
 ];
 

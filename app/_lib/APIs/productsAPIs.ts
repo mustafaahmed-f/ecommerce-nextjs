@@ -8,6 +8,7 @@ export async function getAllProducts({
   color = "",
   priceMin = undefined,
   priceMax = undefined,
+  fromProvider,
 }: {
   page?: number;
   size?: number;
@@ -18,14 +19,15 @@ export async function getAllProducts({
   color?: string;
   priceMin?: number | undefined;
   priceMax?: number | undefined;
+  fromProvider?: boolean; //* This is used for debugging to know if the current call is from the provider or not
 } = {}) {
   try {
     if (priceMin === undefined) priceMin = 0;
     if (priceMax === undefined) priceMax = 50000;
     const response: Response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
-      // { next: { revalidate: 1000 * 60 * 60 * 24 } },
-      { next: { revalidate: 0 } },
+      { next: { revalidate: 1000 * 60 * 60 * 24 } },
+      // { next: { revalidate: 0 } },
     );
 
     if (!response.ok) {

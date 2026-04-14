@@ -5,9 +5,11 @@ import { getAxiosErrMsg } from "../getAxiosErrMsg";
 export async function getCategories() {
   // const response = await instance.get("/api/categories");
   // ALERT : Here i used static url so static pages can be generated on vercel
+  //todo : change url of categories after deployment
   try {
     const response = await fetch(
       `https://ecommerce-nextjs-by-mustafa.vercel.app/api/categories`,
+      // `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
       {
         next: { revalidate: 3600 * 24 },
       },

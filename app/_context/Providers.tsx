@@ -1,5 +1,6 @@
-// app/providers.tsx
 "use client";
+
+// app/providers.tsx
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -12,6 +13,7 @@ import { store } from "../_lib/store/store";
 import { ICart } from "../cart/_types/CartType";
 import UserProvider from "./UserProvider";
 import CartProvider from "./CartProvider";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -51,6 +53,7 @@ function Providers({
                 intitialCategories={initialCategories}
                 initialProducts={initialProducts}
               >
+                <ReactQueryDevtools initialIsOpen={false} />
                 <AlertContextProvider>
                   <NextNavigationProvider>{children}</NextNavigationProvider>
                 </AlertContextProvider>
