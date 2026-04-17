@@ -1,4 +1,4 @@
-import { getCategories } from "@/app/_lib/APIs/categoriesAPIs";
+import { getCategoriesFromDB } from "@/app/_lib/APIs/categoriesAPIs";
 import { getAllProducts } from "@/app/_lib/APIs/productsAPIs";
 import ProductsPage from "../_components/ProductsPage";
 
@@ -20,9 +20,9 @@ interface pageProps {
 export const revalidate = 3600 * 24;
 
 export async function generateStaticParams() {
-  const categories = await getCategories();
+  const categories = await getCategoriesFromDB();
 
-  return categories.categories.map((category: any) => ({
+  return categories.map((category: string) => ({
     category,
   }));
 }

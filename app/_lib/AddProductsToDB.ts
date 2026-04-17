@@ -3,7 +3,7 @@
 import connectDB from "../_mongodb/dbConnect";
 import categoriesModel from "../_mongodb/models/categoriesModel";
 import productsModel from "../_mongodb/models/productsModel";
-import { getCategories } from "./APIs/categoriesAPIs";
+import { getCategoriesFromDB } from "./APIs/categoriesAPIs";
 import { getAllProducts } from "./APIs/productsAPIs";
 import { getRandomRating } from "./getRating";
 // import { faker } from "@faker-js/faker";
@@ -76,8 +76,7 @@ export async function addRatingToProducts() {
 
 export async function fetchCategoriesFromAPI() {
   try {
-    const response = await getCategories();
-    const categories = response.categories;
+    const categories = await getCategoriesFromDB();
     for (let category of categories) {
       const categoryExistence = await categoriesModel.findOne({
         title: category,

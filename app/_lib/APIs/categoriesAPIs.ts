@@ -3,24 +3,34 @@ import categoriesModel from "@/app/_mongodb/models/categoriesModel";
 import { getAxiosErrMsg } from "../getAxiosErrMsg";
 
 export async function getCategories() {
-  // const response = await instance.get("/api/categories");
-  // ALERT : Here i used static url so static pages can be generated on vercel
-  //todo : change url of categories after deployment
+  const baseUrl =
+    process.env.NEXT_PUBLIC_API_URL ||
+    process.env.NEXTAUTH_URL ||
+    "http://localhost:3001";
+
   try {
     const response = await fetch(
-      `https://ecommerce-nextjs-by-mustafa.vercel.app/api/categories`,
-      // `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
+      new URL("/api/categories", baseUrl).toString(),
       {
-        next: { revalidate: 3600 * 24 },
+        next: { revalidate: 0 },
       },
     );
-    // console.log("response", response.data);
-    if (!response.ok) throw new Error("Couldn't get categories !!");
+
+    if (!response.ok) {
+      const message = await response.text();
+      throw new Error(`Couldn't get categories: ${message}`);
+    }
+
     const categories = await response.json();
     return categories;
-  } catch (error) {
+  } catch (error: any) {
     const ErrMsg = getAxiosErrMsg(error);
     console.log("Error fetching categories from API: ", ErrMsg);
+    return {
+      success: false,
+      categories: [],
+      error: ErrMsg ?? error?.message ?? "Unknown error",
+    };
   }
 }
 

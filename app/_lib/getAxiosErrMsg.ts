@@ -1,8 +1,9 @@
 export function getAxiosErrMsg(error: any) {
-  const errorMsg =
-    error.response.data?.message &&
-    error.response.data?.message === "Validation failed"
+  if (error?.response?.data) {
+    return error.response.data?.message === "Validation failed"
       ? error.response.data.errors["code"]._errors[0]
-      : error.response.data.error;
-  return errorMsg;
+      : error.response.data?.error || error.response.data?.message;
+  }
+
+  return error?.message || String(error);
 }
