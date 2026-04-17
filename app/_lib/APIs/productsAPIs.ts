@@ -1,3 +1,17 @@
+function getServerBaseUrl() {
+  if (typeof window !== "undefined") return "";
+
+  if (process.env.NEXTAUTH_URL) {
+    return process.env.NEXTAUTH_URL;
+  }
+
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+
+  return "http://localhost:3000";
+}
+
 export async function getAllProducts({
   page = 1,
   size = 149,
@@ -24,8 +38,9 @@ export async function getAllProducts({
   try {
     if (priceMin === undefined) priceMin = 0;
     if (priceMax === undefined) priceMax = 50000;
+    const baseUrl = getServerBaseUrl();
     const response: Response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
+      `${baseUrl}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
       { next: { revalidate: 1000 * 60 * 60 * 24 } },
       // { next: { revalidate: 0 } },
     );
@@ -50,10 +65,10 @@ export async function getAllProducts({
 }
 
 export async function getSingleProduct(id: number) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/product/${String(id)}`,
-    { next: { revalidate: 0 } },
-  );
+  const baseUrl = getServerBaseUrl();
+  const response = await fetch(`${baseUrl}/api/product/${String(id)}`, {
+    next: { revalidate: 0 },
+  });
 
   const clonedResponse = await response.clone().json();
 
