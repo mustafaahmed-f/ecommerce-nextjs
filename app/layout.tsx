@@ -7,6 +7,8 @@ import { Toaster } from "./_components/shadcn/toaster";
 import AuthHandler from "./_context/AuthHandler";
 import connectDB from "./_mongodb/dbConnect";
 import { Josefin_sans } from "./_styles/fonts";
+
+import { Analytics } from "@vercel/analytics/next";
 import "./_styles/globals.css";
 
 export const metadata: Metadata = {
@@ -36,6 +38,7 @@ export default async function RootLayout({
           <Header />
           <main className="flex flex-grow overflow-hidden overflow-x-auto pb-2 pt-[124px] max-sm:px-2 sm:pt-0">
             {children}
+            <Analytics />
           </main>
           <Toaster />
           <AIBotSecion />

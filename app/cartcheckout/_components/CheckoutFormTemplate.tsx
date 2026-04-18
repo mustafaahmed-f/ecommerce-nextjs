@@ -170,6 +170,8 @@ function CheckOutFormTemplate({
         variant: "destructive",
       });
       setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   }
 
