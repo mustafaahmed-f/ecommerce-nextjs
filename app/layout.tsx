@@ -41,7 +41,7 @@ export default async function RootLayout({
             <Analytics />
           </main>
           <Toaster />
-          <AIBotSecion />
+          {/* <AIBotSecion /> */}
           <Footer />
         </AuthHandler>
       </body>

@@ -48,7 +48,6 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
 
 ### Advanced Features
 
-- AI-powered chat assistant
 - Form rendering system with reusable components
 - Recently viewed products section (coming soon)
 - Top viewed products using Max Heap data structure (coming soon)
@@ -67,7 +66,6 @@ Luminae Store is a modern e-commerce platform that provides a seamless shopping 
 - **Styling**: Tailwind CSS
 - **Icons**: Luicid and custom ones
 - **Data Fetching**: TanStack Query
-- **Chat bot**: Gemini and Generative AI
 
 ### Backend
 

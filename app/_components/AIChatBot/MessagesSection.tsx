@@ -3,7 +3,6 @@ import { ChatHistory, ChatSettings } from "@/app/_types/ChatBotTypes";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../shadcn/button";
-import { Input } from "../shadcn/input";
 import ChatMessage from "./ChatMessage";
 
 interface MessagesSectionProps {
@@ -19,7 +18,7 @@ function MessagesSection({ messages, setMessages }: MessagesSectionProps) {
   const [loading, setLoading] = useState(false);
   const settings: ChatSettings = {
     temperature: 1,
-    model: "gemini-1.5-flash",
+    model: "gemini-2.0-flash",
     systemInstruction: systemInstruction,
   };
 
