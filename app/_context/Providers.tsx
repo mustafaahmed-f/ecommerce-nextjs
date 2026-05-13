@@ -1,7 +1,5 @@
 "use client";
 
-// app/providers.tsx
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Provider } from "react-redux";

@@ -40,6 +40,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "gateway.pinata.cloud",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
     ],
   },
   webpack: (config, { isServer }) => {

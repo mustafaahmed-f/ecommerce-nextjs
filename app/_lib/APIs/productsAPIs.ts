@@ -41,8 +41,8 @@ export async function getAllProducts({
     const baseUrl = getServerBaseUrl();
     const response: Response = await fetch(
       `${baseUrl}/api/products?page=${page}&size=${size}&category=${category}&brand=${brand}&model=${model}&sort=${sort}&color=${color}&priceMin=${priceMin}&priceMax=${priceMax}`,
-      { next: { revalidate: 1000 * 60 * 60 * 24 } },
-      // { next: { revalidate: 0 } },
+      // { next: { revalidate: 1000 * 60 * 60 * 24 } },
+      { next: { revalidate: 0 } },
     );
 
     if (!response.ok) {

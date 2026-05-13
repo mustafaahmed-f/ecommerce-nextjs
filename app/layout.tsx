@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Footer from "./_components/Footer/Footer";
 import Header from "./_components/Header/Header";
 
-import AIBotSecion from "./_components/AIChatBot/AIBotSecion";
 import { Toaster } from "./_components/shadcn/toaster";
 import AuthHandler from "./_context/AuthHandler";
 import connectDB from "./_mongodb/dbConnect";
